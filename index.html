@@ -4,12 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
-    <script src="./js/game.js"></script>
+    <script src="./models/world.class.js" defer></script>
+    <script src="./models/movable-object.class.js" defer></script>
+    <script src="./models/character.class.js" defer></script>
+    <script src="./models/enemy.class.js" defer></script>
+    <script src="./js/game.js" defer></script>
     <title>Document</title>
   </head>
-  <body>
-    <h1>My 2D Game</h1>
+  <body onload="init()">
+    <h1>Nara – Guardian of the Greenwood</h1>
 
-    <canvas width="720" height="480"></canvas>
+    <canvas id="canvas" width="720" height="480"></canvas>
   </body>
 </html>
