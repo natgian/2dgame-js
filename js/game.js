@@ -1,9 +1,13 @@
 let canvas;
 let world;
 
+/**
+ * Initializes the game world by selecting the canvas element
+ * and creating a new World instance with that canvas.
+ *
+ * Called once at the start to set up the environment.
+ */
 function init() {
   canvas = document.getElementById("canvas");
-  world = new World(canvas); // neues World Object wird angelegt und geben das canvas als Variable mit
-
-  console.log("My Character is", world.character);
+  world = new World(canvas);
 }
