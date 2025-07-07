@@ -1,4 +1,6 @@
 class Character extends MovableObject {
+  world;
+  speed = 5;
   IMAGES_IDLE_BLINKING = [
     "img/character/idle_blinking/00_Idle Blinking.png",
     "img/character/idle_blinking/01_Idle Blinking.png",
@@ -29,20 +31,60 @@ class Character extends MovableObject {
     "img/character/idle/11_Idle.png",
   ];
 
+  IMAGES_WALKING = [
+    "img/character/walking/00_Walking.png",
+    "img/character/walking/01_Walking.png",
+    "img/character/walking/02_Walking.png",
+    "img/character/walking/03_Walking.png",
+    "img/character/walking/04_Walking.png",
+    "img/character/walking/05_Walking.png",
+    "img/character/walking/06_Walking.png",
+    "img/character/walking/07_Walking.png",
+    "img/character/walking/08_Walking.png",
+    "img/character/walking/09_Walking.png",
+    "img/character/walking/10_Walking.png",
+    "img/character/walking/11_Walking.png",
+    "img/character/walking/12_Walking.png",
+    "img/character/walking/13_Walking.png",
+    "img/character/walking/14_Walking.png",
+    "img/character/walking/15_Walking.png",
+    "img/character/walking/16_Walking.png",
+    "img/character/walking/17_Walking.png",
+    "img/character/walking/18_Walking.png",
+    "img/character/walking/19_Walking.png",
+    "img/character/walking/20_Walking.png",
+    "img/character/walking/21_Walking.png",
+    "img/character/walking/22_Walking.png",
+    "img/character/walking/23_Walking.png",
+  ];
+
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
     this.loadImages(this.IMAGES_IDLE);
+    this.loadImages(this.IMAGES_WALKING);
 
     this.animate();
   }
 
   animate() {
     setInterval(() => {
-      let index = this.currentImage % this.IMAGES_IDLE.length; // keeps the index inside the array length so the animation loops from start again
-      let path = this.IMAGES_IDLE[index];
-      this.img = this.imageCache[path];
-      this.currentImage++;
-    }, 100);
+      if (this.world.keyboard.RIGHT) {
+        this.x += this.speed;
+      }
+      if (this.world.keyboard.LEFT) {
+        this.x -= this.speed;
+      }
+    }, 1000 / 60);
+
+    setInterval(() => {
+      if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+        // WALK ANIMATION
+        let index = this.currentImage % this.IMAGES_WALKING.length; // keeps the index inside the array length so the animation loops from start again
+        let path = this.IMAGES_WALKING[index];
+        this.img = this.imageCache[path];
+        this.currentImage++;
+      }
+    }, 25);
   }
 
   jump() {}
