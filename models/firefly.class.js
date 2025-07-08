@@ -28,7 +28,7 @@ class Firefly extends MovableObject {
       this.velocityY = Math.max(Math.min(this.velocityY, 0.7), -0.7);
 
       // Respawns the fireflies on the left when they go over the visible image on the right
-      if (this.x > 720 + 50) {
+      if (this.x > 2500 + 50) {
         this.reset();
       }
     }, 1000 / 60);
