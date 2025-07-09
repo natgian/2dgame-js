@@ -31,6 +31,19 @@ function generateRepeatingLayer({ count, imagePath, startX = -100, spacingX = 72
   return layers;
 }
 
+/**
+ * Generates a repeating sequence of layers using a set of image paths
+ *
+ * @param {Object} - Configuration params for generating the layers
+ * @param {number} count - Number of times to repeat the full image sequence
+ * @param {Array} imagePaths - Array of image paths to cycle through for each repetition
+ * @param {number} startX - Starting x-position for the layers
+ * @param {number} spacingX - Horizontal distance between each repeated sequence
+ * @param {number} y - Vertical position for the layers
+ * @param {number} width - Width of each layer image
+ * @param {number} height - Height of each layer image
+ * @returns {Array} Array of Layer instances representing the generated sequence
+ */
 function generateLayerSequence({ count, imagePaths, startX = -100, spacingX = 720, y = 0, width = 720, height = 480 }) {
   const layers = [];
 
