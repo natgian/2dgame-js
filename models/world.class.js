@@ -4,11 +4,7 @@ class World {
   keyboard;
   cameraX = 0;
   character = new Character();
-  enemies = level1.enemies;
-  fireflies = level1.fireflies;
-  backgroundLayer = level1.background;
-  midgroundLayer = level1.midground;
-  foregroundLayer = level1.foreground;
+  level = level1;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
@@ -27,12 +23,12 @@ class World {
 
     this.ctx.translate(this.cameraX, 0);
 
-    this.addObjectsToMap(this.backgroundLayer);
-    this.addObjectsToMap(this.fireflies);
-    this.addObjectsToMap(this.midgroundLayer);
-    this.addObjectsToMap(this.foregroundLayer);
+    this.addObjectsToMap(this.level.background);
+    this.addObjectsToMap(this.level.fireflies);
+    this.addObjectsToMap(this.level.midground);
+    this.addObjectsToMap(this.level.foreground);
     this.addToMap(this.character);
-    this.addObjectsToMap(this.enemies);
+    this.addObjectsToMap(this.level.enemies);
 
     this.ctx.translate(-this.cameraX, 0);
 
