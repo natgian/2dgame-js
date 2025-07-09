@@ -1,12 +1,7 @@
 const level1 = new Level(
   generateObjects(Enemy, 3),
   generateObjects(Firefly, 12),
-  generateRepeatingLayer(5, "img/layers/repeating_layers/background_backdrop.png", 720, 0, 720, 480),
-  [
-    new Layer("img/layers/repeating_layers/background2_trees.png", 0, 0, 720, 480),
-    new Layer("img/layers/repeating_layers/background1_trees.png", 0, 0, 720, 480),
-    new Layer("img/layers/repeating_layers/background2_trees.png", 720, 0, 720, 480),
-    new Layer("img/layers/repeating_layers/background1_trees.png", 720, 0, 720, 480),
-  ],
-  generateRepeatingLayer(5, "img/layers/repeating_layers/midground_grass.png", 720, 300, 720, 200)
+  generateRepeatingLayer({ count: 5, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 }),
+  generateLayerSequence({ count: 5, imagePaths: ["img/layers/repeating_layers/background2_trees.png", "img/layers/repeating_layers/background1_trees.png"] }),
+  generateRepeatingLayer({ count: 5, imagePath: "img/layers/repeating_layers/midground_grass.png", y: 300, height: 200 })
 );
