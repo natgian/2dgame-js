@@ -30,7 +30,7 @@ class Enemy extends MovableObject {
   ];
 
   constructor() {
-    super().loadImage("img/enemies/enemy_1/idle/0_Golem_Idle_000.png");
+    super().loadImage(this.IMAGES_WALKING[0]);
     this.x = 200 + Math.random() * 500;
     this.loadImages(this.IMAGES_WALKING);
     this.speed = 0.15 + Math.random() * 0.75;
@@ -40,10 +40,7 @@ class Enemy extends MovableObject {
 
   animate() {
     setInterval(() => {
-      let index = this.currentImage % this.IMAGES_WALKING.length; // keeps the index inside the array length so the animation loops from start again
-      let path = this.IMAGES_WALKING[index];
-      this.img = this.imageCache[path];
-      this.currentImage++;
+      this.playAnimation(this.IMAGES_WALKING);
     }, this.frameRate);
   }
 }

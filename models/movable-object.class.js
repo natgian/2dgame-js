@@ -26,6 +26,13 @@ class MovableObject {
     });
   }
 
+  playAnimation(images) {
+    let index = this.currentImage % images.length; // keeps the index inside the array length so the animation loops from start again
+    let path = images[index];
+    this.img = this.imageCache[path];
+    this.currentImage++;
+  }
+
   moveRight() {
     console.log("moving right");
   }
