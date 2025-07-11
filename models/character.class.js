@@ -82,6 +82,9 @@ class Character extends MovableObject {
     "img/character/falling_down/05_Falling_Down.png",
   ];
 
+  SOUND_JUMPING = new Audio("audio/whoosh_jump.mp3");
+  SOUND_WALKING = new Audio("audio/running_in_grass.mp3");
+
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
     this.loadImages(this.IMAGES_IDLE);
@@ -97,16 +100,24 @@ class Character extends MovableObject {
       if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
         this.moveRight();
         this.otherDirection = false;
+        this.SOUND_WALKING.volume = 0.5;
+        this.SOUND_WALKING.play();
+        this.SOUND_WALKING.loop = true;
       }
       // Moving left
       if (this.world.keyboard.LEFT && this.x > 0) {
         this.moveLeft();
         this.otherDirection = true;
+        this.SOUND_WALKING.volume = 0.5;
+        this.SOUND_WALKING.play();
+        this.SOUND_WALKING.loop = true;
       }
 
       // Jumping
       if (this.world.keyboard.SPACE && !this.isInTheAir()) {
         this.jump();
+        this.SOUND_JUMPING.volume = 0.1;
+        this.SOUND_JUMPING.play();
       }
 
       // Camera movement
@@ -114,6 +125,7 @@ class Character extends MovableObject {
 
       // Animations
       if (this.isInTheAir()) {
+        this.SOUND_WALKING.pause();
         this.animationTimers.jumping++;
         this.animationTimers.walking = 0;
         this.animationTimers.idle = 0;
@@ -128,12 +140,13 @@ class Character extends MovableObject {
         this.animationTimers.jumping = 0;
         this.animationTimers.idle = 0;
 
-        if (this.animationTimers.walking >= 2) {
+        if (this.animationTimers.walking >= 1) {
           // when the walking timer has reached 2 ticks (at 60FPS = 2 x 16.66ms = ca. 33ms)
           this.playAnimation(this.IMAGES_WALKING);
           this.animationTimers.walking = 0;
         }
       } else {
+        this.SOUND_WALKING.pause();
         this.animationTimers.idle++;
         this.animationTimers.jumping = 0;
         this.animationTimers.walking = 0;
