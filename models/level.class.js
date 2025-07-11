@@ -5,7 +5,7 @@ class Level {
   background;
   midground;
   foreground;
-  levelEndX = 2500;
+  levelEndX = 2800;
 
   constructor(enemies, endboss, fireflies, background, midground, foreground) {
     this.enemies = enemies;
