@@ -2,7 +2,7 @@ const level1 = new Level(
   // Characters & Enemies
   generateObjects(Enemy, 3),
   new Endboss(),
-  generateObjects(Firefly, 12),
+  generateObjects(Firefly, 24),
 
   // Background Layers
   generateRepeatingLayer({ count: 5, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 }),
