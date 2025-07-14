@@ -12,10 +12,26 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
+    this.checkCollisions();
   }
 
   setWorld() {
     this.character.world = this;
+  }
+
+  checkCollisions() {
+    setInterval(() => {
+      this.level.enemies.forEach((enemy) => {
+        if (this.character.isColliding(enemy)) {
+          if (!this.character.isDead()) {
+            this.character.damage();
+          }
+        }
+      });
+
+      if (this.character.isColliding(this.level.endboss)) {
+      }
+    }, 200);
   }
 
   draw() {
@@ -52,15 +68,26 @@ class World {
    */
   addToMap(movableObj) {
     if (movableObj.otherDirection) {
-      this.ctx.save(); // saves the current canvas state
-      this.ctx.translate(movableObj.width, 0); // shifts the canvas origin to the right by the object's width. This is necessary before flipping horizontally to keep the object in the correct position.
-      this.ctx.scale(-1, 1); // flips the canvas horizontally (mirror image effect on the x-axis)
-      movableObj.x = movableObj.x * -1; // because the canvas is flipped horizontally with scale(-1, 1), the object's x-position must also be flipped (multiply by -1), so it appears at the correct mirrored position on screen.
+      this.flipImage(movableObj);
     }
-    this.ctx.drawImage(movableObj.img, movableObj.x, movableObj.y, movableObj.width, movableObj.height);
+
+    movableObj.draw(this.ctx);
+    movableObj.drawBorder(this.ctx);
+
     if (movableObj.otherDirection) {
-      movableObj.x = movableObj.x * -1; // restores the original x position after drawing
-      this.ctx.restore(); // restores the canvas state (undoes the translate and scale)
+      this.flipImageBack(movableObj);
     }
+  }
+
+  flipImage(movableObj) {
+    this.ctx.save(); // saves the current canvas state
+    this.ctx.translate(movableObj.width, 0); // shifts the canvas origin to the right by the object's width. This is necessary before flipping horizontally to keep the object in the correct position.
+    this.ctx.scale(-1, 1); // flips the canvas horizontally (mirror image effect on the x-axis)
+    movableObj.x = movableObj.x * -1; // because the canvas is flipped horizontally with scale(-1, 1), the object's x-position must also be flipped (multiply by -1), so it appears at the correct mirrored position on screen.
+  }
+
+  flipImageBack(movableObj) {
+    movableObj.x = movableObj.x * -1; // restores the original x position after drawing
+    this.ctx.restore(); // restores the canvas state (undoes the translate and scale)
   }
 }

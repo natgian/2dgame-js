@@ -49,8 +49,12 @@ class Endboss extends MovableObject {
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
-    this.x = 2000;
+    this.x = 250;
     this.animate();
+    this.collisionBoxOffsetX = 80;
+    this.collisionBoxOffsetY = 50;
+    this.collisionBoxWidth = -100;
+    this.collisionBoxHeight = -80;
   }
 
   animate() {

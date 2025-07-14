@@ -35,6 +35,10 @@ class Enemy extends MovableObject {
     this.loadImages(this.IMAGES_WALKING);
     this.speed = 0.15 + Math.random() * 0.75;
     this.animate();
+    this.collisionBoxOffsetX = 40;
+    this.collisionBoxOffsetY = 25;
+    this.collisionBoxWidth = -80;
+    this.collisionBoxHeight = -40;
   }
 
   animate() {

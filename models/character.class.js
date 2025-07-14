@@ -2,11 +2,13 @@ class Character extends MovableObject {
   world;
   y = 295;
   speed = 5;
+
   animationTimers = {
     walking: 0,
     jumping: 0,
     idle: 0,
   };
+
   IMAGES_IDLE_BLINKING = [
     "img/character/idle_blinking/00_Idle_Blinking.png",
     "img/character/idle_blinking/01_Idle_Blinking.png",
@@ -81,6 +83,37 @@ class Character extends MovableObject {
     "img/character/falling_down/04_Falling_Down.png",
     "img/character/falling_down/05_Falling_Down.png",
   ];
+  IMAGES_HURT = [
+    "img/character/hurt/00_Hurt.png",
+    "img/character/hurt/01_Hurt.png",
+    "img/character/hurt/02_Hurt.png",
+    "img/character/hurt/03_Hurt.png",
+    "img/character/hurt/04_Hurt.png",
+    "img/character/hurt/05_Hurt.png",
+    "img/character/hurt/06_Hurt.png",
+    "img/character/hurt/07_Hurt.png",
+    "img/character/hurt/08_Hurt.png",
+    "img/character/hurt/09_Hurt.png",
+    "img/character/hurt/10_Hurt.png",
+    "img/character/hurt/11_Hurt.png",
+  ];
+  IMAGES_DYING = [
+    "img/character/dying/00_Dying.png",
+    "img/character/dying/01_Dying.png",
+    "img/character/dying/02_Dying.png",
+    "img/character/dying/03_Dying.png",
+    "img/character/dying/04_Dying.png",
+    "img/character/dying/05_Dying.png",
+    "img/character/dying/06_Dying.png",
+    "img/character/dying/07_Dying.png",
+    "img/character/dying/08_Dying.png",
+    "img/character/dying/09_Dying.png",
+    "img/character/dying/10_Dying.png",
+    "img/character/dying/11_Dying.png",
+    "img/character/dying/12_Dying.png",
+    "img/character/dying/13_Dying.png",
+    "img/character/dying/14_Dying.png",
+  ];
 
   SOUND_JUMPING = new Audio("audio/whoosh_jump.mp3");
   SOUND_WALKING = new Audio("audio/running_in_grass.mp3");
@@ -90,8 +123,15 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_IDLE);
     this.loadImages(this.IMAGES_WALKING);
     this.loadImages(this.IMAGES_JUMPING);
+    this.loadImages(this.IMAGES_HURT);
+    this.loadImages(this.IMAGES_DYING);
     this.applyGravity();
     this.animate();
+    this.collisionBoxOffsetX = 35;
+    this.collisionBoxOffsetY = 0;
+    this.collisionBoxWidth = -50;
+    this.collisionBoxHeight = 0;
+    this.deathAnimationPlayed = false;
   }
 
   animate() {
@@ -124,7 +164,17 @@ class Character extends MovableObject {
       this.world.cameraX = -this.x + 80;
 
       // Animations
-      if (this.isInTheAir()) {
+      if (this.isDead()) {
+        if (!this.deathAnimationPlayed) {
+          this.SOUND_WALKING.pause();
+          this.playAnimationOnce(this.IMAGES_DYING);
+          this.deathAnimationPlayed = true;
+        }
+        return;
+      } else if (this.isHurt()) {
+        this.SOUND_WALKING.pause();
+        this.playAnimation(this.IMAGES_HURT);
+      } else if (this.isInTheAir()) {
         this.SOUND_WALKING.pause();
         this.animationTimers.jumping++;
         this.animationTimers.walking = 0;
