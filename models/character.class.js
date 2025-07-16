@@ -131,41 +131,17 @@ class Character extends MovableObject {
     this.collisionBoxOffsetY = 0;
     this.collisionBoxWidth = -50;
     this.collisionBoxHeight = 0;
-    this.deathAnimationPlayed = false;
   }
 
   animate() {
     setInterval(() => {
-      // Moving right
-      if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-        this.animateMoveRight();
-      }
-      // Moving left
-      if (this.world.keyboard.LEFT && this.x > 0) {
-        this.animateMoveLeft();
-      }
-      // Jumping
-      if (this.world.keyboard.SPACE && !this.isInTheAir()) {
-        this.animateJump();
-      }
-      // Camera movement
-      this.world.cameraX = -this.x + 80;
-      // Animations
-      if (this.isDead()) {
-        this.animateIsDead();
-      } else if (this.isHurt()) {
-        this.animateIsHurt();
-      } else if (this.isInTheAir()) {
-        this.animateIsInTheAir();
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.animateWalking();
-      } else {
-        this.animateIdle();
-      }
+      this.handleMovement();
+      this.updateCamera();
+      this.updateAnimation();
     }, 1000 / 60);
   }
 
-  animateMoveLeft() {
+  handleMoveLeft() {
     this.moveLeft();
     this.otherDirection = true;
     this.SOUND_WALKING.volume = 0.5;
@@ -173,7 +149,7 @@ class Character extends MovableObject {
     this.SOUND_WALKING.loop = true;
   }
 
-  animateMoveRight() {
+  handleMoveRight() {
     this.moveRight();
     this.otherDirection = false;
     this.SOUND_WALKING.volume = 0.5;
@@ -189,7 +165,7 @@ class Character extends MovableObject {
 
   animateIsDead() {
     this.SOUND_WALKING.pause();
-    this.playAnimation(this.IMAGES_DYING);
+    this.playAnimationOnce(this.IMAGES_DYING);
   }
 
   animateIsHurt() {
@@ -231,6 +207,39 @@ class Character extends MovableObject {
       // when the idle timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
       this.playAnimation(this.IMAGES_IDLE);
       this.animationTimers.idle = 0;
+    }
+  }
+
+  handleMovement() {
+    // Moving right
+    if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+      this.handleMoveRight();
+    }
+    // Moving left
+    if (this.world.keyboard.LEFT && this.x > 0) {
+      this.handleMoveLeft();
+    }
+    // Jumping
+    if (this.world.keyboard.SPACE && !this.isInTheAir()) {
+      this.animateJump();
+    }
+  }
+
+  updateCamera() {
+    this.world.cameraX = -this.x + 80;
+  }
+
+  updateAnimation() {
+    if (this.isDead()) {
+      this.animateIsDead();
+    } else if (this.isHurt()) {
+      this.animateIsHurt();
+    } else if (this.isInTheAir()) {
+      this.animateIsInTheAir();
+    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      this.animateWalking();
+    } else {
+      this.animateIdle();
     }
   }
 }
