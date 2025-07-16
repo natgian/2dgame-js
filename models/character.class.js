@@ -138,74 +138,99 @@ class Character extends MovableObject {
     setInterval(() => {
       // Moving right
       if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-        this.moveRight();
-        this.otherDirection = false;
-        this.SOUND_WALKING.volume = 0.5;
-        this.SOUND_WALKING.play();
-        this.SOUND_WALKING.loop = true;
+        this.animateMoveRight();
       }
       // Moving left
       if (this.world.keyboard.LEFT && this.x > 0) {
-        this.moveLeft();
-        this.otherDirection = true;
-        this.SOUND_WALKING.volume = 0.5;
-        this.SOUND_WALKING.play();
-        this.SOUND_WALKING.loop = true;
+        this.animateMoveLeft();
       }
-
       // Jumping
       if (this.world.keyboard.SPACE && !this.isInTheAir()) {
-        this.jump();
-        this.SOUND_JUMPING.volume = 0.1;
-        this.SOUND_JUMPING.play();
+        this.animateJump();
       }
-
       // Camera movement
       this.world.cameraX = -this.x + 80;
-
       // Animations
       if (this.isDead()) {
-        if (!this.deathAnimationPlayed) {
-          this.SOUND_WALKING.pause();
-          this.playAnimationOnce(this.IMAGES_DYING);
-          this.deathAnimationPlayed = true;
-        }
-        return;
+        this.animateIsDead();
       } else if (this.isHurt()) {
-        this.SOUND_WALKING.pause();
-        this.playAnimation(this.IMAGES_HURT);
+        this.animateIsHurt();
       } else if (this.isInTheAir()) {
-        this.SOUND_WALKING.pause();
-        this.animationTimers.jumping++;
-        this.animationTimers.walking = 0;
-        this.animationTimers.idle = 0;
-
-        if (this.animationTimers.jumping >= 6) {
-          // when the jumping timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
-          this.playAnimation(this.IMAGES_JUMPING);
-          this.animationTimers.jumping = 0;
-        }
+        this.animateIsInTheAir();
       } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.animationTimers.walking++;
-        this.animationTimers.jumping = 0;
-        this.animationTimers.idle = 0;
-
-        if (this.animationTimers.walking >= 1) {
-          // when the walking timer has reached 2 ticks (at 60FPS = 2 x 16.66ms = ca. 33ms)
-          this.playAnimation(this.IMAGES_WALKING);
-          this.animationTimers.walking = 0;
-        }
+        this.animateWalking();
       } else {
-        this.SOUND_WALKING.pause();
-        this.animationTimers.idle++;
-        this.animationTimers.jumping = 0;
-        this.animationTimers.walking = 0;
-        if (this.animationTimers.idle >= 6) {
-          // when the idle timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
-          this.playAnimation(this.IMAGES_IDLE);
-          this.animationTimers.idle = 0;
-        }
+        this.animateIdle();
       }
     }, 1000 / 60);
+  }
+
+  animateMoveLeft() {
+    this.moveLeft();
+    this.otherDirection = true;
+    this.SOUND_WALKING.volume = 0.5;
+    this.SOUND_WALKING.play();
+    this.SOUND_WALKING.loop = true;
+  }
+
+  animateMoveRight() {
+    this.moveRight();
+    this.otherDirection = false;
+    this.SOUND_WALKING.volume = 0.5;
+    this.SOUND_WALKING.play();
+    this.SOUND_WALKING.loop = true;
+  }
+
+  animateJump() {
+    this.jump();
+    this.SOUND_JUMPING.volume = 0.1;
+    this.SOUND_JUMPING.play();
+  }
+
+  animateIsDead() {
+    this.SOUND_WALKING.pause();
+    this.playAnimation(this.IMAGES_DYING);
+  }
+
+  animateIsHurt() {
+    this.SOUND_WALKING.pause();
+    this.playAnimationOnce(this.IMAGES_HURT);
+  }
+
+  animateIsInTheAir() {
+    this.SOUND_WALKING.pause();
+    this.animationTimers.jumping++;
+    this.animationTimers.walking = 0;
+    this.animationTimers.idle = 0;
+
+    if (this.animationTimers.jumping >= 6) {
+      // when the jumping timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
+      this.playAnimation(this.IMAGES_JUMPING);
+      this.animationTimers.jumping = 0;
+    }
+  }
+
+  animateWalking() {
+    this.animationTimers.walking++;
+    this.animationTimers.jumping = 0;
+    this.animationTimers.idle = 0;
+
+    if (this.animationTimers.walking >= 1) {
+      // when the walking timer has reached 2 ticks (at 60FPS = 2 x 16.66ms = ca. 33ms)
+      this.playAnimation(this.IMAGES_WALKING);
+      this.animationTimers.walking = 0;
+    }
+  }
+
+  animateIdle() {
+    this.SOUND_WALKING.pause();
+    this.animationTimers.idle++;
+    this.animationTimers.jumping = 0;
+    this.animationTimers.walking = 0;
+    if (this.animationTimers.idle >= 6) {
+      // when the idle timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
+      this.playAnimation(this.IMAGES_IDLE);
+      this.animationTimers.idle = 0;
+    }
   }
 }
