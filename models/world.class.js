@@ -5,6 +5,7 @@ class World {
   cameraX = 0;
   character = new Character();
   level = level1;
+  statusbar = new Statusbar();
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
@@ -24,7 +25,8 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           if (!this.character.isDead()) {
-            this.character.damage();
+            this.character.hit();
+            this.statusbar.setPercentage(this.character.energy);
           }
         }
       });
@@ -38,11 +40,16 @@ class World {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Cleares the canvas by deleting the previous image before drawing again
 
     this.ctx.translate(this.cameraX, 0);
-
     this.addObjectsToMap(this.level.background);
     this.addObjectsToMap(this.level.fireflies);
     this.addObjectsToMap(this.level.midground);
     this.addObjectsToMap(this.level.foreground);
+
+    this.ctx.translate(-this.cameraX, 0);
+    // --- space for fixed objects ---
+    this.addToMap(this.statusbar);
+    this.ctx.translate(this.cameraX, 0);
+
     this.addObjectsToMap(this.level.enemies);
     this.addToMap(this.level.endboss);
     this.addToMap(this.character);
