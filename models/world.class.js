@@ -6,6 +6,7 @@ class World {
   character = new Character();
   level = level1;
   statusbar = new Statusbar();
+  arrows = [];
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
@@ -13,27 +14,39 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.checkCollisions();
+    this.runInterval();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
-  checkCollisions() {
+  runInterval() {
     setInterval(() => {
-      this.level.enemies.forEach((enemy) => {
-        if (this.character.isColliding(enemy)) {
-          if (!this.character.isDead()) {
-            this.character.hit();
-            this.statusbar.setPercentage(this.character.energy);
-          }
-        }
-      });
-
-      if (this.character.isColliding(this.level.endboss)) {
-      }
+      this.checkCollisions();
+      this.checkThrowObjects();
     }, 200);
+  }
+
+  checkCollisions() {
+    this.level.enemies.forEach((enemy) => {
+      if (this.character.isColliding(enemy)) {
+        if (!this.character.isDead()) {
+          this.character.hit();
+          this.statusbar.setPercentage(this.character.energy);
+        }
+      }
+    });
+
+    if (this.character.isColliding(this.level.endboss)) {
+    }
+  }
+
+  checkThrowObjects() {
+    if (this.keyboard.D) {
+      let arrow = new ThrowableObject(this.character.x + 60, this.character.y + 50);
+      this.arrows.push(arrow);
+    }
   }
 
   draw() {
@@ -44,6 +57,7 @@ class World {
     this.addObjectsToMap(this.level.fireflies);
     this.addObjectsToMap(this.level.midground);
     this.addObjectsToMap(this.level.foreground);
+    this.addToMap(this.character);
 
     this.ctx.translate(-this.cameraX, 0);
     // --- space for fixed objects ---
@@ -52,7 +66,8 @@ class World {
 
     this.addObjectsToMap(this.level.enemies);
     this.addToMap(this.level.endboss);
-    this.addToMap(this.character);
+
+    this.addObjectsToMap(this.arrows);
 
     this.ctx.translate(-this.cameraX, 0);
 
