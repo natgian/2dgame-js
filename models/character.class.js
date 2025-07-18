@@ -7,6 +7,7 @@ class Character extends MovableObject {
     walking: 0,
     jumping: 0,
     idle: 0,
+    hurt: 0,
   };
 
   IMAGES_IDLE_BLINKING = [
@@ -117,6 +118,7 @@ class Character extends MovableObject {
 
   SOUND_JUMPING = new Audio("audio/whoosh_jump.mp3");
   SOUND_WALKING = new Audio("audio/running_in_grass.mp3");
+  SOUND_HURT = new Audio("audio/hurt.mp3");
 
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
@@ -165,12 +167,22 @@ class Character extends MovableObject {
 
   animateIsDead() {
     this.SOUND_WALKING.pause();
-    this.playAnimationOnce(this.IMAGES_DYING);
+    this.playDeadAnimation(this.IMAGES_DYING);
   }
 
   animateIsHurt() {
     this.SOUND_WALKING.pause();
-    this.playAnimationOnce(this.IMAGES_HURT);
+    this.animationTimers.hurt++;
+    this.animationTimers.walking = 0;
+    this.animationTimers.idle = 0;
+    this.animationTimers.jumping = 0;
+
+    if (this.animationTimers.hurt >= 1) {
+      this.SOUND_HURT.volume = 0.5;
+      this.SOUND_HURT.play();
+      this.playAnimation(this.IMAGES_HURT);
+      this.animationTimers.hurt = 0;
+    }
   }
 
   animateIsInTheAir() {
@@ -178,6 +190,7 @@ class Character extends MovableObject {
     this.animationTimers.jumping++;
     this.animationTimers.walking = 0;
     this.animationTimers.idle = 0;
+    this.animationTimers.hurt = 0;
 
     if (this.animationTimers.jumping >= 6) {
       // when the jumping timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
@@ -190,6 +203,7 @@ class Character extends MovableObject {
     this.animationTimers.walking++;
     this.animationTimers.jumping = 0;
     this.animationTimers.idle = 0;
+    this.animationTimers.hurt = 0;
 
     if (this.animationTimers.walking >= 1) {
       // when the walking timer has reached 2 ticks (at 60FPS = 2 x 16.66ms = ca. 33ms)
@@ -203,6 +217,8 @@ class Character extends MovableObject {
     this.animationTimers.idle++;
     this.animationTimers.jumping = 0;
     this.animationTimers.walking = 0;
+    this.animationTimers.hurt = 0;
+
     if (this.animationTimers.idle >= 6) {
       // when the idle timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
       this.playAnimation(this.IMAGES_IDLE);
@@ -231,6 +247,10 @@ class Character extends MovableObject {
 
   updateAnimation() {
     if (this.isDead()) {
+      if (!this.isInDeathAnimation) {
+        this.currentImage = 0; // Animation neu starten
+        this.isInDeathAnimation = true;
+      }
       this.animateIsDead();
     } else if (this.isHurt()) {
       this.animateIsHurt();

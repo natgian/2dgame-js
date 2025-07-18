@@ -14,6 +14,7 @@ class MovableObject {
   acceleration = 2.5;
 
   energy = 100;
+  isInDeathAnimation = false;
 
   collisionBoxOffsetX = 0;
   collisionBoxOffsetY = 0;
@@ -72,7 +73,7 @@ class MovableObject {
     return thisObj.x + thisObj.width > otherObj.x && thisObj.y + thisObj.height > otherObj.y && thisObj.x < otherObj.x + otherObj.width && thisObj.y < otherObj.y + otherObj.height;
   }
 
-  damage() {
+  hit() {
     this.energy -= 5;
     if (this.energy < 0) {
       this.energy = 0;
@@ -84,7 +85,6 @@ class MovableObject {
   isHurt() {
     let timePassed = new Date().getTime() - this.lastHit; // difference in milliseconds
     timePassed = timePassed / 1000; // difference in seconds
-    console.log(timePassed);
     return timePassed < 0.2;
   }
 
@@ -111,11 +111,14 @@ class MovableObject {
     this.currentImage++;
   }
 
-  playAnimationOnce(images) {
+  playDeadAnimation(images) {
     if (this.currentImage < images.length) {
       let path = images[this.currentImage];
       this.img = this.imageCache[path];
       this.currentImage++;
+    } else {
+      let path = images[images.length - 1];
+      this.img = this.imageCache[path];
     }
   }
 
