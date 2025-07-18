@@ -33,6 +33,10 @@ document.addEventListener("keydown", (event) => {
   if (event.code === "Space") {
     keyboard.SPACE = true;
   }
+
+  if (event.code === "KeyD") {
+    keyboard.D = true;
+  }
 });
 
 document.addEventListener("keyup", (event) => {
@@ -54,5 +58,9 @@ document.addEventListener("keyup", (event) => {
 
   if (event.code === "Space") {
     keyboard.SPACE = false;
+  }
+
+  if (event.code === "KeyD") {
+    keyboard.D = false;
   }
 });
