@@ -24,7 +24,6 @@ class World {
   runInterval() {
     setInterval(() => {
       this.checkCollisions();
-      // this.checkThrowObjects();
     }, 200);
   }
 
@@ -33,7 +32,7 @@ class World {
       if (this.character.isColliding(enemy)) {
         if (!this.character.isDead()) {
           this.character.hit();
-          this.statusbar.setPercentage(this.character.energy);
+          this.statusbar.setPercentage(this.character.health);
         }
       }
     });
@@ -43,6 +42,10 @@ class World {
   }
 
   checkThrowObjects() {
+    if (!this.character.lastArrowShot()) return;
+
+    this.character.lastShoot = new Date().getTime();
+
     setTimeout(() => {
       let arrow;
       if (!this.character.otherDirection) {
@@ -53,11 +56,8 @@ class World {
 
       arrow.throw();
       this.arrows.push(arrow);
-    }, 600);
-
-    setTimeout(() => {
       this.character.isShooting = false;
-    }, 1000); // 1000ms → neue Schüsse nach 1s erlaubt
+    }, 600);
   }
 
   draw() {

@@ -3,6 +3,7 @@ class Character extends MovableObject {
   y = 295;
   speed = 5;
   isShooting = false;
+  lastShoot = 0;
 
   animationTimers = {
     walking: 0,
@@ -158,6 +159,30 @@ class Character extends MovableObject {
     }, 1000 / 60);
   }
 
+  handleMovement() {
+    // Moving right
+    if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+      this.handleMoveRight();
+    }
+    // Moving left
+    if (this.world.keyboard.LEFT && this.x > 0) {
+      this.handleMoveLeft();
+    }
+    // Jumping
+    if (this.world.keyboard.SPACE && !this.isInTheAir()) {
+      this.animateJump();
+    }
+    // Shooting
+    if (this.world.keyboard.D && !this.isShooting) {
+      this.isShooting = true;
+      this.world.checkThrowObjects();
+    }
+  }
+
+  updateCamera() {
+    this.world.cameraX = -this.x + 80;
+  }
+
   handleMoveLeft() {
     this.moveLeft();
     this.otherDirection = true;
@@ -257,30 +282,6 @@ class Character extends MovableObject {
     }
   }
 
-  handleMovement() {
-    // Moving right
-    if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
-      this.handleMoveRight();
-    }
-    // Moving left
-    if (this.world.keyboard.LEFT && this.x > 0) {
-      this.handleMoveLeft();
-    }
-    // Jumping
-    if (this.world.keyboard.SPACE && !this.isInTheAir()) {
-      this.animateJump();
-    }
-    // Shooting
-    if (this.world.keyboard.D && !this.isShooting) {
-      this.isShooting = true;
-      this.world.checkThrowObjects();
-    }
-  }
-
-  updateCamera() {
-    this.world.cameraX = -this.x + 80;
-  }
-
   updateAnimation() {
     if (this.isDead()) {
       if (!this.isInDeathAnimation) {
@@ -299,5 +300,11 @@ class Character extends MovableObject {
     } else {
       this.animateIdle();
     }
+  }
+
+  lastArrowShot() {
+    let timepassed = new Date().getTime() - this.lastShoot;
+    timepassed = timepassed / 1000;
+    return timepassed > 1;
   }
 }
