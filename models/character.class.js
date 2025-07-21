@@ -2,12 +2,14 @@ class Character extends MovableObject {
   world;
   y = 295;
   speed = 5;
+  isShooting = false;
 
   animationTimers = {
     walking: 0,
     jumping: 0,
     idle: 0,
     hurt: 0,
+    shoot: 0,
   };
 
   IMAGES_IDLE_BLINKING = [
@@ -115,6 +117,18 @@ class Character extends MovableObject {
     "img/character/dying/13_Dying.png",
     "img/character/dying/14_Dying.png",
   ];
+  IMAGES_SHOOTING = [
+    "img/character/shooting/00_Shooting.png",
+    "img/character/shooting/01_Shooting.png",
+    "img/character/shooting/02_Shooting.png",
+    "img/character/shooting/03_Shooting.png",
+    "img/character/shooting/04_Shooting.png",
+    "img/character/shooting/05_Shooting.png",
+    "img/character/shooting/06_Shooting.png",
+    "img/character/shooting/07_Shooting.png",
+    "img/character/shooting/08_Shooting.png",
+    "img/character/shooting/09_Shooting.png",
+  ];
 
   SOUND_JUMPING = new Audio("audio/whoosh_jump.mp3");
   SOUND_WALKING = new Audio("audio/running_in_grass.mp3");
@@ -127,6 +141,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_JUMPING);
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DYING);
+    this.loadImages(this.IMAGES_SHOOTING);
     this.applyGravity();
     this.animate();
     this.collisionBoxOffsetX = 35;
@@ -163,6 +178,22 @@ class Character extends MovableObject {
     this.jump();
     this.SOUND_JUMPING.volume = 0.1;
     this.SOUND_JUMPING.play();
+  }
+
+  animateShoot() {
+    this.animationTimers.shoot++;
+
+    // Alle 6 Frames (100ms) ein Bild → 60FPS
+    if (this.animationTimers.shoot % 6 === 0) {
+      this.img = this.imageCache[this.IMAGES_SHOOTING[this.currentImage]];
+      this.currentImage++;
+    }
+    // Animation nach letztem Frame beenden
+    if (this.currentImage >= this.IMAGES_SHOOTING.length) {
+      this.isShooting = false;
+      this.currentImage = 0;
+      this.animationTimers.shoot = 0;
+    }
   }
 
   animateIsDead() {
@@ -239,6 +270,11 @@ class Character extends MovableObject {
     if (this.world.keyboard.SPACE && !this.isInTheAir()) {
       this.animateJump();
     }
+    // Shooting
+    if (this.world.keyboard.D && !this.isShooting) {
+      this.isShooting = true;
+      this.world.checkThrowObjects();
+    }
   }
 
   updateCamera() {
@@ -254,6 +290,8 @@ class Character extends MovableObject {
       this.animateIsDead();
     } else if (this.isHurt()) {
       this.animateIsHurt();
+    } else if (this.isShooting) {
+      this.animateShoot();
     } else if (this.isInTheAir()) {
       this.animateIsInTheAir();
     } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {

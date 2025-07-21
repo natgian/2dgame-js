@@ -1,14 +1,14 @@
 class ThrowableObject extends MovableObject {
   rotation = 0;
-  // Canvas uses radiant
 
   constructor(x, y) {
     super().loadImage("img/misc/arrow.png");
     this.x = x;
     this.y = y;
+    this.speedX = 0;
+    this.speedY = 0;
     this.width = 48 / 2;
     this.height = 160 / 2;
-    this.throw();
   }
 
   /**
@@ -30,19 +30,34 @@ class ThrowableObject extends MovableObject {
    */
   draw(ctx) {
     ctx.save();
-    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-    ctx.rotate(Math.PI / 2);
+    ctx.translate(this.x + this.width / 2 + 10, this.y + this.height / 2 + 5);
+
+    if (this.facingLeft) {
+      ctx.scale(-1, 1);
+      ctx.rotate(-1.5);
+    } else {
+      ctx.rotate(1.5);
+    }
+
     ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }
 
   throw() {
-    this.speedX = 10;
     this.speedY = -15;
+    this.speedX = 10;
     this.acceleration = 1.2;
     this.applyGravity();
-    setInterval(() => {
-      this.x += 10;
-    }, 10);
+
+    if (!world.character.otherDirection) {
+      this.throwInterval = setInterval(() => {
+        this.x += this.speedX;
+      }, 10);
+    } else {
+      this.throwInterval = setInterval(() => {
+        this.otherDirection = true;
+        this.x -= this.speedX;
+      }, 10);
+    }
   }
 }

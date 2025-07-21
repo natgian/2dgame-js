@@ -24,7 +24,7 @@ class World {
   runInterval() {
     setInterval(() => {
       this.checkCollisions();
-      this.checkThrowObjects();
+      // this.checkThrowObjects();
     }, 200);
   }
 
@@ -43,10 +43,21 @@ class World {
   }
 
   checkThrowObjects() {
-    if (this.keyboard.D) {
-      let arrow = new ThrowableObject(this.character.x + 60, this.character.y + 50);
+    setTimeout(() => {
+      let arrow;
+      if (!this.character.otherDirection) {
+        arrow = new ThrowableObject(this.character.x + 60, this.character.y + 50);
+      } else {
+        arrow = new ThrowableObject(this.character.x + -20, this.character.y + 50);
+      }
+
+      arrow.throw();
       this.arrows.push(arrow);
-    }
+    }, 600);
+
+    setTimeout(() => {
+      this.character.isShooting = false;
+    }, 1000); // 1000ms → neue Schüsse nach 1s erlaubt
   }
 
   draw() {
