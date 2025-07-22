@@ -3,6 +3,8 @@ class Endboss extends MovableObject {
   height = 400;
   y = 85;
   frameRate = this.speed * 400;
+  speed = 10;
+  hadFirstContact = false;
 
   IMAGES_WALKING = [
     "img/enemies/endboss/walking/000.png",
@@ -49,7 +51,8 @@ class Endboss extends MovableObject {
   constructor() {
     super().loadImage(this.IMAGES_IDLE[0]);
     this.loadImages(this.IMAGES_IDLE);
-    this.x = 250;
+    this.loadImages(this.IMAGES_WALKING);
+    this.x = 3000;
     this.animate();
     this.collisionBoxOffsetX = 80;
     this.collisionBoxOffsetY = 50;
@@ -58,8 +61,26 @@ class Endboss extends MovableObject {
   }
 
   animate() {
+    let index = 0;
+
     setInterval(() => {
-      this.playAnimation(this.IMAGES_IDLE);
+      if (world.character.x > 2500 && !this.hadFirstContact) {
+        index = 0;
+        this.hadFirstContact = true;
+      }
+
+      if (!this.hadFirstContact) {
+        this.playAnimation(this.IMAGES_IDLE);
+        return;
+      }
+
+      if (index < 10) {
+        this.playAnimation(this.IMAGES_IDLE);
+      } else {
+        this.playAnimation(this.IMAGES_WALKING);
+        this.moveLeft();
+      }
+      index++;
     }, this.frameRate);
   }
 }
