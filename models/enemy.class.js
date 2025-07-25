@@ -31,7 +31,7 @@ class Enemy extends MovableObject {
 
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
-    this.x = 200 + Math.random() * 500;
+    this.x = 200 + Math.random() * 800;
     this.loadImages(this.IMAGES_WALKING);
     this.speed = 0.15 + Math.random() * 0.75;
     this.animate();
@@ -49,5 +49,9 @@ class Enemy extends MovableObject {
     setInterval(() => {
       this.playAnimation(this.IMAGES_WALKING);
     }, this.frameRate);
+  }
+
+  setRandomPosition() {
+    this.x = 600 + Math.random() * 800;
   }
 }

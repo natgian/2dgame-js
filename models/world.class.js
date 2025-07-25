@@ -68,6 +68,7 @@ class World {
     this.addObjectsToMap(this.level.fireflies);
     this.addObjectsToMap(this.level.midground);
     this.addObjectsToMap(this.level.foreground);
+    this.addObjectsToMap(this.level.feathers);
     this.addToMap(this.character);
 
     this.ctx.translate(-this.cameraX, 0);
