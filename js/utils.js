@@ -5,8 +5,36 @@
  * @param {number} count - The number of objects to create
  * @returns - An array of new objects
  */
-function generateObjects(ClassRef, count) {
-  return Array.from({ length: count }, () => new ClassRef());
+function generateObjects(ClassRef, count, minDistance = 150, maxAttempts = 1000) {
+  const objects = [];
+  let attempts = 0;
+
+  while (canGenerateMoreObjects(objects, count, attempts, maxAttempts)) {
+    attempts++;
+    const newObject = generateAndPositionObject(ClassRef);
+
+    if (isFarEnough(objects, newObject, minDistance)) {
+      objects.push(newObject);
+      attempts = 0;
+    }
+  }
+  return objects;
+}
+
+function generateAndPositionObject(ClassRef) {
+  const newObject = new ClassRef();
+  newObject.setRandomPosition?.();
+  return newObject;
+}
+
+function canGenerateMoreObjects(objects, count, attempts, maxAttempts) {
+  return objects.length < count && attempts < maxAttempts;
+}
+
+function isFarEnough(objects, newObject, minDistance) {
+  return objects.every((existingObject) => {
+    return Math.abs(newObject.x - existingObject.x) >= minDistance;
+  });
 }
 
 /**
