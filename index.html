@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -15,6 +15,7 @@
     <script src="./models/enemy.class.js" defer></script>
     <script src="./models/endboss.class.js" defer></script>
     <script src="./models/firefly.class.js" defer></script>
+    <script src="./models/feather.class.js" defer></script>
     <script src="./models/keyboard.class.js" defer></script>
     <script src="./models/layer.class.js" defer></script>
     <script src="./models/level.class.js" defer></script>
@@ -23,9 +24,12 @@
     <title>Nara - Guardian of the Greendwood</title>
   </head>
   <body onload="init()">
-    <h1>NARA</h1>
-    <h2>Guardian of the Greenwood</h2>
-
-    <canvas id="canvas" width="720" height="480"></canvas>
+    <h1 class="title">NARA</h1>
+    <h2 class="subtitle">Guardian of the Greenwood</h2>
+    <div id="fullscreen">
+      <canvas id="canvas" width="720" height="480"></canvas>
+      <button onclick="enterFullscreen(fullscreen)">Fullscreen</button>
+      <button onclick="exitFullscreen()">Exit Fullscreen</button>
+    </div>
   </body>
 </html>
