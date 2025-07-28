@@ -28,6 +28,12 @@ class World {
   }
 
   checkCollisions() {
+    this.checkCharacterEnemyCollision();
+    this.checkCharacterCollectableCollision("feathers", "feather");
+    this.checkCharacterCollectableCollision("branches", "branch");
+  }
+
+  checkCharacterEnemyCollision() {
     this.level.enemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
         if (!this.character.isDead()) {
@@ -38,6 +44,20 @@ class World {
     });
 
     if (this.character.isColliding(this.level.endboss)) {
+    }
+  }
+
+  checkArrowEnemyCollision() {}
+
+  checkCharacterCollectableCollision(collectableArray, collectableType) {
+    const objects = this.level[collectableArray];
+
+    for (let index = objects.length - 1; index >= 0; index--) {
+      const obj = objects[index];
+      if (this.character.isColliding(obj)) {
+        this.character.handleCollectable(collectableType);
+        objects.splice(index, 1);
+      }
     }
   }
 
@@ -69,6 +89,7 @@ class World {
     this.addObjectsToMap(this.level.midground);
     this.addObjectsToMap(this.level.foreground);
     this.addObjectsToMap(this.level.feathers);
+    this.addObjectsToMap(this.level.branches);
     this.addToMap(this.character);
 
     this.ctx.translate(-this.cameraX, 0);

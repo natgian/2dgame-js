@@ -5,6 +5,10 @@ class Character extends MovableObject {
   isShooting = false;
   lastShoot = 0;
 
+  collectedFeathers = 0;
+  collectedBranches = 0;
+  cratedArrows = 0;
+
   animationTimers = {
     walking: 0,
     jumping: 0,
@@ -134,6 +138,8 @@ class Character extends MovableObject {
   SOUND_JUMPING = new Audio("audio/whoosh_jump.mp3");
   SOUND_WALKING = new Audio("audio/running_in_grass.mp3");
   SOUND_HURT = new Audio("audio/hurt.mp3");
+  SOUND_COLLECT_FEATHER = new Audio("audio/collect_feather.mp3");
+  SOUND_COLLECT_BRANCH = new Audio("audio/collect_branch.mp3");
 
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
@@ -197,6 +203,19 @@ class Character extends MovableObject {
     this.SOUND_WALKING.volume = 0.5;
     this.SOUND_WALKING.play();
     this.SOUND_WALKING.loop = true;
+  }
+
+  //TODO:
+  handleCollectable(type) {
+    if (type === "feather") {
+      this.collectedFeathers++;
+      this.SOUND_COLLECT_FEATHER.currentTime = 0;
+      this.SOUND_COLLECT_FEATHER.play();
+    } else if (type === "branch") {
+      this.collectedBranches++;
+      this.SOUND_COLLECT_BRANCH.currentTime = 0;
+      this.SOUND_COLLECT_BRANCH.play();
+    }
   }
 
   animateJump() {

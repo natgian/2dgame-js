@@ -1,7 +1,7 @@
 class Feather extends MovableObject {
   width = 30;
   height = 60;
-  frameRate = 180;
+  frameRate = 320;
 
   IMAGES = [
     "img/collectables/gold_feather/_01_gold_feather.png",
@@ -14,6 +14,10 @@ class Feather extends MovableObject {
     super().loadImage("img/collectables/gold_feather/_01_gold_feather.png");
     this.loadImages(this.IMAGES);
     this.animate();
+    this.collisionBoxOffsetX = 0;
+    this.collisionBoxOffsetY = 0;
+    this.collisionBoxWidth = this.width - 30;
+    this.collisionBoxHeight = this.height - 55;
   }
 
   animate() {

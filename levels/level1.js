@@ -5,8 +5,9 @@ function initLevel() {
     // Characters & Enemies
     generateObjects(Enemy, 3),
     new Endboss(),
-    generateObjects(Firefly, 24),
+    generateObjects(Firefly, 100, 0),
     generateObjects(Feather, 10),
+    generateObjects(Branch, 5),
 
     // Background Layers
     generateRepeatingLayer({ count: 5, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 }),
