@@ -18,6 +18,7 @@ class Statusbar extends DrawableObject {
     this.y = 20;
     this.width = 595 / 3;
     this.height = 158 / 3;
+    this.hasCollisionBox = false;
   }
 
   // setPercentage(50)

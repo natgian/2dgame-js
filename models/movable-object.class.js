@@ -7,11 +7,6 @@ class MovableObject extends DrawableObject {
   health = 100;
   isInDeathAnimation = false;
 
-  collisionBoxOffsetX = 0;
-  collisionBoxOffsetY = 0;
-  collisionBoxWidth = this.width;
-  collisionBoxHeight = this.height;
-
   setRandomPosition() {
     this.x = 0;
     this.y = 0;
@@ -28,15 +23,6 @@ class MovableObject extends DrawableObject {
 
   isInTheAir() {
     return this.y < 295;
-  }
-
-  getCollisionBox() {
-    return {
-      x: this.x + this.collisionBoxOffsetX,
-      y: this.y + this.collisionBoxOffsetY,
-      width: this.width + this.collisionBoxWidth,
-      height: this.height + this.collisionBoxHeight,
-    };
   }
 
   // z.B. character.isColliding(enemy);

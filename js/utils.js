@@ -1,10 +1,3 @@
-/**
- * Creates an array of new objects from the given class
- *
- * @param {Function} ClassRef - The class constructor to create a new object
- * @param {number} count - The number of objects to create
- * @returns - An array of new objects
- */
 function generateObjects(ClassRef, count, minDistance = 150, maxAttempts = 1000) {
   const objects = [];
   let attempts = 0;

@@ -8,6 +8,12 @@ class DrawableObject {
   height = 150;
   width = 150;
 
+  hasCollisionBox = true;
+  collisionBoxOffsetX = 0;
+  collisionBoxOffsetY = 0;
+  collisionBoxWidth = this.width;
+  collisionBoxHeight = this.height;
+
   loadImage(path) {
     this.img = new Image();
     this.img.src = path;
@@ -25,6 +31,15 @@ class DrawableObject {
     });
   }
 
+  getCollisionBox() {
+    return {
+      x: this.x + this.collisionBoxOffsetX,
+      y: this.y + this.collisionBoxOffsetY,
+      width: this.width + this.collisionBoxWidth,
+      height: this.height + this.collisionBoxHeight,
+    };
+  }
+
   draw(ctx) {
     try {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -35,7 +50,7 @@ class DrawableObject {
   }
 
   drawBorder(ctx) {
-    if (this instanceof Character || this instanceof Enemy || this instanceof Endboss) {
+    if (this.hasCollisionBox) {
       const collisionBox = this.getCollisionBox();
 
       ctx.beginPath();

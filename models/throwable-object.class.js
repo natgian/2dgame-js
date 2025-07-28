@@ -9,6 +9,10 @@ class ThrowableObject extends MovableObject {
     this.speedY = 0;
     this.width = 48 / 2;
     this.height = 160 / 2;
+    this.collisionBoxOffsetX = -12;
+    this.collisionBoxOffsetY = 25;
+    this.collisionBoxWidth = 50;
+    this.collisionBoxHeight = -50;
   }
 
   /**

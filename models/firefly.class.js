@@ -6,6 +6,7 @@ class Firefly extends MovableObject {
     super().loadImage("img/misc/firefly.png");
     this.reset();
     this.animate();
+    this.hasCollisionBox = false;
   }
 
   reset() {
@@ -32,5 +33,9 @@ class Firefly extends MovableObject {
         this.reset();
       }
     }, 1000 / 60);
+  }
+
+  setRandomPosition() {
+    this.reset();
   }
 }
