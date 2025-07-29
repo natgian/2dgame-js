@@ -5,7 +5,7 @@ class World {
   cameraX = 0;
   character = new Character();
   level = level1;
-  statusbar = new Statusbar();
+  arrowCounter = new ArrowCounter(this.character);
   arrows = [];
 
   constructor(canvas, keyboard) {
@@ -38,7 +38,7 @@ class World {
       if (this.character.isColliding(enemy)) {
         if (!this.character.isDead()) {
           this.character.hit();
-          this.statusbar.setPercentage(this.character.health);
+          this.level.statusBars[0].setValue(this.character.health);
         }
       }
     });
@@ -47,6 +47,7 @@ class World {
     }
   }
 
+  //TODO:
   checkArrowEnemyCollision() {}
 
   checkCharacterCollectableCollision(collectableArray, collectableType) {
@@ -55,8 +56,16 @@ class World {
     for (let index = objects.length - 1; index >= 0; index--) {
       const obj = objects[index];
       if (this.character.isColliding(obj)) {
-        this.character.handleCollectable(collectableType);
-        objects.splice(index, 1);
+        const collected = this.character.handleCollectable(collectableType);
+        if (collected) {
+          objects.splice(index, 1);
+
+          if (collectableType === "branch") {
+            this.level.statusBars[1].setValue(this.character.collectedBranches);
+          } else if (collectableType === "feather") {
+            this.level.statusBars[2].setValue(this.character.collectedFeathers);
+          }
+        }
       }
     }
   }
@@ -64,6 +73,9 @@ class World {
   checkThrowObjects() {
     if (!this.character.lastArrowShot()) return;
 
+    if (this.character.craftedArrows <= 0) return;
+
+    this.character.craftedArrows--;
     this.character.lastShoot = new Date().getTime();
 
     setTimeout(() => {
@@ -90,12 +102,15 @@ class World {
     this.addObjectsToMap(this.level.foreground);
     this.addObjectsToMap(this.level.feathers);
     this.addObjectsToMap(this.level.branches);
-    this.addToMap(this.character);
 
     this.ctx.translate(-this.cameraX, 0);
     // --- space for fixed objects ---
-    this.addToMap(this.statusbar);
+    this.addObjectsToMap(this.level.statusBars);
+    // this.addToMap(this.statusbar);
+    this.addToMap(this.arrowCounter);
     this.ctx.translate(this.cameraX, 0);
+
+    this.addToMap(this.character);
 
     this.addObjectsToMap(this.level.enemies);
     this.addToMap(this.level.endboss);

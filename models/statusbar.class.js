@@ -1,45 +1,67 @@
+const STATUSBAR_CONFIG = {
+  health: {
+    maxValue: 100,
+    startValue: 100,
+    images: [
+      "img/statusbars/health/health_0.png",
+      "img/statusbars/health/health_20.png",
+      "img/statusbars/health/health_40.png",
+      "img/statusbars/health/health_60.png",
+      "img/statusbars/health/health_80.png",
+      "img/statusbars/health/health_100.png",
+    ],
+  },
+  branch: {
+    maxValue: 3,
+    startValue: 0,
+    images: ["img/statusbars/branches/branch_0.png", "img/statusbars/branches/branch_1.png", "img/statusbars/branches/branch_2.png", "img/statusbars/branches/branch_3.png"],
+  },
+  feather: {
+    maxValue: 3,
+    startValue: 0,
+    images: ["img/statusbars/feathers/feather_0.png", "img/statusbars/feathers/feather_1.png", "img/statusbars/feathers/feather_2.png", "img/statusbars/feathers/feather_3.png"],
+  },
+};
+
 class Statusbar extends DrawableObject {
-  IMAGES = [
-    "img/statusbars/health/0.png", // 0
-    "img/statusbars/health/20.png",
-    "img/statusbars/health/40.png",
-    "img/statusbars/health/60.png",
-    "img/statusbars/health/80.png",
-    "img/statusbars/health/100.png", // 5
-  ];
-
-  percentage = 100;
-
-  constructor() {
+  constructor(type, x, y) {
     super();
+    this.type = type;
+
+    const config = STATUSBAR_CONFIG[type];
+    if (!config) throw new Error(`Unknown statusbar type: ${type}`);
+
+    this.maxValue = config.maxValue;
+    this.startValue = config.startValue;
+    this.IMAGES = config.images;
+
     this.loadImages(this.IMAGES);
-    this.setPercentage(100);
-    this.x = 40;
-    this.y = 20;
+    this.setValue(this.startValue);
+
+    this.x = x;
+    this.y = y;
     this.width = 595 / 3;
     this.height = 158 / 3;
     this.hasCollisionBox = false;
   }
 
-  // setPercentage(50)
-  setPercentage(percentage) {
-    this.percentage = percentage; // => 0 ... 5
-    let imagePath = this.IMAGES[this.getImageIndex()];
-    this.img = this.imageCache[imagePath];
+  setValue(value) {
+    this.value = Math.min(value, this.maxValue);
+    this.img = this.imageCache[this.IMAGES[this.getImageIndex(this.value)]];
   }
 
   getImageIndex() {
-    if (this.percentage === 100) {
-      return 5;
-    } else if (this.percentage > 80) {
-      return 4;
-    } else if (this.percentage > 60) {
-      return 3;
-    } else if (this.percentage > 40) {
-      return 2;
-    } else if (this.percentage > 20 || this.percentage > 0) {
-      return 1;
+    if (this.type === "health") {
+      if (this.value === 100) return 5;
+      if (this.value > 80) return 4;
+      if (this.value > 60) return 3;
+      if (this.value > 40) return 2;
+      if (this.value > 0) return 1;
+      return 0;
     } else {
+      if (this.value === 3) return 3;
+      if (this.value === 2) return 2;
+      if (this.value === 1) return 1;
       return 0;
     }
   }

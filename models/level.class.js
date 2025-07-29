@@ -4,17 +4,19 @@ class Level {
   fireflies;
   feathers;
   branches;
+  statusBars;
   background;
   midground;
   foreground;
   levelEndX = 2800;
 
-  constructor(enemies, endboss, fireflies, feathers, branches, background, midground, foreground) {
+  constructor(enemies, endboss, fireflies, feathers, branches, statusBars, background, midground, foreground) {
     this.enemies = enemies;
     this.endboss = endboss;
     this.fireflies = fireflies;
     this.feathers = feathers;
     this.branches = branches;
+    this.statusBars = statusBars;
     this.background = background;
     this.midground = midground;
     this.foreground = foreground;

@@ -7,7 +7,8 @@ class Character extends MovableObject {
 
   collectedFeathers = 0;
   collectedBranches = 0;
-  cratedArrows = 0;
+  maxCollectables = 3;
+  craftedArrows = 0;
 
   animationTimers = {
     walking: 0,
@@ -205,16 +206,19 @@ class Character extends MovableObject {
     this.SOUND_WALKING.loop = true;
   }
 
-  //TODO:
   handleCollectable(type) {
     if (type === "feather") {
+      if (this.collectedFeathers >= this.maxCollectables) return;
       this.collectedFeathers++;
       this.SOUND_COLLECT_FEATHER.currentTime = 0;
       this.SOUND_COLLECT_FEATHER.play();
+      return true;
     } else if (type === "branch") {
+      if (this.collectedBranches >= this.maxCollectables) return;
       this.collectedBranches++;
       this.SOUND_COLLECT_BRANCH.currentTime = 0;
       this.SOUND_COLLECT_BRANCH.play();
+      return true;
     }
   }
 
