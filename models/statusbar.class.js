@@ -24,9 +24,15 @@ const STATUSBAR_CONFIG = {
 };
 
 class Statusbar extends DrawableObject {
+  width = 200;
+  height = 50;
+  hasCollisionBox = false;
+
   constructor(type, x, y) {
     super();
     this.type = type;
+    this.x = x;
+    this.y = y;
 
     const config = STATUSBAR_CONFIG[type];
     if (!config) throw new Error(`Unknown statusbar type: ${type}`);
@@ -37,12 +43,6 @@ class Statusbar extends DrawableObject {
 
     this.loadImages(this.IMAGES);
     this.setValue(this.startValue);
-
-    this.x = x;
-    this.y = y;
-    this.width = 595 / 3;
-    this.height = 158 / 3;
-    this.hasCollisionBox = false;
   }
 
   setValue(value) {
