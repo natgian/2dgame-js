@@ -1,6 +1,4 @@
 class ThrowableObject extends MovableObject {
-  rotation = 0;
-
   constructor(x, y) {
     super().loadImage("img/misc/arrow.png");
     this.x = x;
@@ -43,6 +41,7 @@ class ThrowableObject extends MovableObject {
       ctx.rotate(1.5);
     }
 
+    ctx.imageSmoothingEnabled = false;
     ctx.drawImage(this.img, -this.width / 2, -this.height / 2, this.width, this.height);
     ctx.restore();
   }

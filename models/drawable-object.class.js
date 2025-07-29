@@ -42,6 +42,7 @@ class DrawableObject {
 
   draw(ctx) {
     try {
+      ctx.imageSmoothingEnabled = false;
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     } catch (error) {
       console.warn("Error loading image", error);
