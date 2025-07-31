@@ -22,7 +22,7 @@ class MovableObject extends DrawableObject {
   }
 
   isInTheAir() {
-    return this.y < 295;
+    return this.y < 260;
   }
 
   // z.B. character.isColliding(enemy);
@@ -79,6 +79,6 @@ class MovableObject extends DrawableObject {
   }
 
   jump() {
-    this.speedY = 35;
+    this.speedY = 30;
   }
 }

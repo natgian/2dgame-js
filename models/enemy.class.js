@@ -1,5 +1,5 @@
 class Enemy extends MovableObject {
-  y = 305;
+  y = 270;
   frameRate = this.speed * 200;
 
   IMAGES_WALKING = [

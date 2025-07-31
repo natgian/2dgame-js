@@ -1,9 +1,9 @@
 class Endboss extends MovableObject {
   width = 400;
   height = 400;
-  y = 85;
-  frameRate = this.speed * 400;
-  speed = 10;
+  y = 50;
+  frameRate = this.speed * 600;
+  speed = 2;
   hadFirstContact = false;
 
   IMAGES_WALKING = [

@@ -11,6 +11,6 @@ class Branch extends DrawableObject {
 
   setRandomPosition() {
     this.x = 300 + Math.random() * (2500 - this.width);
-    this.y = 360;
+    this.y = 320;
   }
 }

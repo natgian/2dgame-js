@@ -1,6 +1,6 @@
 class Character extends MovableObject {
   world;
-  y = 295;
+  y = 260;
   speed = 5;
   isShooting = false;
   lastShoot = 0;
