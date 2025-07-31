@@ -3,6 +3,13 @@ let world;
 let keyboard = new Keyboard();
 let intervalIds = [];
 const fullscreen = document.getElementById("fullscreen");
+const keyMap = {
+  ArrowRight: "RIGHT",
+  ArrowLeft: "LEFT",
+  ArrowDown: "DOWN",
+  Space: "SPACE",
+  KeyD: "D",
+};
 
 /**
  * Initializes the game world by selecting the canvas element
@@ -12,6 +19,7 @@ const fullscreen = document.getElementById("fullscreen");
  */
 function init() {
   initLevel();
+  initAllEventListeners();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
 }
@@ -41,24 +49,14 @@ async function exitFullscreen() {
   }
 }
 
-document.addEventListener("fullscreenchange", () => {
-  if (!document.fullscreenElement) {
-    fullscreen.classList.remove("fullscreen-active");
-  }
-});
-
-document.addEventListener("webkitfullscreenchange", () => {
-  if (!document.webkitFullscreenElement) {
-    fullscreen.classList.remove("fullscreen-active");
-  }
-});
-
 function resizeCanvasToFullscreen() {
-  canvas.width = 720;
+  canvas.style.width = `${canvas.width * 1.5}px`;
+  canvas.style.height = `${canvas.height * 1.5}px`;
 }
 
 function resetCanvasSize() {
-  canvas.width = 720;
+  canvas.style.width = "720px";
+  canvas.style.height = "480px";
 }
 
 function resizeCanvas() {
@@ -69,8 +67,6 @@ function resizeCanvas() {
   }
 }
 
-window.addEventListener("resize", resizeCanvas);
-
 function stopGame() {
   clearAllIntervals();
 }
@@ -79,58 +75,54 @@ function clearAllIntervals() {
   for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
 
-document.addEventListener("keydown", (event) => {
-  if (event.code === "ArrowRight") {
-    keyboard.RIGHT = true;
-  }
+function initKeyDownListener() {
+  document.addEventListener("keydown", (event) => {
+    const key = keyMap[event.code];
 
-  if (event.code === "ArrowLeft") {
-    keyboard.LEFT = true;
-  }
+    if (key) {
+      keyboard[key] = true;
+    }
 
-  if (event.code === "ArrowDown") {
-    keyboard.DOWN = true;
-  }
+    if (event.code === "Escape") {
+      exitFullscreen();
+    }
+  });
+}
 
-  if (event.code === "ArrowUp") {
-    keyboard.UP = true;
-  }
+function initKeyUpListener() {
+  document.addEventListener("keyup", (event) => {
+    const key = keyMap[event.code];
 
-  if (event.code === "Space") {
-    keyboard.SPACE = true;
-  }
+    if (key) {
+      keyboard[key] = false;
+    }
+  });
+}
 
-  if (event.code === "KeyD") {
-    keyboard.D = true;
-  }
+function initFullscreenChangeListener() {
+  document.addEventListener("fullscreenchange", () => {
+    if (!document.fullscreenElement) {
+      fullscreen.classList.remove("fullscreen-active");
+    }
+  });
+}
 
-  if (event.code === "Escape") {
-    exitFullscreen();
-  }
-});
+function initWebKitFullscreenChangeListener() {
+  document.addEventListener("webkitfullscreenchange", () => {
+    if (!document.webkitFullscreenElement) {
+      fullscreen.classList.remove("fullscreen-active");
+    }
+  });
+}
 
-document.addEventListener("keyup", (event) => {
-  if (event.code === "ArrowRight") {
-    keyboard.RIGHT = false;
-  }
+function initResizeListener() {
+  window.addEventListener("resize", resizeCanvas);
+}
 
-  if (event.code === "ArrowLeft") {
-    keyboard.LEFT = false;
-  }
-
-  if (event.code === "ArrowDown") {
-    keyboard.DOWN = false;
-  }
-
-  if (event.code === "ArrowUp") {
-    keyboard.UP = false;
-  }
-
-  if (event.code === "Space") {
-    keyboard.SPACE = false;
-  }
-
-  if (event.code === "KeyD") {
-    keyboard.D = false;
-  }
-});
+function initAllEventListeners() {
+  initResizeListener();
+  initFullscreenChangeListener();
+  initWebKitFullscreenChangeListener();
+  initKeyDownListener();
+  initKeyUpListener();
+}
