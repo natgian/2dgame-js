@@ -1,4 +1,4 @@
-function generateObjects(ClassRef, count, minDistance = 150, maxAttempts = 1000) {
+function generateObjects(ClassRef, count, minDistance = 250, maxAttempts = 1000) {
   const objects = [];
   let attempts = 0;
 

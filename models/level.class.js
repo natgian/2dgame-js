@@ -21,4 +21,8 @@ class Level {
     this.midground = midground;
     this.foreground = foreground;
   }
+
+  getStatusBar(type) {
+    return this.statusBars.find((bar) => bar.type === type);
+  }
 }

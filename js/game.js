@@ -9,6 +9,7 @@ const keyMap = {
   ArrowDown: "DOWN",
   Space: "SPACE",
   KeyD: "D",
+  KeyF: "F",
 };
 
 /**
@@ -50,13 +51,11 @@ async function exitFullscreen() {
 }
 
 function resizeCanvasToFullscreen() {
-  canvas.style.width = `${canvas.width * 1.5}px`;
-  canvas.style.height = `${canvas.height * 1.5}px`;
+  canvas.classList.add("fullscreen-canvas");
 }
 
 function resetCanvasSize() {
-  canvas.style.width = "720px";
-  canvas.style.height = "480px";
+  canvas.classList.remove("fullscreen-canvas");
 }
 
 function resizeCanvas() {

@@ -160,13 +160,13 @@ class Character extends MovableObject {
 
   animate() {
     setInterval(() => {
-      this.handleMovement();
+      this.handlePlayerActions();
       this.updateCamera();
       this.updateAnimation();
     }, 1000 / 60);
   }
 
-  handleMovement() {
+  handlePlayerActions() {
     // Moving right
     if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
       this.handleMoveRight();
@@ -183,6 +183,10 @@ class Character extends MovableObject {
     if (this.world.keyboard.D && !this.isShooting) {
       this.isShooting = true;
       this.world.checkThrowObjects();
+    }
+    // Crafting
+    if (this.world.keyboard.F) {
+      this.craftArrows();
     }
   }
 
@@ -219,6 +223,17 @@ class Character extends MovableObject {
       this.SOUND_COLLECT_BRANCH.currentTime = 0;
       this.SOUND_COLLECT_BRANCH.play();
       return true;
+    }
+  }
+
+  craftArrows() {
+    if (this.collectedBranches === 3 && this.collectedFeathers === 3) {
+      this.craftedArrows += 3;
+      this.collectedBranches -= 3;
+      this.collectedFeathers -= 3;
+
+      this.world.level.getStatusBar("branch").setValue(this.collectedBranches);
+      this.world.level.getStatusBar("feather").setValue(this.collectedFeathers);
     }
   }
 
