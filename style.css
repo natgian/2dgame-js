@@ -126,10 +126,9 @@ canvas {
   transform: translateX(-50%);
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding: 16px 20px;
-  background: transparent; /* sicherstellen, dass kein Hintergrund sichtbar ist */
-  box-sizing: border-box;
+  background: transparent;
 }
 
 .controls-container {
@@ -155,6 +154,10 @@ canvas {
   color: #83c13c;
 }
 
+.mobile-controls {
+  display: none;
+}
+
 /*-------------- */
 /* MEDIA QUERIES */
 /*-------------- */
@@ -166,6 +169,18 @@ canvas {
 
   h1,
   h2 {
+    display: none;
+  }
+
+  .mobile-controls {
+    display: flex;
+  }
+
+  .controls {
+    justify-content: space-between;
+  }
+
+  #fullscreen-btn {
     display: none;
   }
 }
