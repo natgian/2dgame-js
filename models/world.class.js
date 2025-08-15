@@ -7,6 +7,7 @@ class World {
   level = level1;
   arrowCounter = new ArrowCounter(this.character);
   arrows = [];
+  hintTextVisible = true;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
@@ -92,6 +93,29 @@ class World {
     }, 600);
   }
 
+  drawCraftingHint() {
+    if (this.character.collectedBranches === 3 && this.character.collectedFeathers === 3) {
+      this.ctx.fillStyle = "rgba(0,0,0,0.5)";
+      this.ctx.fillRect(195, 75, 400, 40);
+      this.ctx.font = "20px Lora";
+      this.ctx.fillStyle = "white";
+
+      // Activate shadow for this text
+      this.ctx.shadowColor = "black";
+      this.ctx.shadowBlur = 5;
+      this.ctx.shadowOffsetX = 2;
+      this.ctx.shadowOffsetY = 2;
+
+      this.ctx.fillText("Press F or crafting button to craft arrows!", 200, 100);
+
+      // Reset shadow so other items do not have the shadow
+      this.ctx.shadowColor = "transparent";
+      this.ctx.shadowBlur = 0;
+      this.ctx.shadowOffsetX = 0;
+      this.ctx.shadowOffsetY = 0;
+    }
+  }
+
   draw() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Cleares the canvas by deleting the previous image before drawing again
 
@@ -118,6 +142,8 @@ class World {
     this.addObjectsToMap(this.arrows);
 
     this.ctx.translate(-this.cameraX, 0);
+
+    this.drawCraftingHint(this.ctx);
 
     requestAnimationFrame(() => {
       this.draw();

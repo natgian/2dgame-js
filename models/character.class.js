@@ -141,6 +141,7 @@ class Character extends MovableObject {
   SOUND_HURT = new Audio("audio/hurt.mp3");
   SOUND_COLLECT_FEATHER = new Audio("audio/collect_feather.mp3");
   SOUND_COLLECT_BRANCH = new Audio("audio/collect_branch.mp3");
+  SOUND_CRAFT_ITEM = new Audio("audio/craft_item.wav");
 
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
@@ -228,12 +229,16 @@ class Character extends MovableObject {
 
   craftArrows() {
     if (this.collectedBranches === 3 && this.collectedFeathers === 3) {
+      this.SOUND_CRAFT_ITEM.volume = 0.5;
+      this.SOUND_CRAFT_ITEM.play();
+
       this.craftedArrows += 3;
       this.collectedBranches -= 3;
       this.collectedFeathers -= 3;
 
       this.world.level.getStatusBar("branch").setValue(this.collectedBranches);
       this.world.level.getStatusBar("feather").setValue(this.collectedFeathers);
+      this.world.arrowCounter.craftingAnimation = 20;
     }
   }
 

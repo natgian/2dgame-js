@@ -9,8 +9,8 @@ function initLevel() {
     generateObjects(Enemy, 3),
     new Endboss(),
     generateObjects(Firefly, 50, 0),
-    generateObjects(Feather, 10),
-    generateObjects(Branch, 10),
+    generateObjects(Feather, 12),
+    generateObjects(Branch, 12),
     [healthBar, branchesBar, feathersBar],
 
     // Background Layers
