@@ -2,13 +2,15 @@ class Character extends MovableObject {
   world;
   y = 260;
   speed = 5;
-  isShooting = false;
+
   lastShoot = 0;
+  isWalkingAndShooting = false;
+  isShooting = false;
 
   collectedFeathers = 0;
   collectedBranches = 0;
   maxCollectables = 3;
-  craftedArrows = 0;
+  craftedArrows = 3;
 
   animationTimers = {
     walking: 0,
@@ -16,6 +18,7 @@ class Character extends MovableObject {
     idle: 0,
     hurt: 0,
     shoot: 0,
+    walkAndShoot: 0,
   };
 
   IMAGES_IDLE_BLINKING = [
@@ -135,6 +138,23 @@ class Character extends MovableObject {
     "img/character/shooting/08_Shooting.png",
     "img/character/shooting/09_Shooting.png",
   ];
+  IMAGES_WALK_AND_SHOOT = [
+    "img/character/run_shooting/00_Run_Shooting.png",
+    "img/character/run_shooting/01_Run_Shooting.png",
+    "img/character/run_shooting/02_Run_Shooting.png",
+    "img/character/run_shooting/03_Run_Shooting.png",
+    "img/character/run_shooting/04_Run_Shooting.png",
+    "img/character/run_shooting/05_Run_Shooting.png",
+    "img/character/run_shooting/06_Run_Shooting.png",
+    "img/character/run_shooting/07_Run_Shooting.png",
+    "img/character/run_shooting/08_Run_Shooting.png",
+    "img/character/run_shooting/09_Run_Shooting.png",
+    "img/character/run_shooting/10_Run_Shooting.png",
+    "img/character/run_shooting/11_Run_Shooting.png",
+    "img/character/run_shooting/12_Run_Shooting.png",
+    "img/character/run_shooting/13_Run_Shooting.png",
+    "img/character/run_shooting/14_Run_Shooting.png",
+  ];
 
   SOUND_JUMPING = new Audio("audio/whoosh_jump.mp3");
   SOUND_WALKING = new Audio("audio/running_in_grass.mp3");
@@ -142,6 +162,7 @@ class Character extends MovableObject {
   SOUND_COLLECT_FEATHER = new Audio("audio/collect_feather.mp3");
   SOUND_COLLECT_BRANCH = new Audio("audio/collect_branch.mp3");
   SOUND_CRAFT_ITEM = new Audio("audio/craft_item.wav");
+  SOUND_SHOOT = new Audio("audio/wind_swoosh.mp3");
 
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
@@ -151,6 +172,7 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_HURT);
     this.loadImages(this.IMAGES_DYING);
     this.loadImages(this.IMAGES_SHOOTING);
+    this.loadImages(this.IMAGES_WALK_AND_SHOOT);
     this.applyGravity();
     this.animate();
     this.collisionBoxOffsetX = 35;
@@ -168,27 +190,49 @@ class Character extends MovableObject {
   }
 
   handlePlayerActions() {
-    // Moving right
-    if (this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX) {
+    if (this.isMovingRight()) {
       this.handleMoveRight();
     }
-    // Moving left
-    if (this.world.keyboard.LEFT && this.x > 0) {
+    if (this.isMovingLeft()) {
       this.handleMoveLeft();
     }
-    // Jumping
-    if (this.world.keyboard.SPACE && !this.isInTheAir()) {
+    if (this.isJumping()) {
       this.animateJump();
     }
     // Shooting
     if (this.world.keyboard.D && !this.isShooting) {
-      this.isShooting = true;
+      this.handleShooting();
+    }
+    // Walking & Shooting
+    if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.keyboard.D) {
+      this.isWalkingAndShooting = true;
+      this.isShooting = false;
       this.world.checkThrowObjects();
     }
     // Crafting
-    if (this.world.keyboard.F) {
+    if (this.isCrafting()) {
       this.craftArrows();
     }
+  }
+
+  isMovingRight() {
+    return this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX;
+  }
+
+  isMovingLeft() {
+    return this.world.keyboard.LEFT && this.x > 0;
+  }
+
+  isWalking() {
+    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+  }
+
+  isJumping() {
+    return this.world.keyboard.SPACE && !this.isInTheAir();
+  }
+
+  isCrafting() {
+    return this.world.keyboard.F;
   }
 
   updateCamera() {
@@ -209,6 +253,11 @@ class Character extends MovableObject {
     this.SOUND_WALKING.volume = 0.5;
     this.SOUND_WALKING.play();
     this.SOUND_WALKING.loop = true;
+  }
+
+  handleShooting() {
+    this.isShooting = true;
+    this.world.checkThrowObjects();
   }
 
   handleCollectable(type) {
@@ -246,22 +295,6 @@ class Character extends MovableObject {
     this.jump();
     this.SOUND_JUMPING.volume = 0.1;
     this.SOUND_JUMPING.play();
-  }
-
-  animateShoot() {
-    this.animationTimers.shoot++;
-
-    // Alle 6 Frames (100ms) ein Bild → 60FPS
-    if (this.animationTimers.shoot % 6 === 0) {
-      this.img = this.imageCache[this.IMAGES_SHOOTING[this.currentImage]];
-      this.currentImage++;
-    }
-    // Animation nach letztem Frame beenden
-    if (this.currentImage >= this.IMAGES_SHOOTING.length) {
-      this.isShooting = false;
-      this.currentImage = 0;
-      this.animationTimers.shoot = 0;
-    }
   }
 
   animateIsDead() {
@@ -311,6 +344,38 @@ class Character extends MovableObject {
     }
   }
 
+  animateShooting() {
+    this.animationTimers.shoot++;
+
+    // Alle 6 Frames (100ms) ein Bild → 60FPS
+    if (this.animationTimers.shoot % 6 === 0) {
+      this.img = this.imageCache[this.IMAGES_SHOOTING[this.currentImage]];
+      this.currentImage++;
+    }
+    // Animation nach letztem Frame beenden
+    if (this.currentImage >= this.IMAGES_SHOOTING.length) {
+      this.isShooting = false;
+      this.currentImage = 0;
+      this.animationTimers.shoot = 0;
+    }
+  }
+
+  //TODO:
+  animateWalkAndShoot() {
+    this.animationTimers.walkAndShoot++;
+    // Alle 6 Frames (100ms) ein Bild → 60FPS
+    if (this.animationTimers.walkAndShoot % 4 === 0) {
+      this.img = this.imageCache[this.IMAGES_WALK_AND_SHOOT[this.currentImage]];
+      this.currentImage++;
+    }
+    // Animation nach letztem Frame beenden
+    if (this.currentImage >= this.IMAGES_WALK_AND_SHOOT.length) {
+      this.isWalkingAndShooting = false;
+      this.currentImage = 0;
+      this.animationTimers.walkAndShoot = 0;
+    }
+  }
+
   animateIdle() {
     this.SOUND_WALKING.pause();
     this.animationTimers.idle++;
@@ -325,29 +390,31 @@ class Character extends MovableObject {
     }
   }
 
+  lastArrowShot() {
+    let timepassed = new Date().getTime() - this.lastShoot;
+    timepassed = timepassed / 1000;
+    return timepassed > 1;
+  }
+
   updateAnimation() {
     if (this.isDead()) {
       if (!this.isInDeathAnimation) {
-        this.currentImage = 0; // Animation neu starten
+        this.currentImage = 0;
         this.isInDeathAnimation = true;
       }
       this.animateIsDead();
     } else if (this.isHurt()) {
       this.animateIsHurt();
     } else if (this.isShooting) {
-      this.animateShoot();
+      this.animateShooting();
+    } else if (this.isWalkingAndShooting) {
+      this.animateWalkAndShoot();
     } else if (this.isInTheAir()) {
       this.animateIsInTheAir();
-    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+    } else if (this.isWalking()) {
       this.animateWalking();
     } else {
       this.animateIdle();
     }
-  }
-
-  lastArrowShot() {
-    let timepassed = new Date().getTime() - this.lastShoot;
-    timepassed = timepassed / 1000;
-    return timepassed > 1;
   }
 }

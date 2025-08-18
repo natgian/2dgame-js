@@ -30,6 +30,7 @@ class World {
 
   checkCollisions() {
     this.checkCharacterEnemyCollision();
+    this.checkArrowEnemyCollision();
     this.checkCharacterCollectableCollision("feathers", "feather");
     this.checkCharacterCollectableCollision("branches", "branch");
   }
@@ -49,7 +50,28 @@ class World {
   }
 
   //TODO:
-  checkArrowEnemyCollision() {}
+  checkArrowEnemyCollision() {
+    for (let arrowIndex = this.arrows.length - 1; arrowIndex >= 0; arrowIndex--) {
+      let arrow = this.arrows[arrowIndex];
+
+      for (let enemyIndex = this.level.enemies.length - 1; enemyIndex >= 0; enemyIndex--) {
+        let enemy = this.level.enemies[enemyIndex];
+
+        if (arrow.isColliding(enemy)) {
+          this.arrows.splice(arrowIndex, 1);
+          enemy.hit(20);
+          enemy.SOUND_HIT.volume = 0.1;
+          enemy.SOUND_HIT.play();
+
+          if (enemy.isDead()) {
+            this.level.enemies.splice(enemyIndex, 1);
+          }
+
+          break;
+        }
+      }
+    }
+  }
 
   checkCharacterCollectableCollision(collectableArray, collectableType) {
     const objects = this.level[collectableArray];
@@ -73,7 +95,6 @@ class World {
 
   checkThrowObjects() {
     if (!this.character.lastArrowShot()) return;
-
     if (this.character.craftedArrows <= 0) return;
 
     this.character.craftedArrows--;
@@ -88,6 +109,8 @@ class World {
       }
 
       arrow.throw();
+      this.character.SOUND_SHOOT.volume = 0.5;
+      this.character.SOUND_SHOOT.play();
       this.arrows.push(arrow);
       this.character.isShooting = false;
     }, 600);
@@ -97,22 +120,17 @@ class World {
     if (this.character.collectedBranches === 3 && this.character.collectedFeathers === 3) {
       this.ctx.fillStyle = "rgba(0,0,0,0.5)";
       this.ctx.fillRect(195, 75, 400, 40);
+      this.ctx.save();
+
       this.ctx.font = "20px Lora";
       this.ctx.fillStyle = "white";
-
-      // Activate shadow for this text
       this.ctx.shadowColor = "black";
       this.ctx.shadowBlur = 5;
       this.ctx.shadowOffsetX = 2;
       this.ctx.shadowOffsetY = 2;
-
       this.ctx.fillText("Press F or crafting button to craft arrows!", 200, 100);
 
-      // Reset shadow so other items do not have the shadow
-      this.ctx.shadowColor = "transparent";
-      this.ctx.shadowBlur = 0;
-      this.ctx.shadowOffsetX = 0;
-      this.ctx.shadowOffsetY = 0;
+      this.ctx.restore();
     }
   }
 
@@ -130,7 +148,6 @@ class World {
     this.ctx.translate(-this.cameraX, 0);
     // --- space for fixed objects ---
     this.addObjectsToMap(this.level.statusBars);
-    // this.addToMap(this.statusbar);
     this.addToMap(this.arrowCounter);
     this.ctx.translate(this.cameraX, 0);
 
