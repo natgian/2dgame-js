@@ -1,6 +1,8 @@
 class Enemy extends MovableObject {
   y = 270;
   frameRate = this.speed * 200;
+  health = 20;
+  isReadyToRemove = false;
 
   IMAGES_WALKING = [
     "img/enemies/enemy_1/walking/0_Golem_Walking_000.png",
@@ -29,10 +31,31 @@ class Enemy extends MovableObject {
     "img/enemies/enemy_1/walking/0_Golem_Walking_023.png",
   ];
 
+  IMAGES_DYING = [
+    "img/enemies/enemy_1/dying/0_Golem_Dying_000.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_001.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_002.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_003.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_004.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_005.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_006.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_007.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_008.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_009.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_010.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_011.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_012.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_013.png",
+    "img/enemies/enemy_1/dying/0_Golem_Dying_014.png",
+  ];
+
+  SOUND_HIT = new Audio("audio/hit_enemy.mp3");
+
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
-    this.x = 200 + Math.random() * 800;
     this.loadImages(this.IMAGES_WALKING);
+    this.loadImages(this.IMAGES_DYING);
+    this.x = 200 + Math.random() * 800;
     this.speed = 0.15 + Math.random() * 0.75;
     this.animate();
     this.collisionBoxOffsetX = 40;
