@@ -33,8 +33,8 @@ class MovableObject extends DrawableObject {
     return thisObj.x + thisObj.width > otherObj.x && thisObj.y + thisObj.height > otherObj.y && thisObj.x < otherObj.x + otherObj.width && thisObj.y < otherObj.y + otherObj.height;
   }
 
-  hit() {
-    this.health -= 5;
+  hit(damage = 5) {
+    this.health -= damage;
     if (this.health < 0) {
       this.health = 0;
     } else {
