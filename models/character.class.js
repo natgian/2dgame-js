@@ -12,15 +12,6 @@ class Character extends MovableObject {
   maxCollectables = 3;
   craftedArrows = 3;
 
-  animationTimers = {
-    walking: 0,
-    jumping: 0,
-    idle: 0,
-    hurt: 0,
-    shoot: 0,
-    walkAndShoot: 0,
-  };
-
   IMAGES_IDLE_BLINKING = [
     "img/character/idle_blinking/00_Idle_Blinking.png",
     "img/character/idle_blinking/01_Idle_Blinking.png",
@@ -165,16 +156,16 @@ class Character extends MovableObject {
   SOUND_SHOOT = new Audio("audio/wind_swoosh.mp3");
 
   constructor() {
-    super().loadImage("img/character/idle/00_Idle.png"); // the loadImage function is called and executed from the MovableObject superclass
-    this.loadImages(this.IMAGES_IDLE);
-    this.loadImages(this.IMAGES_WALKING);
-    this.loadImages(this.IMAGES_JUMPING);
-    this.loadImages(this.IMAGES_HURT);
-    this.loadImages(this.IMAGES_DYING);
-    this.loadImages(this.IMAGES_SHOOTING);
-    this.loadImages(this.IMAGES_WALK_AND_SHOOT);
+    super().loadImage("img/character/idle/00_Idle.png");
+
+    const allImages = [...this.IMAGES_IDLE, ...this.IMAGES_WALKING, ...this.IMAGES_JUMPING, ...this.IMAGES_HURT, ...this.IMAGES_DYING, ...this.IMAGES_SHOOTING, ...this.IMAGES_WALK_AND_SHOOT];
+
+    this.loadImages(allImages, () => {
+      this.animate();
+    });
+
     this.applyGravity();
-    this.animate();
+
     this.collisionBoxOffsetX = 35;
     this.collisionBoxOffsetY = 0;
     this.collisionBoxWidth = -50;
@@ -304,90 +295,44 @@ class Character extends MovableObject {
 
   animateIsHurt() {
     this.SOUND_WALKING.pause();
-    this.animationTimers.hurt++;
-    this.animationTimers.walking = 0;
-    this.animationTimers.idle = 0;
-    this.animationTimers.jumping = 0;
-
-    if (this.animationTimers.hurt >= 1) {
-      this.SOUND_HURT.volume = 0.5;
-      this.SOUND_HURT.play();
-      this.playAnimation(this.IMAGES_HURT);
-      this.animationTimers.hurt = 0;
-    }
+    this.SOUND_HURT.volume = 0.5;
+    this.SOUND_HURT.play();
+    this.playAnimation(this.IMAGES_HURT, 83);
   }
 
   animateIsInTheAir() {
     this.SOUND_WALKING.pause();
-    this.animationTimers.jumping++;
-    this.animationTimers.walking = 0;
-    this.animationTimers.idle = 0;
-    this.animationTimers.hurt = 0;
-
-    if (this.animationTimers.jumping >= 6) {
-      // when the jumping timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
-      this.playAnimation(this.IMAGES_JUMPING);
-      this.animationTimers.jumping = 0;
-    }
+    this.playAnimation(this.IMAGES_JUMPING, 100);
   }
 
   animateWalking() {
-    this.animationTimers.walking++;
-    this.animationTimers.jumping = 0;
-    this.animationTimers.idle = 0;
-    this.animationTimers.hurt = 0;
-
-    if (this.animationTimers.walking >= 1) {
-      // when the walking timer has reached 2 ticks (at 60FPS = 2 x 16.66ms = ca. 33ms)
-      this.playAnimation(this.IMAGES_WALKING);
-      this.animationTimers.walking = 0;
+    if (this.currentImage >= this.IMAGES_WALKING.length) {
+      this.currentImage = 0;
     }
+    this.playAnimation(this.IMAGES_WALKING, 16);
   }
 
   animateShooting() {
-    this.animationTimers.shoot++;
-
-    // Alle 6 Frames (100ms) ein Bild → 60FPS
-    if (this.animationTimers.shoot % 6 === 0) {
-      this.img = this.imageCache[this.IMAGES_SHOOTING[this.currentImage]];
-      this.currentImage++;
-    }
-    // Animation nach letztem Frame beenden
-    if (this.currentImage >= this.IMAGES_SHOOTING.length) {
+    this.playAnimation(this.IMAGES_SHOOTING, 100); // ~12 FPS
+    if (this.currentImage === this.IMAGES_SHOOTING.length - 1) {
       this.isShooting = false;
-      this.currentImage = 0;
-      this.animationTimers.shoot = 0;
+      this.currentImage = 0; // reset so next time it starts fresh
     }
   }
 
-  //TODO:
   animateWalkAndShoot() {
-    this.animationTimers.walkAndShoot++;
-    // Alle 6 Frames (100ms) ein Bild → 60FPS
-    if (this.animationTimers.walkAndShoot % 4 === 0) {
-      this.img = this.imageCache[this.IMAGES_WALK_AND_SHOOT[this.currentImage]];
-      this.currentImage++;
-    }
-    // Animation nach letztem Frame beenden
-    if (this.currentImage >= this.IMAGES_WALK_AND_SHOOT.length) {
+    this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 80);
+
+    // when the last frame has been shown → stop the animation
+    if (this.currentImage === this.IMAGES_WALK_AND_SHOOT.length - 1) {
       this.isWalkingAndShooting = false;
-      this.currentImage = 0;
-      this.animationTimers.walkAndShoot = 0;
+      this.currentImage = 0; // reset so next time it starts from the beginning
     }
   }
 
   animateIdle() {
     this.SOUND_WALKING.pause();
-    this.animationTimers.idle++;
-    this.animationTimers.jumping = 0;
-    this.animationTimers.walking = 0;
-    this.animationTimers.hurt = 0;
-
-    if (this.animationTimers.idle >= 6) {
-      // when the idle timer has reached 6 ticks (at 60FPS = 6 x 16.66ms = 100ms)
-      this.playAnimation(this.IMAGES_IDLE);
-      this.animationTimers.idle = 0;
-    }
+    this.playAnimation(this.IMAGES_IDLE, 100);
   }
 
   lastArrowShot() {
