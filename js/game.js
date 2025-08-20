@@ -118,10 +118,37 @@ function initResizeListener() {
   window.addEventListener("resize", resizeCanvas);
 }
 
+function connectButtonToKeyboard(btn, key) {
+  btn.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    keyboard[key] = true;
+    btn.classList.add("active");
+  });
+
+  btn.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    keyboard[key] = false;
+    btn.classList.remove("active");
+  });
+}
+
+function initMobileControls() {
+  const walkLeftBtn = document.getElementById("walk-left-btn");
+  const walkRightBtn = document.getElementById("walk-right-btn");
+  const jumpBtn = document.getElementById("jump-btn");
+  const shootBtn = document.getElementById("shoot-btn");
+
+  connectButtonToKeyboard(walkLeftBtn, "LEFT");
+  connectButtonToKeyboard(walkRightBtn, "RIGHT");
+  connectButtonToKeyboard(jumpBtn, "SPACE");
+  connectButtonToKeyboard(shootBtn, "D");
+}
+
 function initAllEventListeners() {
   initResizeListener();
   initFullscreenChangeListener();
   initWebKitFullscreenChangeListener();
   initKeyDownListener();
   initKeyUpListener();
+  initMobileControls();
 }

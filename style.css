@@ -149,7 +149,8 @@ canvas {
   box-shadow: 0 0 8px rgba(131, 193, 60, 0.6);
 }
 
-.controls-container button:hover {
+.controls-container button:hover,
+.controls-container button.active {
   transform: scale(1.05);
   color: #83c13c;
 }
