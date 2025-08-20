@@ -130,6 +130,10 @@ function connectButtonToKeyboard(btn, key) {
     keyboard[key] = false;
     btn.classList.remove("active");
   });
+
+  btn.addEventListener("contextmenu", (event) => {
+    event.preventDefault();
+  });
 }
 
 function initMobileControls() {
