@@ -4,8 +4,8 @@ class Character extends MovableObject {
   speed = 5;
 
   lastShoot = 0;
-  isWalkingAndShooting = false;
-  isShooting = false;
+  isCurrentlyWalkingAndShooting = false;
+  isCurrentlyShooting = false;
 
   collectedFeathers = 0;
   collectedBranches = 0;
@@ -180,27 +180,25 @@ class Character extends MovableObject {
     }, 1000 / 60);
   }
 
+  updateCamera() {
+    this.world.cameraX = -this.x + 80;
+  }
+
   handlePlayerActions() {
     if (this.isMovingRight()) {
       this.handleMoveRight();
-    }
-    if (this.isMovingLeft()) {
+    } else if (this.isMovingLeft()) {
       this.handleMoveLeft();
     }
     if (this.isJumping()) {
-      this.animateJump();
+      this.handleJump();
     }
-    // Shooting
-    if (this.world.keyboard.D && !this.isShooting) {
+    if (this.isShooting()) {
       this.handleShooting();
     }
-    // Walking & Shooting
-    if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.keyboard.D) {
-      this.isWalkingAndShooting = true;
-      this.isShooting = false;
-      this.world.checkThrowObjects();
+    if (this.isWalkingAndShooting()) {
+      this.handleWalkingAndShooting();
     }
-    // Crafting
     if (this.isCrafting()) {
       this.craftArrows();
     }
@@ -223,11 +221,15 @@ class Character extends MovableObject {
   }
 
   isCrafting() {
-    return this.world.keyboard.F;
+    return this.world.keyboard.C;
   }
 
-  updateCamera() {
-    this.world.cameraX = -this.x + 80;
+  isShooting() {
+    return this.world.keyboard.D && !this.isCurrentlyShooting;
+  }
+
+  isWalkingAndShooting() {
+    return (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.keyboard.D;
   }
 
   handleMoveLeft() {
@@ -246,8 +248,21 @@ class Character extends MovableObject {
     this.SOUND_WALKING.loop = true;
   }
 
+  handleJump() {
+    this.jump();
+    this.SOUND_JUMPING.volume = 0.1;
+    this.SOUND_JUMPING.play();
+  }
+
   handleShooting() {
-    this.isShooting = true;
+    this.isCurrentlyShooting = true;
+    this.currentImage = 0;
+    this.world.checkThrowObjects();
+  }
+
+  handleWalkingAndShooting() {
+    this.isCurrentlyWalkingAndShooting = true;
+    this.isCurrentlyShooting = false;
     this.world.checkThrowObjects();
   }
 
@@ -282,12 +297,6 @@ class Character extends MovableObject {
     }
   }
 
-  animateJump() {
-    this.jump();
-    this.SOUND_JUMPING.volume = 0.1;
-    this.SOUND_JUMPING.play();
-  }
-
   animateIsDead() {
     this.SOUND_WALKING.pause();
     this.playDeadAnimation(this.IMAGES_DYING);
@@ -297,42 +306,36 @@ class Character extends MovableObject {
     this.SOUND_WALKING.pause();
     this.SOUND_HURT.volume = 0.5;
     this.SOUND_HURT.play();
-    this.playAnimation(this.IMAGES_HURT, 83);
+    this.playAnimation(this.IMAGES_HURT, 16, true);
   }
 
   animateIsInTheAir() {
     this.SOUND_WALKING.pause();
-    this.playAnimation(this.IMAGES_JUMPING, 100);
+    this.playAnimation(this.IMAGES_JUMPING, 83, true);
   }
 
   animateWalking() {
-    if (this.currentImage >= this.IMAGES_WALKING.length) {
-      this.currentImage = 0;
-    }
-    this.playAnimation(this.IMAGES_WALKING, 16);
+    this.playAnimation(this.IMAGES_WALKING, 16, true);
   }
 
   animateShooting() {
-    this.playAnimation(this.IMAGES_SHOOTING, 100); // ~12 FPS
+    this.playAnimation(this.IMAGES_SHOOTING, 100, false);
     if (this.currentImage === this.IMAGES_SHOOTING.length - 1) {
-      this.isShooting = false;
-      this.currentImage = 0; // reset so next time it starts fresh
+      this.isCurrentlyShooting = false;
     }
   }
 
   animateWalkAndShoot() {
-    this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 80);
+    this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 83, true);
 
-    // when the last frame has been shown → stop the animation
     if (this.currentImage === this.IMAGES_WALK_AND_SHOOT.length - 1) {
-      this.isWalkingAndShooting = false;
-      this.currentImage = 0; // reset so next time it starts from the beginning
+      this.isCurrentlyWalkingAndShooting = false;
     }
   }
 
   animateIdle() {
     this.SOUND_WALKING.pause();
-    this.playAnimation(this.IMAGES_IDLE, 100);
+    this.playAnimation(this.IMAGES_IDLE, 83, true);
   }
 
   lastArrowShot() {
@@ -350,9 +353,9 @@ class Character extends MovableObject {
       this.animateIsDead();
     } else if (this.isHurt()) {
       this.animateIsHurt();
-    } else if (this.isShooting) {
+    } else if (this.isCurrentlyShooting) {
       this.animateShooting();
-    } else if (this.isWalkingAndShooting) {
+    } else if (this.isCurrentlyWalkingAndShooting) {
       this.animateWalkAndShoot();
     } else if (this.isInTheAir()) {
       this.animateIsInTheAir();
