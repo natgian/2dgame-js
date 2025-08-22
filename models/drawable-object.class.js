@@ -2,6 +2,7 @@ class DrawableObject {
   img;
   imageCache = {};
   currentImage = 0;
+  lastFrameTime = 0;
 
   x = 100;
   y = 260;
@@ -14,19 +15,27 @@ class DrawableObject {
   collisionBoxWidth = this.width;
   collisionBoxHeight = this.height;
 
-  loadImage(path) {
+  loadImage(path, callback) {
     this.img = new Image();
     this.img.src = path;
+    this.img.onload = () => {
+      if (callback) callback();
+    };
   }
 
-  /**
-   *
-   * @param {Array} arr - ["img/image1.png", "img/image2.png", "img/image3.png"]
-   */
-  loadImages(arr) {
+  loadImages(arr, callback) {
+    let loadedImages = 0;
+    let totalImages = arr.length;
+
     arr.forEach((path) => {
       let img = new Image();
       img.src = path;
+      img.onload = () => {
+        loadedImages++;
+        if (loadedImages === totalImages && callback) {
+          callback(); // only call if callback exists
+        }
+      };
       this.imageCache[path] = img;
     });
   }
@@ -41,13 +50,10 @@ class DrawableObject {
   }
 
   draw(ctx) {
-    try {
-      ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = false;
 
+    if (this.img && this.img.complete) {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    } catch (error) {
-      console.warn("Error loading image", error);
-      console.log("Could not load image", this.img.src);
     }
   }
 
