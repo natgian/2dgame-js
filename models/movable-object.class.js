@@ -6,6 +6,7 @@ class MovableObject extends DrawableObject {
 
   health = 100;
   isInDeathAnimation = false;
+  isReadyToRemove = false;
 
   setRandomPosition() {
     this.x = 0;

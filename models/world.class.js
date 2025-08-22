@@ -15,28 +15,48 @@ class World {
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
-    this.runInterval();
+    this.runCollisionInterval();
+    this.runArrowCollisionInterval();
+    this.runCleanupInterval();
   }
 
   setWorld() {
     this.character.world = this;
   }
 
-  runInterval() {
+  runCollisionInterval() {
     setInterval(() => {
       this.checkCollisions();
     }, 200);
   }
+  runArrowCollisionInterval() {
+    setInterval(() => {
+      this.checkArrowEnemyCollision();
+    }, 50);
+  }
+
+  runCleanupInterval() {
+    setInterval(() => {
+      this.removeDeadEnemies();
+    }, 1000 / 60);
+  }
+
+  removeDeadEnemies() {
+    // this.level.enemies.splice(enemyIndex, 1);
+    this.level.enemies = this.level.enemies.filter((enemy) => !enemy.isReadyToRemove);
+  }
 
   checkCollisions() {
     this.checkCharacterEnemyCollision();
-    this.checkArrowEnemyCollision();
+    // this.checkArrowEnemyCollision();
     this.checkCharacterCollectableCollision("feathers", "feather");
     this.checkCharacterCollectableCollision("branches", "branch");
   }
 
   checkCharacterEnemyCollision() {
-    this.level.enemies.forEach((enemy) => {
+    const allEnemies = [...this.level.enemies, this.level.endboss];
+
+    allEnemies.forEach((enemy) => {
       if (this.character.isColliding(enemy)) {
         if (!this.character.isDead()) {
           this.character.hit();
@@ -49,7 +69,6 @@ class World {
     }
   }
 
-  //TODO:
   checkArrowEnemyCollision() {
     for (let arrowIndex = this.arrows.length - 1; arrowIndex >= 0; arrowIndex--) {
       let arrow = this.arrows[arrowIndex];
@@ -62,11 +81,7 @@ class World {
           enemy.hit(20);
           enemy.SOUND_HIT.volume = 0.1;
           enemy.SOUND_HIT.play();
-
-          if (enemy.isDead()) {
-            this.level.enemies.splice(enemyIndex, 1);
-          }
-          break;
+          break; // stops checking if arrow has collided with an enemy
         }
       }
     }

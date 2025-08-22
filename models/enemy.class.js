@@ -1,6 +1,5 @@
 class Enemy extends MovableObject {
   y = 270;
-  frameRate = this.speed * 200;
   health = 20;
   isReadyToRemove = false;
 
@@ -77,11 +76,36 @@ class Enemy extends MovableObject {
   }
 
   updateAnimation() {
-    this.animateWalking();
+    if (this.isDead()) {
+      if (!this.isInDeathAnimation) {
+        this.currentImage = 0;
+        this.isInDeathAnimation = true;
+      }
+      this.animateIsDead();
+    } else {
+      this.animateWalking();
+    }
   }
 
   animateWalking() {
     this.moveLeft();
     this.playAnimation(this.IMAGES_WALKING, 16, true);
+  }
+
+  animateIsDead() {
+    this.playDeadAnimation(this.IMAGES_DYING);
+  }
+
+  playDeadAnimation(images) {
+    if (this.currentImage < images.length) {
+      let path = images[this.currentImage];
+      this.img = this.imageCache[path];
+      this.currentImage++;
+    } else {
+      let path = images[images.length - 1];
+      this.img = this.imageCache[path];
+
+      this.isReadyToRemove = true;
+    }
   }
 }
