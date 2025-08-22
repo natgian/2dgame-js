@@ -25,7 +25,6 @@ class MovableObject extends DrawableObject {
     return this.y < 260;
   }
 
-  // z.B. character.isColliding(enemy);
   isColliding(movableObj) {
     const thisObj = this.getCollisionBox();
     const otherObj = movableObj.getCollisionBox();
@@ -52,11 +51,23 @@ class MovableObject extends DrawableObject {
     return this.health === 0;
   }
 
-  playAnimation(images) {
-    let index = this.currentImage % images.length; // keeps the index inside the array length so the animation loops from start again
-    let path = images[index];
-    this.img = this.imageCache[path];
-    this.currentImage++;
+  playAnimation(images, frameDuration = 100, loop = true) {
+    const now = Date.now();
+
+    if (now - this.lastFrameTime > frameDuration) {
+      this.lastFrameTime = now;
+
+      let index = this.currentImage % images.length;
+      this.img = this.imageCache[images[index]];
+
+      if (loop) {
+        this.currentImage++;
+      } else {
+        if (this.currentImage < images.length - 1) {
+          this.currentImage++;
+        }
+      }
+    }
   }
 
   playDeadAnimation(images) {
