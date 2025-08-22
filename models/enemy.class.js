@@ -52,12 +52,14 @@ class Enemy extends MovableObject {
   SOUND_HIT = new Audio("audio/hit_enemy.mp3");
 
   constructor() {
-    super().loadImage(this.IMAGES_WALKING[0]);
-    this.loadImages(this.IMAGES_WALKING);
-    this.loadImages(this.IMAGES_DYING);
+    super().loadImage("img/enemies/enemy_1/walking/0_Golem_Walking_000.png");
+
+    const allImages = [...this.IMAGES_WALKING, ...this.IMAGES_DYING];
+    this.loadImages(allImages, () => this.animate());
+
     this.x = 200 + Math.random() * 800;
     this.speed = 0.15 + Math.random() * 0.75;
-    this.animate();
+
     this.collisionBoxOffsetX = 40;
     this.collisionBoxOffsetY = 25;
     this.collisionBoxWidth = -80;
@@ -66,15 +68,20 @@ class Enemy extends MovableObject {
 
   animate() {
     setInterval(() => {
-      this.moveLeft();
+      this.updateAnimation();
     }, 1000 / 60);
-
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_WALKING);
-    }, this.frameRate);
   }
 
   setRandomPosition() {
     this.x = 600 + Math.random() * 800;
+  }
+
+  updateAnimation() {
+    this.animateWalking();
+  }
+
+  animateWalking() {
+    this.moveLeft();
+    this.playAnimation(this.IMAGES_WALKING, 16, true);
   }
 }
