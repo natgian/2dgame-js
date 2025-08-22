@@ -66,7 +66,6 @@ class World {
           if (enemy.isDead()) {
             this.level.enemies.splice(enemyIndex, 1);
           }
-
           break;
         }
       }
@@ -112,7 +111,7 @@ class World {
       this.character.SOUND_SHOOT.volume = 0.5;
       this.character.SOUND_SHOOT.play();
       this.arrows.push(arrow);
-      this.character.isShooting = false;
+      this.character.isCurrentlyShooting = false;
     }, 600);
   }
 
