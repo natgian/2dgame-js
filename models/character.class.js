@@ -221,7 +221,7 @@ class Character extends MovableObject {
   }
 
   isCrafting() {
-    return this.world.keyboard.C;
+    return this.world.keyboard.F;
   }
 
   isShooting() {
