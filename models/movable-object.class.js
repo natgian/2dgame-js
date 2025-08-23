@@ -5,6 +5,7 @@ class MovableObject extends DrawableObject {
   acceleration = 2.5;
 
   health = 100;
+  damage = 5;
   isInDeathAnimation = false;
   isReadyToRemove = false;
 
@@ -33,8 +34,8 @@ class MovableObject extends DrawableObject {
     return thisObj.x + thisObj.width > otherObj.x && thisObj.y + thisObj.height > otherObj.y && thisObj.x < otherObj.x + otherObj.width && thisObj.y < otherObj.y + otherObj.height;
   }
 
-  hit(damage = 5) {
-    this.health -= damage;
+  hit() {
+    this.health -= this.damage;
     if (this.health < 0) {
       this.health = 0;
     } else {

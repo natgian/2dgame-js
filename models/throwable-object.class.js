@@ -1,8 +1,9 @@
 class ThrowableObject extends MovableObject {
-  constructor(x, y) {
+  constructor(x, y, world) {
     super().loadImage("img/misc/arrow.png");
     this.x = x;
     this.y = y;
+    this.world = world;
     this.speedX = 0;
     this.speedY = 0;
     this.width = 48 / 2;
@@ -34,6 +35,7 @@ class ThrowableObject extends MovableObject {
     this.speedX = 15;
     this.acceleration = 1.2;
     this.applyGravity();
+    this.world.sound.play("char_shooting");
 
     if (!world.character.otherDirection) {
       this.throwInterval = setInterval(() => {

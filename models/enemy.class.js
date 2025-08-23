@@ -1,6 +1,8 @@
 class Enemy extends MovableObject {
+  world;
   y = 270;
   health = 20;
+  damage = 20;
   isReadyToRemove = false;
 
   IMAGES_WALKING = [
@@ -48,8 +50,6 @@ class Enemy extends MovableObject {
     "img/enemies/enemy_1/dying/0_Golem_Dying_014.png",
   ];
 
-  SOUND_HIT = new Audio("audio/hit_enemy.mp3");
-
   constructor() {
     super().loadImage("img/enemies/enemy_1/walking/0_Golem_Walking_000.png");
 
@@ -63,6 +63,11 @@ class Enemy extends MovableObject {
     this.collisionBoxOffsetY = 25;
     this.collisionBoxWidth = -80;
     this.collisionBoxHeight = -40;
+  }
+
+  hit() {
+    super.hit();
+    this.world.sound.play("enemy_hit");
   }
 
   animate() {

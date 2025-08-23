@@ -13,8 +13,23 @@ class World {
     this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.sound = new AudioManager();
+
+    // Character sounds
+    this.sound.load("char_walking", "audio/running_in_grass.mp3", true);
+    this.sound.load("char_collect_branch", "audio/collect_branch.mp3", false, 0.6);
+    this.sound.load("char_collect_feather", "audio/collect_feather.mp3", false);
+    this.sound.load("char_crafting", "audio/craft_item.wav", false);
+    this.sound.load("char_shooting", "audio/wind_swoosh.mp3", false);
+    this.sound.load("char_jumping", "audio/whoosh_jump.mp3", false, 0.1);
+    this.sound.load("char_hurt", "audio/hurt.mp3", false);
+
+    // Enemy sounds
+    this.sound.load("enemy_hit", "audio/hit_enemy.mp3", false, 0.2);
+
     this.draw();
     this.setWorld();
+
     this.runCollisionInterval();
     this.runArrowCollisionInterval();
     this.runCleanupInterval();
@@ -22,6 +37,10 @@ class World {
 
   setWorld() {
     this.character.world = this;
+    this.level.enemies.forEach((enemy) => (enemy.world = this));
+    if (this.level.endbos) {
+      this.level.endboss.world = this;
+    }
   }
 
   runCollisionInterval() {
@@ -78,9 +97,7 @@ class World {
 
         if (arrow.isColliding(enemy)) {
           this.arrows.splice(arrowIndex, 1);
-          enemy.hit(20);
-          enemy.SOUND_HIT.volume = 0.1;
-          enemy.SOUND_HIT.play();
+          enemy.hit();
           break; // stops checking if arrow has collided with an enemy
         }
       }
@@ -117,14 +134,12 @@ class World {
     setTimeout(() => {
       let arrow;
       if (!this.character.otherDirection) {
-        arrow = new ThrowableObject(this.character.x + 60, this.character.y + 50);
+        arrow = new ThrowableObject(this.character.x + 60, this.character.y + 50, this);
       } else {
-        arrow = new ThrowableObject(this.character.x + -20, this.character.y + 50);
+        arrow = new ThrowableObject(this.character.x + -20, this.character.y + 50, this);
       }
 
       arrow.throw();
-      this.character.SOUND_SHOOT.volume = 0.5;
-      this.character.SOUND_SHOOT.play();
       this.arrows.push(arrow);
       this.character.isCurrentlyShooting = false;
     }, 600);
