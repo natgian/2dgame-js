@@ -25,6 +25,14 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+function initAllEventListeners() {
+  initResizeListener();
+  initFullscreenListeners();
+  initKeyDownListener();
+  initKeyUpListener();
+  initMobileControls();
+}
+
 async function enterFullscreen(element) {
   try {
     if (element.requestFullscreen) {
@@ -34,9 +42,6 @@ async function enterFullscreen(element) {
     } else if (element.msRequestFullscreen) {
       element.msRequestFullscreen();
     }
-
-    element.classList.add("fullscreen-active");
-    resizeCanvasToFullscreen();
   } catch (error) {
     console.warn("Fullscreen could not be activated", error);
   }
@@ -54,7 +59,7 @@ function resizeCanvasToFullscreen() {
   canvas.classList.add("fullscreen-canvas");
 }
 
-function resetCanvasSize() {
+function resizeCanvasToNormal() {
   canvas.classList.remove("fullscreen-canvas");
 }
 
@@ -62,16 +67,8 @@ function resizeCanvas() {
   if (document.fullscreenElement) {
     resizeCanvasToFullscreen();
   } else {
-    resetCanvasSize();
+    resizeCanvasToNormal();
   }
-}
-
-function stopGame() {
-  clearAllIntervals();
-}
-
-function clearAllIntervals() {
-  for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
 
 function initKeyDownListener() {
@@ -98,24 +95,33 @@ function initKeyUpListener() {
   });
 }
 
-function initFullscreenChangeListener() {
-  document.addEventListener("fullscreenchange", () => {
-    if (!document.fullscreenElement) {
+function initFullscreenListeners() {
+  function onFullscreenChange() {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      fullscreen.classList.add("fullscreen-active");
+      showExitFullscreenButton();
+      resizeCanvasToFullscreen();
+    } else {
       fullscreen.classList.remove("fullscreen-active");
+      showEnterFullscreenButton();
     }
-  });
-}
-
-function initWebKitFullscreenChangeListener() {
-  document.addEventListener("webkitfullscreenchange", () => {
-    if (!document.webkitFullscreenElement) {
-      fullscreen.classList.remove("fullscreen-active");
-    }
-  });
+  }
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
 }
 
 function initResizeListener() {
   window.addEventListener("resize", resizeCanvas);
+}
+
+function showExitFullscreenButton() {
+  document.getElementById("fullscreen-exit-btn").classList.remove("d-none");
+  document.getElementById("fullscreen-btn").classList.add("d-none");
+}
+
+function showEnterFullscreenButton() {
+  document.getElementById("fullscreen-exit-btn").classList.add("d-none");
+  document.getElementById("fullscreen-btn").classList.remove("d-none");
 }
 
 function connectButtonToKeyboard(btn, key) {
@@ -148,11 +154,10 @@ function initMobileControls() {
   connectButtonToKeyboard(shootBtn, "D");
 }
 
-function initAllEventListeners() {
-  initResizeListener();
-  initFullscreenChangeListener();
-  initWebKitFullscreenChangeListener();
-  initKeyDownListener();
-  initKeyUpListener();
-  initMobileControls();
+function stopGame() {
+  clearAllIntervals();
+}
+
+function clearAllIntervals() {
+  for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }

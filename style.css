@@ -75,10 +75,6 @@ body {
   background: url("./img/layers/repeating_layers/background_backdrop.png") no-repeat center center / cover;
 }
 
-.d-none {
-  display: none;
-}
-
 .title {
   font-family: "Cinzel", serif;
   font-size: 64px;
@@ -155,7 +151,15 @@ canvas {
   color: #83c13c;
 }
 
+.controls-container button.d-none {
+  display: none;
+}
+
 .mobile-controls {
+  display: none;
+}
+
+.d-none {
   display: none;
 }
 

@@ -46,10 +46,18 @@
           <!-- settings controls -->
           <div class="controls-container">
             <button id="fullscreen-btn" onclick="enterFullscreen(fullscreen)">
+              <!-- fullscreen button -->
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M5 5h5v2H7v3H5zm9 0h5v5h-2V7h-3zm3 9h2v5h-5v-2h3zm-7 3v2H5v-5h2v3z" />
               </svg>
             </button>
+            <!-- fullscreen exit button -->
+            <button class="d-none" id="fullscreen-exit-btn" onclick="exitFullscreen()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M14 14h5v2h-3v3h-2zm-9 0h5v5H8v-3H5zm3-9h2v5H5V8h3zm11 3v2h-5V5h2v3z" />
+              </svg>
+            </button>
+
             <button id="sound-btn">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                 <path
