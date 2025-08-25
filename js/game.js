@@ -147,11 +147,13 @@ function initMobileControls() {
   const walkRightBtn = document.getElementById("walk-right-btn");
   const jumpBtn = document.getElementById("jump-btn");
   const shootBtn = document.getElementById("shoot-btn");
+  const craftBtn = document.getElementById("craft-btn");
 
   connectButtonToKeyboard(walkLeftBtn, "LEFT");
   connectButtonToKeyboard(walkRightBtn, "RIGHT");
   connectButtonToKeyboard(jumpBtn, "SPACE");
   connectButtonToKeyboard(shootBtn, "D");
+  connectButtonToKeyboard(craftBtn, "F");
 }
 
 function stopGame() {

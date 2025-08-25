@@ -159,6 +159,10 @@ canvas {
   display: none;
 }
 
+#craft-btn {
+  padding: 4px;
+}
+
 .d-none {
   display: none;
 }
@@ -167,11 +171,7 @@ canvas {
 /* MEDIA QUERIES */
 /*-------------- */
 
-@media only screen and (max-width: 720px) {
-  canvas {
-    width: 100%;
-  }
-
+@media only screen and (max-width: 720px), only screen and (max-height: 480px) {
   h1,
   h2 {
     display: none;
@@ -190,8 +190,22 @@ canvas {
   }
 }
 
+@media only screen and (max-width: 720px) {
+  canvas {
+    width: 100%;
+  }
+}
+
 @media only screen and (max-height: 480px) {
   canvas {
-    height: 100vh;
+    height: 100dvh;
+    height: 100vh; /* fallback for browsers without dvh */
+  }
+}
+
+@media only screen and (max-height: 768px) {
+  h1,
+  h2 {
+    display: none;
   }
 }
