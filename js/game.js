@@ -161,3 +161,15 @@ function stopGame() {
 function clearAllIntervals() {
   for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
+
+function muteAudio() {
+  document.getElementById("sound-off-btn").classList.add("d-none");
+  document.getElementById("sound-on-btn").classList.remove("d-none");
+  world.sound.muteAll();
+}
+
+function unmuteAudio() {
+  document.getElementById("sound-off-btn").classList.remove("d-none");
+  document.getElementById("sound-on-btn").classList.add("d-none");
+  world.sound.unmuteAll();
+}

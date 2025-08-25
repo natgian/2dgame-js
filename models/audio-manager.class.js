@@ -1,6 +1,7 @@
 class AudioManager {
   constructor() {
     this.sounds = {};
+    this.muted = false;
   }
 
   load(name, src, loop = false, volume = 0.5) {
@@ -41,5 +42,17 @@ class AudioManager {
   isPlaying(name) {
     const sound = this.sounds[name];
     return sound && !sound.paused;
+  }
+
+  muteAll() {
+    for (const key in this.sounds) {
+      this.sounds[key].muted = true;
+    }
+  }
+
+  unmuteAll() {
+    for (const key in this.sounds) {
+      this.sounds[key].muted = false;
+    }
   }
 }
