@@ -30,7 +30,10 @@ function initAllEventListeners() {
   initFullscreenListeners();
   initKeyDownListener();
   initKeyUpListener();
-  initMobileControls();
+
+  if (isMobile()) {
+    initMobileControls();
+  }
 }
 
 async function enterFullscreen(element) {
@@ -125,17 +128,25 @@ function showEnterFullscreenButton() {
 }
 
 function connectButtonToKeyboard(btn, key) {
-  btn.addEventListener("touchstart", (event) => {
-    event.preventDefault();
-    keyboard[key] = true;
-    btn.classList.add("active");
-  });
+  btn.addEventListener(
+    "touchstart",
+    (event) => {
+      event.preventDefault();
+      keyboard[key] = true;
+      btn.classList.add("active");
+    },
+    { passive: false }
+  );
 
-  btn.addEventListener("touchend", (event) => {
-    event.preventDefault();
-    keyboard[key] = false;
-    btn.classList.remove("active");
-  });
+  btn.addEventListener(
+    "touchend",
+    (event) => {
+      event.preventDefault();
+      keyboard[key] = false;
+      btn.classList.remove("active");
+    },
+    { passive: false }
+  );
 
   btn.addEventListener("contextmenu", (event) => {
     event.preventDefault();
@@ -154,6 +165,10 @@ function initMobileControls() {
   connectButtonToKeyboard(jumpBtn, "SPACE");
   connectButtonToKeyboard(shootBtn, "D");
   connectButtonToKeyboard(craftBtn, "F");
+}
+
+function isMobile() {
+  return window.matchMedia("(max-width: 720px), (max-height: 480px)").matches;
 }
 
 function stopGame() {
