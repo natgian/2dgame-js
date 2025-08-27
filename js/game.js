@@ -198,16 +198,25 @@ function unmuteAudio() {
 function initDialogEventListeners() {
   controlsBtn.addEventListener("click", () => {
     dialog.showModal();
+    dialog.focus();
   });
 
   closeBtn.addEventListener("click", () => {
     dialog.close();
+    controlsBtn.blur();
   });
 
   dialog.addEventListener("click", (event) => {
     if (!isInDialog(dialog, event)) {
       dialog.close();
+      controlsBtn.blur();
     }
+  });
+
+  dialog.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    dialog.close();
+    controlsBtn.blur();
   });
 }
 
