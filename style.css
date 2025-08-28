@@ -75,6 +75,7 @@ body {
   align-items: center;
   background: url("./img/layers/repeating_layers/background_backdrop.png") no-repeat center center / cover;
   font-family: "Lora", serif;
+  color: black;
 }
 
 .title {
@@ -204,6 +205,10 @@ canvas {
   background: url("img/misc/info_bg.png") no-repeat center / cover;
   border: none;
   overflow: hidden;
+}
+
+.controls-overlay:focus {
+  outline: none;
 }
 
 ::backdrop {
