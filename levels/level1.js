@@ -4,13 +4,16 @@ function initLevel() {
   healthBar = new Statusbar("health", 0, 20);
   branchesBar = new Statusbar("branch", 200, 20);
   feathersBar = new Statusbar("feather", 400, 20);
+  enemies1 = generateObjects(() => new Enemy("enemy1"), 3);
+  enemies2 = generateObjects(() => new Enemy("enemy2"), 3);
+  allEnemies = [...enemies1, ...enemies2];
 
   level1 = new Level(
-    generateObjects(Enemy, 3),
+    allEnemies,
     new Endboss(),
-    generateObjects(Firefly, 50, 0),
-    generateObjects(Feather, 12),
-    generateObjects(Branch, 12),
+    generateObjects(() => new Firefly(), 50, 0),
+    generateObjects(() => new Feather(), 12),
+    generateObjects(() => new Branch(), 12),
     [healthBar, branchesBar, feathersBar],
 
     // Background Layers
