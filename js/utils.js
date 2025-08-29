@@ -1,10 +1,10 @@
-function generateObjects(ClassRef, count, minDistance = 250, maxAttempts = 1000) {
+function generateObjects(createObjectFunc, count, minDistance = 250, maxAttempts = 1000) {
   const objects = [];
   let attempts = 0;
 
   while (canGenerateMoreObjects(objects, count, attempts, maxAttempts)) {
     attempts++;
-    const newObject = generateAndPositionObject(ClassRef);
+    const newObject = generateAndPositionObject(createObjectFunc);
 
     if (isFarEnough(objects, newObject, minDistance)) {
       objects.push(newObject);
@@ -14,8 +14,8 @@ function generateObjects(ClassRef, count, minDistance = 250, maxAttempts = 1000)
   return objects;
 }
 
-function generateAndPositionObject(ClassRef) {
-  const newObject = new ClassRef();
+function generateAndPositionObject(createObjectFunc) {
+  const newObject = createObjectFunc();
   newObject.setRandomPosition?.();
   return newObject;
 }
