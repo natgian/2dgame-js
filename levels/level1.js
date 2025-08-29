@@ -4,8 +4,8 @@ function initLevel() {
   healthBar = new Statusbar("health", 0, 20);
   branchesBar = new Statusbar("branch", 200, 20);
   feathersBar = new Statusbar("feather", 400, 20);
-  enemies1 = generateObjects(() => new Enemy("enemy1"), 3);
-  enemies2 = generateObjects(() => new Enemy("enemy2"), 3);
+  enemies1 = generateObjects(() => new Enemy("enemy_1"), 4, 400);
+  enemies2 = generateObjects(() => new Enemy("enemy_2"), 4, 400);
   allEnemies = [...enemies1, ...enemies2];
 
   level1 = new Level(
