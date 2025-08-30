@@ -10,147 +10,42 @@ class Character extends MovableObject {
   collectedFeathers = 0;
   collectedBranches = 0;
   maxCollectables = 3;
-  craftedArrows = 3;
+  craftedArrows = 6;
 
-  IMAGES_IDLE_BLINKING = [
-    "img/character/idle_blinking/00_Idle_Blinking.png",
-    "img/character/idle_blinking/01_Idle_Blinking.png",
-    "img/character/idle_blinking/02_Idle_Blinking.png",
-    "img/character/idle_blinking/03_Idle_Blinking.png",
-    "img/character/idle_blinking/04_Idle_Blinking.png",
-    "img/character/idle_blinking/05_Idle_Blinking.png",
-    "img/character/idle_blinking/06_Idle_Blinking.png",
-    "img/character/idle_blinking/07_Idle_Blinking.png",
-    "img/character/idle_blinking/08_Idle_Blinking.png",
-    "img/character/idle_blinking/09_Idle_Blinking.png",
-    "img/character/idle_blinking/10_Idle_Blinking.png",
-    "img/character/idle_blinking/11_Idle_Blinking.png",
-  ];
-  IMAGES_IDLE = [
-    "img/character/idle/00_Idle.png",
-    "img/character/idle/01_Idle.png",
-    "img/character/idle/02_Idle.png",
-    "img/character/idle/03_Idle.png",
-    "img/character/idle/04_Idle.png",
-    "img/character/idle/05_Idle.png",
-    "img/character/idle/06_Idle.png",
-    "img/character/idle/07_Idle.png",
-    "img/character/idle/08_Idle.png",
-    "img/character/idle/09_Idle.png",
-    "img/character/idle/10_Idle.png",
-    "img/character/idle/11_Idle.png",
-  ];
-  IMAGES_WALKING = [
-    "img/character/walking/00_Walking.png",
-    "img/character/walking/01_Walking.png",
-    "img/character/walking/02_Walking.png",
-    "img/character/walking/03_Walking.png",
-    "img/character/walking/04_Walking.png",
-    "img/character/walking/05_Walking.png",
-    "img/character/walking/06_Walking.png",
-    "img/character/walking/07_Walking.png",
-    "img/character/walking/08_Walking.png",
-    "img/character/walking/09_Walking.png",
-    "img/character/walking/10_Walking.png",
-    "img/character/walking/11_Walking.png",
-    "img/character/walking/12_Walking.png",
-    "img/character/walking/13_Walking.png",
-    "img/character/walking/14_Walking.png",
-    "img/character/walking/15_Walking.png",
-    "img/character/walking/16_Walking.png",
-    "img/character/walking/17_Walking.png",
-    "img/character/walking/18_Walking.png",
-    "img/character/walking/19_Walking.png",
-    "img/character/walking/20_Walking.png",
-    "img/character/walking/21_Walking.png",
-    "img/character/walking/22_Walking.png",
-    "img/character/walking/23_Walking.png",
-  ];
-  IMAGES_JUMPING = [
-    "img/character/jump_start/00_Jump_Start.png",
-    "img/character/jump_start/01_Jump_Start.png",
-    "img/character/jump_start/02_Jump_Start.png",
-    "img/character/jump_start/03_Jump_Start.png",
-    "img/character/jump_start/04_Jump_Start.png",
-    "img/character/jump_start/05_Jump_Start.png",
-    "img/character/jump_loop/00_Jump_Loop.png",
-    "img/character/jump_loop/01_Jump_Loop.png",
-    "img/character/jump_loop/02_Jump_Loop.png",
-    "img/character/jump_loop/03_Jump_Loop.png",
-    "img/character/jump_loop/04_Jump_Loop.png",
-    "img/character/jump_loop/05_Jump_Loop.png",
-    "img/character/falling_down/00_Falling_Down.png",
-    "img/character/falling_down/01_Falling_Down.png",
-    "img/character/falling_down/02_Falling_Down.png",
-    "img/character/falling_down/03_Falling_Down.png",
-    "img/character/falling_down/04_Falling_Down.png",
-    "img/character/falling_down/05_Falling_Down.png",
-  ];
-  IMAGES_HURT = [
-    "img/character/hurt/00_Hurt.png",
-    "img/character/hurt/01_Hurt.png",
-    "img/character/hurt/02_Hurt.png",
-    "img/character/hurt/03_Hurt.png",
-    "img/character/hurt/04_Hurt.png",
-    "img/character/hurt/05_Hurt.png",
-    "img/character/hurt/06_Hurt.png",
-    "img/character/hurt/07_Hurt.png",
-    "img/character/hurt/08_Hurt.png",
-    "img/character/hurt/09_Hurt.png",
-    "img/character/hurt/10_Hurt.png",
-    "img/character/hurt/11_Hurt.png",
-  ];
-  IMAGES_DYING = [
-    "img/character/dying/00_Dying.png",
-    "img/character/dying/01_Dying.png",
-    "img/character/dying/02_Dying.png",
-    "img/character/dying/03_Dying.png",
-    "img/character/dying/04_Dying.png",
-    "img/character/dying/05_Dying.png",
-    "img/character/dying/06_Dying.png",
-    "img/character/dying/07_Dying.png",
-    "img/character/dying/08_Dying.png",
-    "img/character/dying/09_Dying.png",
-    "img/character/dying/10_Dying.png",
-    "img/character/dying/11_Dying.png",
-    "img/character/dying/12_Dying.png",
-    "img/character/dying/13_Dying.png",
-    "img/character/dying/14_Dying.png",
-  ];
-  IMAGES_SHOOTING = [
-    "img/character/shooting/00_Shooting.png",
-    "img/character/shooting/01_Shooting.png",
-    "img/character/shooting/02_Shooting.png",
-    "img/character/shooting/03_Shooting.png",
-    "img/character/shooting/04_Shooting.png",
-    "img/character/shooting/05_Shooting.png",
-    "img/character/shooting/06_Shooting.png",
-    "img/character/shooting/07_Shooting.png",
-    "img/character/shooting/08_Shooting.png",
-    "img/character/shooting/09_Shooting.png",
-  ];
-  IMAGES_WALK_AND_SHOOT = [
-    "img/character/run_shooting/00_Run_Shooting.png",
-    "img/character/run_shooting/01_Run_Shooting.png",
-    "img/character/run_shooting/02_Run_Shooting.png",
-    "img/character/run_shooting/03_Run_Shooting.png",
-    "img/character/run_shooting/04_Run_Shooting.png",
-    "img/character/run_shooting/05_Run_Shooting.png",
-    "img/character/run_shooting/06_Run_Shooting.png",
-    "img/character/run_shooting/07_Run_Shooting.png",
-    "img/character/run_shooting/08_Run_Shooting.png",
-    "img/character/run_shooting/09_Run_Shooting.png",
-    "img/character/run_shooting/10_Run_Shooting.png",
-    "img/character/run_shooting/11_Run_Shooting.png",
-    "img/character/run_shooting/12_Run_Shooting.png",
-    "img/character/run_shooting/13_Run_Shooting.png",
-    "img/character/run_shooting/14_Run_Shooting.png",
-  ];
+  IMAGES_IDLE_BLINKING = Array.from({ length: 12 }, (_, i) => `img/character/idle_blinking/${String(i).padStart(2, "0")}_Idle_Blinking.png`);
+
+  IMAGES_IDLE = Array.from({ length: 12 }, (_, i) => `img/character/idle/${String(i).padStart(2, "0")}_Idle.png`);
+
+  IMAGES_WALKING = Array.from({ length: 24 }, (_, i) => `img/character/walking/${String(i).padStart(2, "0")}_Walking.png`);
+
+  IMAGES_JUMP_START = Array.from({ length: 6 }, (_, i) => `img/character/jump_start/${String(i).padStart(2, "0")}_Jump_Start.png`);
+
+  IMAGES_JUMP_LOOP = Array.from({ length: 6 }, (_, i) => `img/character/jump_loop/${String(i).padStart(2, "0")}_Jump_Loop.png`);
+
+  IMAGES_FALLING = Array.from({ length: 6 }, (_, i) => `img/character/falling_down/${String(i).padStart(2, "0")}_Falling_Down.png`);
+
+  IMAGES_HURT = Array.from({ length: 12 }, (_, i) => `img/character/hurt/${String(i).padStart(2, "0")}_Hurt.png`);
+
+  IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/character/dying/${String(i).padStart(2, "0")}_Dying.png`);
+
+  IMAGES_SHOOTING = Array.from({ length: 10 }, (_, i) => `img/character/shooting/${String(i).padStart(2, "0")}_Shooting.png`);
+
+  IMAGES_WALK_AND_SHOOT = Array.from({ length: 15 }, (_, i) => `img/character/run_shooting/${String(i).padStart(2, "0")}_Run_Shooting.png`);
 
   constructor() {
     super().loadImage("img/character/idle/00_Idle.png");
 
-    const allImages = [...this.IMAGES_IDLE, ...this.IMAGES_WALKING, ...this.IMAGES_JUMPING, ...this.IMAGES_HURT, ...this.IMAGES_DYING, ...this.IMAGES_SHOOTING, ...this.IMAGES_WALK_AND_SHOOT];
+    const allImages = [
+      ...this.IMAGES_IDLE,
+      ...this.IMAGES_WALKING,
+      ...this.IMAGES_WALK_AND_SHOOT,
+      ...this.IMAGES_JUMP_START,
+      ...this.IMAGES_JUMP_LOOP,
+      ...this.IMAGES_FALLING,
+      ...this.IMAGES_HURT,
+      ...this.IMAGES_DYING,
+      ...this.IMAGES_SHOOTING,
+    ];
 
     this.loadImages(allImages, () => {
       this.animate();
@@ -305,7 +200,17 @@ class Character extends MovableObject {
   }
 
   animateIsInTheAir() {
-    this.playAnimation(this.IMAGES_JUMPING, 83, true);
+    // this.playAnimation(this.IMAGES_JUMPING, 83, true);
+    if (this.speedY > 0) {
+      // Sprung nach oben
+      this.playAnimation(this.IMAGES_JUMP_START, 50, false);
+    } else if (this.speedY === 0) {
+      // oben, "float"
+      this.playAnimation(this.IMAGES_JUMP_LOOP, 100, true);
+    } else {
+      // fällt runter
+      this.playAnimation(this.IMAGES_FALLING, 50, false);
+    }
   }
 
   animateWalking() {
@@ -320,7 +225,7 @@ class Character extends MovableObject {
   }
 
   animateWalkAndShoot() {
-    this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 83, true);
+    this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 66, true);
 
     if (this.currentImage === this.IMAGES_WALK_AND_SHOOT.length - 1) {
       this.isCurrentlyWalkingAndShooting = false;

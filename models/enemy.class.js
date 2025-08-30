@@ -5,11 +5,12 @@ class Enemy extends MovableObject {
   damage = 20;
   isReadyToRemove = false;
 
-  constructor(type = "enemy1") {
-    super().loadImage("img/enemies/enemy_1/walking/0_Golem_Walking_000.png");
+  constructor(type = "enemy_1") {
+    super().loadImage(`img/enemies/${type}/walking/0_Golem_Walking_000.png`);
 
-    this.x = 200 + Math.random() * 800;
-    this.speed = 0.15 + Math.random() * 0.75;
+    this.type = type;
+
+    this.speed = 0.15 + Math.random() * 0.25;
 
     this.isSlashing = false;
     this.nextSlashTime = Date.now() + this.randomSlashInterval();
@@ -19,125 +20,11 @@ class Enemy extends MovableObject {
     this.collisionBoxWidth = -80;
     this.collisionBoxHeight = -40;
 
-    if (type === "enemy1") {
-      this.IMAGES_WALKING = [
-        "img/enemies/enemy_1/walking/0_Golem_Walking_000.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_001.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_002.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_003.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_004.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_005.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_006.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_007.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_008.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_009.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_010.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_011.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_012.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_013.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_014.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_015.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_016.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_017.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_018.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_019.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_020.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_021.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_022.png",
-        "img/enemies/enemy_1/walking/0_Golem_Walking_023.png",
-      ];
+    this.IMAGES_WALKING = Array.from({ length: 24 }, (_, i) => `img/enemies/${type}/walking/0_Golem_Walking_${String(i).padStart(3, "0")}.png`);
 
-      this.IMAGES_DYING = [
-        "img/enemies/enemy_1/dying/0_Golem_Dying_000.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_001.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_002.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_003.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_004.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_005.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_006.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_007.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_008.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_009.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_010.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_011.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_012.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_013.png",
-        "img/enemies/enemy_1/dying/0_Golem_Dying_014.png",
-      ];
+    this.IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/enemies/${type}/dying/0_Golem_Dying_${String(i).padStart(3, "0")}.png`);
 
-      this.IMAGES_SLASHING = [
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_000.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_001.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_002.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_003.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_004.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_005.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_006.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_007.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_008.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_009.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_010.png",
-        "img/enemies/enemy_1/run_slashing/0_Golem_Run Slashing_011.png",
-      ];
-    } else if (type === "enemy2") {
-      this.IMAGES_WALKING = [
-        "img/enemies/enemy_2/walking/0_Golem_Walking_000.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_001.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_002.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_003.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_004.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_005.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_006.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_007.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_008.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_009.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_010.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_011.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_012.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_013.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_014.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_015.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_016.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_017.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_018.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_019.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_020.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_021.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_022.png",
-        "img/enemies/enemy_2/walking/0_Golem_Walking_023.png",
-      ];
-      this.IMAGES_DYING = [
-        "img/enemies/enemy_2/dying/0_Golem_Dying_000.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_001.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_002.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_003.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_004.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_005.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_006.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_007.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_008.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_009.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_010.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_011.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_012.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_013.png",
-        "img/enemies/enemy_2/dying/0_Golem_Dying_014.png",
-      ];
-      this.IMAGES_SLASHING = [
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_000.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_001.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_002.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_003.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_004.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_005.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_006.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_007.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_008.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_009.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_010.png",
-        "img/enemies/enemy_2/run_slashing/0_Golem_Run Slashing_011.png",
-      ];
-    }
+    this.IMAGES_SLASHING = Array.from({ length: 12 }, (_, i) => `img/enemies/${type}/run_slashing/0_Golem_Run_Slashing_${String(i).padStart(3, "0")}.png`);
 
     const allImages = [...this.IMAGES_WALKING, ...this.IMAGES_DYING, ...this.IMAGES_SLASHING];
     this.loadImages(allImages, () => this.animate());
@@ -156,7 +43,7 @@ class Enemy extends MovableObject {
   }
 
   setRandomPosition() {
-    this.x = 600 + Math.random() * 800;
+    this.x = 800 + Math.random() * 2000;
   }
 
   startSlashing() {
