@@ -2,7 +2,8 @@ class Branch extends DrawableObject {
   width = 120;
   height = 120;
   constructor() {
-    super().loadImage("img/misc/branch.png");
+    super();
+    this.loadImage("img/misc/branch.png");
     this.collisionBoxOffsetX = 10;
     this.collisionBoxOffsetY = 40;
     this.collisionBoxWidth = this.width - 140;

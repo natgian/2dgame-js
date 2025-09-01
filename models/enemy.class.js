@@ -6,7 +6,8 @@ class Enemy extends MovableObject {
   isReadyToRemove = false;
 
   constructor(type = "enemy_1") {
-    super().loadImage(`img/enemies/${type}/walking/0_Golem_Walking_000.png`);
+    super();
+    this.loadImage(`img/enemies/${type}/walking/0_Golem_Walking_000.png`);
 
     this.type = type;
 

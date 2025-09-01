@@ -1,6 +1,7 @@
 class ArrowCounter extends DrawableObject {
   constructor(character) {
-    super().loadImage("img/misc/arrow_status.png");
+    super();
+    this.loadImage("img/misc/arrow_status.png");
     this.character = character;
     this.x = 600;
     this.y = 0;

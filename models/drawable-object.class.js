@@ -9,7 +9,7 @@ class DrawableObject {
   height = 150;
   width = 150;
 
-  hasCollisionBox = true;
+  hasCollisionBox = false;
   collisionBoxOffsetX = 0;
   collisionBoxOffsetY = 0;
   collisionBoxWidth = this.width;
