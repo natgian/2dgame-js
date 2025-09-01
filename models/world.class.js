@@ -38,7 +38,7 @@ class World {
   setWorld() {
     this.character.world = this;
     this.level.enemies.forEach((enemy) => (enemy.world = this));
-    if (this.level.endbos) {
+    if (this.level.endboss) {
       this.level.endboss.world = this;
     }
   }
@@ -61,13 +61,11 @@ class World {
   }
 
   removeDeadEnemies() {
-    // this.level.enemies.splice(enemyIndex, 1);
     this.level.enemies = this.level.enemies.filter((enemy) => !enemy.isReadyToRemove);
   }
 
   checkCollisions() {
     this.checkCharacterEnemyCollision();
-    // this.checkArrowEnemyCollision();
     this.checkCharacterCollectableCollision("feathers", "feather");
     this.checkCharacterCollectableCollision("branches", "branch");
   }
@@ -83,21 +81,26 @@ class World {
         }
       }
     });
-
-    if (this.character.isColliding(this.level.endboss)) {
-    }
   }
 
   checkArrowEnemyCollision() {
     for (let arrowIndex = this.arrows.length - 1; arrowIndex >= 0; arrowIndex--) {
-      let arrow = this.arrows[arrowIndex];
+      const arrow = this.arrows[arrowIndex];
 
       for (let enemyIndex = this.level.enemies.length - 1; enemyIndex >= 0; enemyIndex--) {
-        let enemy = this.level.enemies[enemyIndex];
+        const enemy = this.level.enemies[enemyIndex];
+        const isCollidingWithEnemy = arrow.isColliding(enemy);
+        const isCollidingWithEndboss = arrow.isColliding(this.level.endboss);
 
-        if (arrow.isColliding(enemy)) {
+        if (isCollidingWithEnemy || isCollidingWithEndboss) {
+          clearInterval(arrow.throwInterval);
           this.arrows.splice(arrowIndex, 1);
-          enemy.hit();
+
+          if (isCollidingWithEnemy) {
+            enemy.hit();
+          } else if (isCollidingWithEndboss) {
+            this.level.endboss.hit();
+          }
           break; // stops checking if arrow has collided with an enemy
         }
       }
@@ -174,11 +177,12 @@ class World {
     this.addObjectsToMap(this.level.feathers);
     this.addObjectsToMap(this.level.branches);
 
-    this.ctx.translate(-this.cameraX, 0);
     // --- space for fixed objects ---
+    this.ctx.translate(-this.cameraX, 0);
     this.addObjectsToMap(this.level.statusBars);
     this.addToMap(this.arrowCounter);
     this.ctx.translate(this.cameraX, 0);
+    // --- space for fixed objects ---
 
     this.addToMap(this.character);
 
