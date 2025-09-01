@@ -1,17 +1,20 @@
 class ThrowableObject extends MovableObject {
+  width = 24;
+  height = 80;
+  collisionBoxOffsetX = -12;
+  collisionBoxOffsetY = 25;
+  collisionBoxWidth = 50;
+  collisionBoxHeight = -50;
+  speedX = 15;
+  speedY = -15;
+  acceleration = 1.2;
+
   constructor(x, y, world) {
-    super().loadImage("img/misc/arrow.png");
+    super();
+    this.loadImage("img/misc/arrow.png");
     this.x = x;
     this.y = y;
     this.world = world;
-    this.speedX = 0;
-    this.speedY = 0;
-    this.width = 48 / 2;
-    this.height = 160 / 2;
-    this.collisionBoxOffsetX = -12;
-    this.collisionBoxOffsetY = 25;
-    this.collisionBoxWidth = 50;
-    this.collisionBoxHeight = -50;
   }
 
   draw(ctx) {
@@ -31,21 +34,20 @@ class ThrowableObject extends MovableObject {
   }
 
   throw() {
-    this.speedY = -15;
-    this.speedX = 15;
-    this.acceleration = 1.2;
     this.applyGravity();
     this.world.sound.play("char_shooting");
 
-    if (!world.character.otherDirection) {
-      this.throwInterval = setInterval(() => {
-        this.x += this.speedX;
-      }, 10);
-    } else {
-      this.throwInterval = setInterval(() => {
-        this.otherDirection = true;
-        this.x -= this.speedX;
-      }, 10);
-    }
+    const maxDistance = 800;
+
+    const step = !world.character.otherDirection ? this.speedX : -this.speedX;
+    this.otherDirection = world.character.otherDirection;
+
+    this.throwInterval = setInterval(() => {
+      this.x += step;
+      if (Math.abs(this.x - world.character.x) > maxDistance) {
+        clearInterval(this.throwInterval);
+        this.world.arrows = this.world.arrows.filter((arrow) => arrow !== this);
+      }
+    }, 10);
   }
 }
