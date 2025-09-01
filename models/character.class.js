@@ -3,6 +3,11 @@ class Character extends MovableObject {
   y = 260;
   speed = 5;
 
+  collisionBoxOffsetX = 35;
+  collisionBoxOffsetY = 0;
+  collisionBoxWidth = -50;
+  collisionBoxHeight = 0;
+
   lastShoot = 0;
   isCurrentlyWalkingAndShooting = false;
   isCurrentlyShooting = false;
@@ -33,7 +38,8 @@ class Character extends MovableObject {
   IMAGES_WALK_AND_SHOOT = Array.from({ length: 15 }, (_, i) => `img/character/run_shooting/${String(i).padStart(2, "0")}_Run_Shooting.png`);
 
   constructor() {
-    super().loadImage("img/character/idle/00_Idle.png");
+    super();
+    this.loadImage("img/character/idle/00_Idle.png");
 
     const allImages = [
       ...this.IMAGES_IDLE,
@@ -50,11 +56,6 @@ class Character extends MovableObject {
     this.loadImages(allImages, () => {
       this.animate();
     });
-
-    this.collisionBoxOffsetX = 35;
-    this.collisionBoxOffsetY = 0;
-    this.collisionBoxWidth = -50;
-    this.collisionBoxHeight = 0;
 
     this.applyGravity();
   }
@@ -200,15 +201,11 @@ class Character extends MovableObject {
   }
 
   animateIsInTheAir() {
-    // this.playAnimation(this.IMAGES_JUMPING, 83, true);
     if (this.speedY > 0) {
-      // Sprung nach oben
       this.playAnimation(this.IMAGES_JUMP_START, 50, false);
     } else if (this.speedY === 0) {
-      // oben, "float"
       this.playAnimation(this.IMAGES_JUMP_LOOP, 100, true);
     } else {
-      // fällt runter
       this.playAnimation(this.IMAGES_FALLING, 50, false);
     }
   }
