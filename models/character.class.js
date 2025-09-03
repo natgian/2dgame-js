@@ -3,9 +3,9 @@ class Character extends MovableObject {
   y = 260;
   speed = 5;
 
-  collisionBoxOffsetX = 35;
+  collisionBoxOffsetX = 40;
   collisionBoxOffsetY = 0;
-  collisionBoxWidth = -50;
+  collisionBoxWidth = -60;
   collisionBoxHeight = 0;
 
   lastShoot = 0;
@@ -76,7 +76,9 @@ class Character extends MovableObject {
   }
 
   updateCamera() {
-    this.world.cameraX = -this.x + 80;
+    if (this.x < 3300) {
+      this.world.cameraX = -this.x + 60;
+    }
   }
 
   handlePlayerActions() {
