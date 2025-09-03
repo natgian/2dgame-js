@@ -26,6 +26,11 @@ class World {
 
     // Enemy sounds
     this.sound.load("enemy_hit", "audio/hit_enemy.mp3", false, 0.2);
+    this.sound.load("endboss_growl", "audio/endboss_growl.mp3", false, 0.2);
+    this.sound.load("endboss_hurt", "audio/endboss_hurt.mp3", false);
+    this.sound.load("endboss_hit", "audio/endboss_hit.mp3", false);
+
+    this.sound.load("bg_music", "audio/fairy_background_music.mp3", true);
 
     this.draw();
     this.setWorld();
@@ -86,23 +91,23 @@ class World {
   checkArrowEnemyCollision() {
     for (let arrowIndex = this.arrows.length - 1; arrowIndex >= 0; arrowIndex--) {
       const arrow = this.arrows[arrowIndex];
+      let arrowHit = false;
 
       for (let enemyIndex = this.level.enemies.length - 1; enemyIndex >= 0; enemyIndex--) {
         const enemy = this.level.enemies[enemyIndex];
-        const isCollidingWithEnemy = arrow.isColliding(enemy);
-        const isCollidingWithEndboss = arrow.isColliding(this.level.endboss);
-
-        if (isCollidingWithEnemy || isCollidingWithEndboss) {
+        if (arrow.isColliding(enemy)) {
           clearInterval(arrow.throwInterval);
           this.arrows.splice(arrowIndex, 1);
-
-          if (isCollidingWithEnemy) {
-            enemy.hit();
-          } else if (isCollidingWithEndboss) {
-            this.level.endboss.hit();
-          }
-          break; // stops checking if arrow has collided with an enemy
+          enemy.hit();
+          arrowHit = true;
+          break;
         }
+      }
+
+      if (!arrowHit && this.level.endboss && arrow.isColliding(this.level.endboss)) {
+        clearInterval(arrow.throwInterval);
+        this.arrows.splice(arrowIndex, 1);
+        this.level.endboss.hit();
       }
     }
   }
