@@ -2,10 +2,10 @@ class Endboss extends Enemy {
   width = 400;
   height = 400;
   y = 50;
-  x = 480;
+  x = 3600;
   health = 100;
   damage = 20;
-  speed = 0.2;
+  speed = 0.5;
   collisionBoxOffsetX = 80;
   collisionBoxOffsetY = 50;
   collisionBoxWidth = -60;
@@ -51,38 +51,31 @@ class Endboss extends Enemy {
     });
   }
 
-  // animate() {
-  //   let index = 0;
-
-  //   setInterval(() => {
-  //     if (world.character.x > 2500 && !this.hadFirstContact) {
-  //       index = 0;
-  //       this.hadFirstContact = true;
-  //     }
-
-  //     if (!this.hadFirstContact) {
-  //       this.playAnimation(this.IMAGES_IDLE);
-  //       return;
-  //     }
-
-  //     if (index < 10) {
-  //       this.playAnimation(this.IMAGES_IDLE);
-  //     } else {
-  //       this.playAnimation(this.IMAGES_WALKING);
-  //       this.moveLeft();
-  //     }
-  //     index++;
-  //   }, this.frameRate);
-  // }
+  hit() {
+    this.health -= this.damage;
+    if (this.health < 0) {
+      this.health = 0;
+    } else {
+      this.lastHit = new Date().getTime();
+    }
+    this.world.sound.play("endboss_hit");
+    this.world.sound.play("endboss_hurt");
+  }
 
   handleEnemyActions() {
     if (this.isDead()) return;
+    if (!this.hadFirstContact) return;
     this.followCharacter();
     this.handleSlashing();
     this.handleJumping();
   }
 
   updateAnimation() {
+    if (this.world.character.x >= 3200 && !this.hadFirstContact) {
+      this.hadFirstContact = true;
+      this.world.sound.play("endboss_growl");
+    }
+
     if (this.isDead()) {
       if (!this.isInDeathAnimation) {
         this.currentImage = 0;
@@ -92,6 +85,12 @@ class Endboss extends Enemy {
       return;
     }
 
+    if (this.hadFirstContact) {
+      this.animateMovements();
+    } else this.animateIdle();
+  }
+
+  animateMovements() {
     if (this.isHurt()) {
       this.isSlashing = false;
       this.animateIsHurt();
@@ -104,8 +103,12 @@ class Endboss extends Enemy {
     }
   }
 
+  animateIdle() {
+    this.playAnimation(this.IMAGES_IDLE);
+  }
+
   animateWalking() {
-    this.playAnimation(this.IMAGES_WALKING, 66, true);
+    this.playAnimation(this.IMAGES_WALKING, 33, true);
   }
 
   animateSlashing() {
@@ -139,10 +142,6 @@ class Endboss extends Enemy {
     }, 1000);
   }
 
-  randomJumpInterval() {
-    return Math.random() * 3000 + 8000;
-  }
-
   applyGravity() {
     setInterval(() => {
       if (this.isJumping || this.speedY > 0) {
@@ -170,6 +169,10 @@ class Endboss extends Enemy {
 
   isInTheAir() {
     return this.y < 50;
+  }
+
+  randomJumpInterval() {
+    return Math.random() * 3000 + 5000;
   }
 
   followCharacter() {
