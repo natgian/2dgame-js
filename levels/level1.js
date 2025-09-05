@@ -7,14 +7,17 @@ function initLevel() {
   healthBar = new Statusbar("health", 0, 20);
   branchesBar = new Statusbar("branch", 200, 20);
   feathersBar = new Statusbar("feather", 400, 20);
+  endbossBar = new Statusbar("endboss", 400, 80);
+  endbossBar.visible = false;
+  endboss = new Endboss(endbossBar);
 
   level1 = new Level(
     allEnemies,
-    new Endboss(),
+    endboss,
     generateObjects(() => new Firefly(), 50, 0),
     generateObjects(() => new Feather(), 12),
     generateObjects(() => new Branch(), 12),
-    [healthBar, branchesBar, feathersBar],
+    [healthBar, branchesBar, feathersBar, endbossBar],
 
     // Background Layers
     generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 }),

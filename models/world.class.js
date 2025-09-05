@@ -108,6 +108,7 @@ class World {
         clearInterval(arrow.throwInterval);
         this.arrows.splice(arrowIndex, 1);
         this.level.endboss.hit();
+        this.level.statusBars[3].setValue(this.level.endboss.health);
       }
     }
   }

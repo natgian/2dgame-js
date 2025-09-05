@@ -5,7 +5,7 @@ class Endboss extends Enemy {
   x = 3600;
   health = 100;
   damage = 20;
-  speed = 0.5;
+  speed = 1;
   collisionBoxOffsetX = 80;
   collisionBoxOffsetY = 50;
   collisionBoxWidth = -60;
@@ -28,10 +28,11 @@ class Endboss extends Enemy {
 
   IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/enemies/endboss/dying/${String(i).padStart(3, "0")}.png`);
 
-  constructor() {
+  constructor(statusbar) {
     super();
     this.nextJumpTime = Date.now() + this.randomJumpInterval();
     this.applyGravity();
+    this.statusbar = statusbar;
 
     this.loadImage("img/enemies/endboss/idle/000.png");
 
@@ -72,6 +73,7 @@ class Endboss extends Enemy {
 
   updateAnimation() {
     if (this.world.character.x >= 3200 && !this.hadFirstContact) {
+      this.statusbar.visible = true;
       this.hadFirstContact = true;
       this.world.sound.play("endboss_growl");
     }

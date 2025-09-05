@@ -15,7 +15,7 @@ class Character extends MovableObject {
   collectedFeathers = 0;
   collectedBranches = 0;
   maxCollectables = 3;
-  craftedArrows = 6;
+  craftedArrows = 9;
 
   IMAGES_IDLE_BLINKING = Array.from({ length: 12 }, (_, i) => `img/character/idle_blinking/${String(i).padStart(2, "0")}_Idle_Blinking.png`);
 

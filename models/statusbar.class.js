@@ -21,12 +21,25 @@ const STATUSBAR_CONFIG = {
     startValue: 0,
     images: ["img/statusbars/feathers/feather_0.png", "img/statusbars/feathers/feather_1.png", "img/statusbars/feathers/feather_2.png", "img/statusbars/feathers/feather_3.png"],
   },
+  endboss: {
+    maxValue: 100,
+    startValue: 100,
+    images: [
+      "img/statusbars/endboss_health/health_0.png",
+      "img/statusbars/endboss_health/health_20.png",
+      "img/statusbars/endboss_health/health_40.png",
+      "img/statusbars/endboss_health/health_60.png",
+      "img/statusbars/endboss_health/health_80.png",
+      "img/statusbars/endboss_health/health_100.png",
+    ],
+  },
 };
 
 class Statusbar extends DrawableObject {
+  hasCollisionBox = false;
+  visible = true;
   width = 200;
   height = 50;
-  hasCollisionBox = false;
 
   constructor(type, x, y) {
     super();
@@ -45,17 +58,22 @@ class Statusbar extends DrawableObject {
     this.setValue(this.startValue);
   }
 
+  draw(ctx) {
+    if (!this.visible) return;
+    super.draw(ctx);
+  }
+
   setValue(value) {
     this.value = Math.min(value, this.maxValue);
     this.img = this.imageCache[this.IMAGES[this.getImageIndex(this.value)]];
   }
 
   getImageIndex() {
-    if (this.type === "health") {
+    if (this.type === "health" || this.type === "endboss") {
       if (this.value === 100) return 5;
-      if (this.value > 80) return 4;
-      if (this.value > 60) return 3;
-      if (this.value > 40) return 2;
+      if (this.value >= 80) return 4;
+      if (this.value >= 60) return 3;
+      if (this.value >= 40) return 2;
       if (this.value > 0) return 1;
       return 0;
     } else {
