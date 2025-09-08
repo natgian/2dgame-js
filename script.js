@@ -14,7 +14,6 @@ function closeOverlay(dialogId) {
 
 function initDialogEventListeners() {
   const dialogs = document.querySelectorAll("dialog");
-  console.log(dialogs);
 
   dialogs.forEach((dialog) => {
     const closeBtn = dialog.querySelector(".close-btn");
