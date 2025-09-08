@@ -3,7 +3,7 @@ let world;
 let keyboard = new Keyboard();
 let intervalIds = [];
 const fullscreen = document.getElementById("fullscreen");
-const dialog = document.querySelector("dialog");
+
 const controlsBtn = document.getElementById("controls-btn");
 const closeBtn = document.getElementById("close-overlay-btn");
 const keyMap = {
@@ -193,34 +193,4 @@ function unmuteAudio() {
   document.getElementById("sound-off-btn").classList.remove("d-none");
   document.getElementById("sound-on-btn").classList.add("d-none");
   world.sound.unmuteAll();
-}
-
-function initDialogEventListeners() {
-  controlsBtn.addEventListener("click", () => {
-    dialog.showModal();
-    dialog.focus();
-  });
-
-  closeBtn.addEventListener("click", () => {
-    dialog.close();
-    controlsBtn.blur();
-  });
-
-  dialog.addEventListener("click", (event) => {
-    if (!isInDialog(dialog, event)) {
-      dialog.close();
-      controlsBtn.blur();
-    }
-  });
-
-  dialog.addEventListener("cancel", (event) => {
-    event.preventDefault();
-    dialog.close();
-    controlsBtn.blur();
-  });
-}
-
-function isInDialog(dialog, event) {
-  const rect = dialog.getBoundingClientRect();
-  return event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
 }
