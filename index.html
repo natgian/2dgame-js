@@ -33,9 +33,9 @@
         <div id="start-screen" class="start-screen">
           <img id="nara-gif" src="./img/misc/nara.gif" alt="Nara character" />
           <div class="menu-btn-container">
-            <button class="menu-btn"><img src="./img/misc/play_btn.png" alt="play button" /></button>
-            <button class="menu-btn"><img src="./img/misc/story_btn.png" alt="story button" onclick="openOverlay('story-overlay')" /></button>
-            <button id="menu-controls-btn" class="menu-btn"><img src="./img/misc/controls_btn.png" alt="controls button" onclick="openOverlay('controls-overlay')" /></button>
+            <button type="button" class="menu-btn" onclick="startGame()"><img src="./img/misc/play_btn.png" alt="play button" /></button>
+            <button type="button" class="menu-btn" onclick="openOverlay('story-overlay')"><img src="./img/misc/story_btn.png" alt="story button" /></button>
+            <button type="button" id="menu-controls-btn" class="menu-btn" onclick="openOverlay('controls-overlay')"><img src="./img/misc/controls_btn.png" alt="controls button" /></button>
           </div>
         </div>
         <canvas id="canvas" width="720" height="480"></canvas>
@@ -138,7 +138,7 @@
         </dialog>
 
         <!-- CONTROLS -->
-        <div class="controls">
+        <div class="controls d-none">
           <!-- left mobile controls -->
           <div class="controls-container mobile-controls">
             <button id="walk-left-btn">
