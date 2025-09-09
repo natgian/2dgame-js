@@ -1,25 +1,20 @@
 class Level {
   enemies;
   endboss;
+  statusBars;
   fireflies;
   feathers;
   branches;
-  statusBars;
-  background;
-  midground;
-  foreground;
+
   levelEndX = 3800;
 
-  constructor(enemies, endboss, fireflies, feathers, branches, statusBars, background, midground, foreground) {
+  constructor(enemies, endboss, statusBars, fireflies, feathers, branches) {
     this.enemies = enemies;
     this.endboss = endboss;
+    this.statusBars = statusBars;
     this.fireflies = fireflies;
     this.feathers = feathers;
     this.branches = branches;
-    this.statusBars = statusBars;
-    this.background = background;
-    this.midground = midground;
-    this.foreground = foreground;
   }
 
   getStatusBar(type) {

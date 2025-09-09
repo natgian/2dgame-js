@@ -22,10 +22,16 @@ const keyMap = {
  * Called once at the start to set up the environment.
  */
 function init() {
-  initLevel();
   initAllEventListeners();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
+}
+
+function startGame() {
+  document.getElementById("start-screen").classList.add("d-none");
+  document.querySelector(".controls").classList.remove("d-none");
+  initLevel();
+  world.startGame(level1);
 }
 
 function initAllEventListeners() {

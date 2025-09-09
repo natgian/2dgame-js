@@ -3,8 +3,8 @@ class World {
   ctx;
   keyboard;
   cameraX = 0;
+  level = null;
   character = new Character();
-  level = level1;
   arrowCounter = new ArrowCounter(this.character);
   arrows = [];
   hintTextVisible = true;
@@ -13,8 +13,28 @@ class World {
     this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.character.world = this;
     this.sound = new AudioManager();
+    this.loadSounds();
 
+    this.backgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 });
+    this.midgroundLayers = generateLayerSequence({ count: 6, imagePaths: ["img/layers/repeating_layers/background2_trees.png", "img/layers/repeating_layers/background1_trees.png"] });
+    this.foregroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/midground_grass.png", y: 200, height: 300 });
+
+    this.draw();
+  }
+
+  startGame(level) {
+    this.level = level;
+    this.linkEnemiesToWorld();
+    this.sound.play("bg_music");
+
+    this.runCollisionInterval();
+    this.runArrowCollisionInterval();
+    this.runCleanupInterval();
+  }
+
+  loadSounds() {
     // Character sounds
     this.sound.load("char_walking", "audio/running_in_grass.mp3", true);
     this.sound.load("char_collect_branch", "audio/collect_branch.mp3", false, 0.6);
@@ -30,22 +50,55 @@ class World {
     this.sound.load("endboss_hurt", "audio/endboss_hurt.mp3", false);
     this.sound.load("endboss_hit", "audio/endboss_hit.mp3", false);
 
-    this.sound.load("bg_music", "audio/fairy_background_music.mp3", true);
-
-    this.draw();
-    this.setWorld();
-
-    this.runCollisionInterval();
-    this.runArrowCollisionInterval();
-    this.runCleanupInterval();
+    this.sound.load("bg_music", "audio/fairy_background_music.mp3", true, 0.1);
   }
 
-  setWorld() {
-    this.character.world = this;
+  linkEnemiesToWorld() {
     this.level.enemies.forEach((enemy) => (enemy.world = this));
     if (this.level.endboss) {
       this.level.endboss.world = this;
     }
+  }
+
+  draw() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Cleares the canvas by deleting the previous image before drawing again
+
+    this.ctx.translate(this.cameraX, 0);
+
+    this.addObjectsToMap(this.backgroundLayers);
+    if (this.level) {
+      this.addObjectsToMap(this.level.fireflies);
+    }
+    this.addObjectsToMap(this.midgroundLayers);
+    this.addObjectsToMap(this.foregroundLayers);
+
+    // --- space for fixed objects ---
+    this.ctx.translate(-this.cameraX, 0);
+    if (this.level) {
+      this.addObjectsToMap(this.level.statusBars);
+    }
+    this.addToMap(this.arrowCounter);
+    this.ctx.translate(this.cameraX, 0);
+    // --- space for fixed objects ---
+
+    this.addToMap(this.character);
+
+    if (this.level) {
+      this.addObjectsToMap(this.level.enemies);
+      this.addToMap(this.level.endboss);
+      this.addObjectsToMap(this.level.feathers);
+      this.addObjectsToMap(this.level.branches);
+    }
+
+    this.addObjectsToMap(this.arrows);
+
+    this.ctx.translate(-this.cameraX, 0);
+
+    this.drawCraftingHint(this.ctx);
+
+    requestAnimationFrame(() => {
+      this.draw();
+    });
   }
 
   runCollisionInterval() {
@@ -53,6 +106,7 @@ class World {
       this.checkCollisions();
     }, 200);
   }
+
   runArrowCollisionInterval() {
     setInterval(() => {
       this.checkArrowEnemyCollision();
@@ -170,42 +224,6 @@ class World {
 
       this.ctx.restore();
     }
-  }
-
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Cleares the canvas by deleting the previous image before drawing again
-
-    this.ctx.translate(this.cameraX, 0);
-    this.addObjectsToMap(this.level.background);
-    this.addObjectsToMap(this.level.fireflies);
-    this.addObjectsToMap(this.level.midground);
-    this.addObjectsToMap(this.level.foreground);
-    this.addObjectsToMap(this.level.feathers);
-    this.addObjectsToMap(this.level.branches);
-
-    // --- space for fixed objects ---
-    this.ctx.translate(-this.cameraX, 0);
-    this.addObjectsToMap(this.level.statusBars);
-    this.addToMap(this.arrowCounter);
-    this.ctx.translate(this.cameraX, 0);
-    // --- space for fixed objects ---
-
-    this.addToMap(this.character);
-
-    this.addObjectsToMap(this.level.enemies);
-    this.addToMap(this.level.endboss);
-
-    this.addObjectsToMap(this.arrows);
-
-    this.ctx.translate(-this.cameraX, 0);
-
-    this.drawCraftingHint(this.ctx);
-
-    requestAnimationFrame(() => {
-      this.draw();
-    });
-    // “requestAnimationFrame” tells the browser that this function should be executed before the next screen update.
-    // With an anonymous function, “this.draw()” would not work here because ‘this’ would no longer point to the object, but with the Arrow function it is possible because it retains the “this” context.
   }
 
   addObjectsToMap(objects) {

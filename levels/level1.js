@@ -8,24 +8,15 @@ function initLevel() {
   branchesBar = new Statusbar("branch", 200, 20);
   feathersBar = new Statusbar("feather", 400, 20);
   endbossBar = new Statusbar("endboss", 400, 80);
-  endbossBar.visible = false;
   endboss = new Endboss(endbossBar);
+  endbossBar.visible = false;
 
   level1 = new Level(
     allEnemies,
     endboss,
+    [healthBar, branchesBar, feathersBar, endbossBar],
     generateObjects(() => new Firefly(), 50, 0),
     generateObjects(() => new Feather(), 12),
-    generateObjects(() => new Branch(), 12),
-    [healthBar, branchesBar, feathersBar, endbossBar],
-
-    // Background Layers
-    generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 }),
-
-    // Midground Layers
-    generateLayerSequence({ count: 6, imagePaths: ["img/layers/repeating_layers/background2_trees.png", "img/layers/repeating_layers/background1_trees.png"] }),
-
-    // Foreground Layers
-    generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/midground_grass.png", y: 200, height: 300 })
+    generateObjects(() => new Branch(), 12)
   );
 }
