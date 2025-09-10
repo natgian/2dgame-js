@@ -28,10 +28,16 @@ class World {
     this.level = level;
     this.linkEnemiesToWorld();
     this.sound.play("bg_music");
-
     this.runCollisionInterval();
     this.runArrowCollisionInterval();
     this.runCleanupInterval();
+  }
+
+  stopGame() {
+    this.sound.stop("bg_music");
+    if (this.character.isDead) {
+      this.sound.play("game_over");
+    }
   }
 
   loadSounds() {
@@ -51,6 +57,7 @@ class World {
     this.sound.load("endboss_hit", "audio/endboss_hit.mp3", false);
 
     this.sound.load("bg_music", "audio/fairy_background_music.mp3", true, 0.1);
+    this.sound.load("game_over", "audio/game_over.mp3", false, 0.2);
   }
 
   linkEnemiesToWorld() {
@@ -60,41 +67,53 @@ class World {
     }
   }
 
-  draw() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); // Cleares the canvas by deleting the previous image before drawing again
+  clearCanvas() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  }
 
-    this.ctx.translate(this.cameraX, 0);
-
+  drawLayers() {
     this.addObjectsToMap(this.backgroundLayers);
     if (this.level) {
       this.addObjectsToMap(this.level.fireflies);
     }
     this.addObjectsToMap(this.midgroundLayers);
     this.addObjectsToMap(this.foregroundLayers);
+  }
 
-    // --- space for fixed objects ---
+  drawFixedObjects() {
     this.ctx.translate(-this.cameraX, 0);
     if (this.level) {
       this.addObjectsToMap(this.level.statusBars);
     }
     this.addToMap(this.arrowCounter);
+    this.drawCraftingHint(this.ctx);
     this.ctx.translate(this.cameraX, 0);
-    // --- space for fixed objects ---
+  }
 
-    this.addToMap(this.character);
-
+  drawEnemies() {
     if (this.level) {
       this.addObjectsToMap(this.level.enemies);
       this.addToMap(this.level.endboss);
+    }
+  }
+
+  drawCollectableObjects() {
+    if (this.level) {
       this.addObjectsToMap(this.level.feathers);
       this.addObjectsToMap(this.level.branches);
     }
+  }
 
+  draw() {
+    this.clearCanvas();
+    this.ctx.translate(this.cameraX, 0);
+    this.drawLayers();
+    this.drawFixedObjects();
+    this.drawCollectableObjects();
+    this.drawEnemies();
+    this.addToMap(this.character);
     this.addObjectsToMap(this.arrows);
-
     this.ctx.translate(-this.cameraX, 0);
-
-    this.drawCraftingHint(this.ctx);
 
     requestAnimationFrame(() => {
       this.draw();
@@ -137,6 +156,8 @@ class World {
         if (!this.character.isDead()) {
           this.character.hit();
           this.level.statusBars[0].setValue(this.character.health);
+        } else {
+          stopGame();
         }
       }
     });
