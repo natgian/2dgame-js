@@ -32,6 +32,19 @@ function startGame() {
   document.querySelector(".controls").classList.remove("d-none");
   initLevel();
   world.startGame(level1);
+
+  const soundState = localStorage.getItem("soundState");
+
+  if (soundState === null) {
+    unmuteAudio();
+  } else if (soundState === "muted") {
+    muteAudio();
+  }
+}
+
+function stopGame() {
+  clearAllIntervals();
+  world.stopGame();
 }
 
 function initAllEventListeners() {
@@ -181,10 +194,6 @@ function isMobile() {
   return window.matchMedia("(max-width: 720px), (max-height: 480px)").matches;
 }
 
-function stopGame() {
-  clearAllIntervals();
-}
-
 function clearAllIntervals() {
   for (let i = 1; i < 9999; i++) window.clearInterval(i);
 }
@@ -193,10 +202,12 @@ function muteAudio() {
   document.getElementById("sound-off-btn").classList.add("d-none");
   document.getElementById("sound-on-btn").classList.remove("d-none");
   world.sound.muteAll();
+  localStorage.setItem("soundState", "muted");
 }
 
 function unmuteAudio() {
   document.getElementById("sound-off-btn").classList.remove("d-none");
   document.getElementById("sound-on-btn").classList.add("d-none");
   world.sound.unmuteAll();
+  localStorage.setItem("soundState", "unmuted");
 }
