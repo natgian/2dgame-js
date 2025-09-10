@@ -25,7 +25,7 @@ class ArrowCounter extends DrawableObject {
     ctx.shadowBlur = 2;
     ctx.fillStyle = this.getTextColor();
     const animationScale = this.getAnimationScale();
-    ctx.translate(this.x + this.width - 60, this.y + 72);
+    ctx.translate(this.x + this.width - 64, this.y + 72);
     ctx.scale(animationScale, animationScale);
     ctx.fillText(`${this.character.craftedArrows}`, 0, 0);
     ctx.restore();
