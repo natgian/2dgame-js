@@ -3,13 +3,12 @@ const menuControlsBtn = document.getElementById("menu-controls-btn");
 function openOverlay(dialogId) {
   const dialog = document.getElementById(dialogId);
   dialog.showModal();
-  dialog.focus();
 }
 
 function closeOverlay(dialogId) {
   const dialog = document.getElementById(dialogId);
   dialog.close();
-  dialog.blur();
+  document.activeElement.blur();
 }
 
 function initDialogEventListeners() {
