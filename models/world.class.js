@@ -14,6 +14,8 @@ class World {
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.character.world = this;
+    this.isGameOver = false;
+    this.isGameWon = false;
     this.sound = new AudioManager();
     this.loadSounds();
 
@@ -33,31 +35,24 @@ class World {
     this.runCleanupInterval();
   }
 
-  stopGame() {
-    this.sound.stop("bg_music");
-    if (this.character.isDead) {
-      this.sound.play("game_over");
-    }
-  }
-
   loadSounds() {
     // Character sounds
     this.sound.load("char_walking", "audio/running_in_grass.mp3", true);
     this.sound.load("char_collect_branch", "audio/collect_branch.mp3", false, 0.6);
     this.sound.load("char_collect_feather", "audio/collect_feather.mp3", false);
-    this.sound.load("char_crafting", "audio/craft_item.wav", false);
+    this.sound.load("char_crafting", "audio/craft_item.mp3", false);
     this.sound.load("char_shooting", "audio/wind_swoosh.mp3", false);
     this.sound.load("char_jumping", "audio/whoosh_jump.mp3", false, 0.1);
     this.sound.load("char_hurt", "audio/hurt.mp3", false);
-
     // Enemy sounds
     this.sound.load("enemy_hit", "audio/hit_enemy.mp3", false, 0.2);
     this.sound.load("endboss_growl", "audio/endboss_growl.mp3", false, 0.2);
     this.sound.load("endboss_hurt", "audio/endboss_hurt.mp3", false);
     this.sound.load("endboss_hit", "audio/endboss_hit.mp3", false);
-
+    // Background sounds
     this.sound.load("bg_music", "audio/fairy_background_music.mp3", true, 0.1);
     this.sound.load("game_over", "audio/game_over.mp3", false, 0.2);
+    this.sound.load("victory", "audio/victory.mp3", false, 0.2);
   }
 
   linkEnemiesToWorld() {
@@ -157,7 +152,10 @@ class World {
           this.character.hit();
           this.level.statusBars[0].setValue(this.character.health);
         } else {
-          stopGame();
+          this.isGameOver = true;
+          setTimeout(() => {
+            stopGame();
+          }, 500);
         }
       }
     });
@@ -184,6 +182,12 @@ class World {
         this.arrows.splice(arrowIndex, 1);
         this.level.endboss.hit();
         this.level.statusBars[3].setValue(this.level.endboss.health);
+        if (this.level.endboss.isDead()) {
+          this.isGameWon = true;
+          setTimeout(() => {
+            stopGame();
+          }, 500);
+        }
       }
     }
   }

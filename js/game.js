@@ -1,7 +1,6 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
-let intervalIds = [];
 const fullscreen = document.getElementById("fullscreen");
 
 const controlsBtn = document.getElementById("controls-btn");
@@ -34,7 +33,6 @@ function startGame() {
   world.startGame(level1);
 
   const soundState = localStorage.getItem("soundState");
-
   if (soundState === null) {
     unmuteAudio();
   } else if (soundState === "muted") {
@@ -42,13 +40,52 @@ function startGame() {
   }
 }
 
+function restartGame() {
+  document.getElementById("lose-end-screen").classList.add("d-none");
+  document.getElementById("win-end-screen").classList.add("d-none");
+
+  world = new World(canvas, keyboard);
+  startGame();
+}
+
 function stopGame() {
   clearAllIntervals();
-  world.stopGame();
+  world.sound.stop("bg_music");
+  world.sound.stop("char_walking");
+
+  if (world.isGameOver) {
+    handleGameOver();
+  }
+
+  if (world.isGameWon) {
+    handleGameWon();
+  }
+}
+
+function handleGameWon() {
+  setTimeout(() => {
+    world.sound.play("victory");
+    document.getElementById("win-end-screen").classList.remove("d-none");
+    document.querySelector(".controls").classList.add("d-none");
+  }, 500);
+}
+
+function handleGameOver() {
+  setTimeout(() => {
+    world.sound.play("game_over");
+    document.getElementById("lose-end-screen").classList.remove("d-none");
+    document.querySelector(".controls").classList.add("d-none");
+  }, 500);
+}
+
+function backToStartScreen() {
+  document.getElementById("lose-end-screen").classList.add("d-none");
+  document.getElementById("win-end-screen").classList.add("d-none");
+  document.getElementById("start-screen").classList.remove("d-none");
+  world = new World(canvas, keyboard);
 }
 
 function initAllEventListeners() {
-  initResizeListener();
   initFullscreenListeners();
   initDialogEventListeners();
   initKeyDownListener();
@@ -60,6 +97,7 @@ function initAllEventListeners() {
 }
 
 async function enterFullscreen(element) {
+  if (!world || world.isGameOver || world.isGameWon) return;
   try {
     if (element.requestFullscreen) {
       await element.requestFullscreen();
@@ -78,22 +116,6 @@ async function exitFullscreen() {
     await document.exitFullscreen();
   } else if (document.webkitFullscreenElement) {
     document.webkitExitFullscreen();
-  }
-}
-
-function resizeCanvasToFullscreen() {
-  canvas.classList.add("fullscreen-canvas");
-}
-
-function resizeCanvasToNormal() {
-  canvas.classList.remove("fullscreen-canvas");
-}
-
-function resizeCanvas() {
-  if (document.fullscreenElement) {
-    resizeCanvasToFullscreen();
-  } else {
-    resizeCanvasToNormal();
   }
 }
 
@@ -124,9 +146,7 @@ function initKeyUpListener() {
 function initFullscreenListeners() {
   function onFullscreenChange() {
     if (document.fullscreenElement || document.webkitFullscreenElement) {
-      fullscreen.classList.add("fullscreen-active");
       showExitFullscreenButton();
-      resizeCanvasToFullscreen();
     } else {
       fullscreen.classList.remove("fullscreen-active");
       showEnterFullscreenButton();
@@ -134,10 +154,6 @@ function initFullscreenListeners() {
   }
   document.addEventListener("fullscreenchange", onFullscreenChange);
   document.addEventListener("webkitfullscreenchange", onFullscreenChange);
-}
-
-function initResizeListener() {
-  window.addEventListener("resize", resizeCanvas);
 }
 
 function showExitFullscreenButton() {
