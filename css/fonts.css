@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "Cinzel";
+  src: url("../fonts/Cinzel_Decorative/CinzelDecorative-Regular.ttf") format("truetype");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: "Cinzel";
+  src: url("../fonts/Cinzel_Decorative/CinzelDecorative-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url("../fonts/Lora/Lora-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lora";
+  src: url("../fonts/Lora/Lora-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+}
