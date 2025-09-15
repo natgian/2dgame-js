@@ -21,6 +21,7 @@ const keyMap = {
  * Called once at the start to set up the environment.
  */
 function init() {
+  checkOrientation();
   initAllEventListeners();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
@@ -86,6 +87,7 @@ function backToStartScreen() {
 }
 
 function initAllEventListeners() {
+  initOrientationListener();
   initFullscreenListeners();
   initDialogEventListeners();
   initKeyDownListener();
@@ -117,6 +119,11 @@ async function exitFullscreen() {
   } else if (document.webkitFullscreenElement) {
     document.webkitExitFullscreen();
   }
+}
+
+function initOrientationListener() {
+  window.addEventListener("resize", checkOrientation);
+  checkOrientation();
 }
 
 function initKeyDownListener() {
@@ -208,6 +215,14 @@ function initMobileControls() {
 
 function isMobile() {
   return window.matchMedia("(max-width: 720px), (max-height: 480px)").matches;
+}
+
+function checkOrientation() {
+  if (window.matchMedia("(orientation: portrait)").matches) {
+    document.getElementById("mobile-portrait-blocker").classList.remove("d-none");
+  } else {
+    document.getElementById("mobile-portrait-blocker").classList.add("d-none");
+  }
 }
 
 function clearAllIntervals() {

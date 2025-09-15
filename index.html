@@ -31,7 +31,7 @@
   </head>
   <body onload="init()">
     <!-- MOBILE PORTRAIT MODE BLOCKER -->
-    <div class="mobile-portrait-blocker">
+    <div id="mobile-portrait-blocker" class="mobile-portrait-blocker d-none">
       <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" fill="#c8c500" viewBox="0 0 256 256">
         <path
           d="M176,18H80A22,22,0,0,0,58,40V216a22,22,0,0,0,22,22h96a22,22,0,0,0,22-22V40A22,22,0,0,0,176,18ZM70,62H186V194H70ZM80,30h96a10,10,0,0,1,10,10V50H70V40A10,10,0,0,1,80,30Zm96,196H80a10,10,0,0,1-10-10V206H186v10A10,10,0,0,1,176,226Z"
@@ -48,6 +48,7 @@
             <button type="button" class="menu-btn" onclick="startGame()"><img src="./img/buttons/play_btn.png" alt="play button" /></button>
             <button type="button" class="menu-btn" onclick="openOverlay('story-overlay')"><img src="./img/buttons/story_btn.png" alt="story button" /></button>
             <button type="button" id="menu-controls-btn" class="menu-btn" onclick="openOverlay('controls-overlay')"><img src="./img/buttons/controls_btn.png" alt="controls button" /></button>
+            <button type="button" id="imprint-btn" class="menu-btn" onclick="openOverlay('imprint-overlay')"><img src="./img/buttons/imprint_btn.png" alt="imprint button" /></button>
           </div>
         </div>
         <!-- WIN END SCREEN -->
@@ -162,6 +163,7 @@
             </button>
           </div>
         </div>
+
         <!-- STORY OVERLAY -->
         <dialog id="story-overlay" class="overlay">
           <div class="overlay-inner">
@@ -173,6 +175,57 @@
               <p>Her name is Nara. Armed with courage, her bow, and unerring aim, she protects the forest from a creeping darkness rising at its edges.</p>
               <p>The balance is shifting. Shadows awaken. But Nara does not falter. She draws her bow.</p>
               <p>The Greenwood will stand.</p>
+            </div>
+          </div>
+        </dialog>
+
+        <!-- IMPRINT OVERLAY -->
+        <dialog id="imprint-overlay" class="overlay">
+          <div class="overlay-inner">
+            <button id="close-overlay-btn" class="close-btn" onclick="closeOverlay('imprint-overlay')">X</button>
+            <div class="imprint-info-wrapper">
+              <h2 class="overlay-title">IMPRINT</h2>
+              <p>
+                Nathalie Giancaspro
+                <br />
+                Heinrichstrasse 10
+                <br />
+                8304 Wallisellen
+                <br />
+                Contact: <a href="mailto:info@natgian.com">info@natgian.com</a>
+              </p>
+
+              <p>
+                <strong>Music & Sound Effects by</strong>
+                <br />
+                <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=36029" target="_blank"
+                  >freesound_community</a
+                >
+                from
+                <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=36029" target="_blank">Pixabay</a>
+                <br />
+                <a href="https://pixabay.com/users/dragon-studio-38165424/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=390285" target="_blank">DRAGON-STUDIO</a>
+                from
+                <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=390285" target="_blank">Pixabay</a>
+                <br />
+                <a href="https://pixabay.com/users/voicebosch-30143949/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=174559" target="_blank">Otto</a>
+                from
+                <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=174559" target="_blank">Pixabay</a>
+                <br />
+                <a href="https://pixabay.com/users/audley_fergine-32337609/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=206486" target="_blank">Hanifi Şahin</a> from
+                <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=206486" target="_blank">Pixabay</a>
+                <br />
+                <a href="https://pixabay.com/users/akiko_shina-42793791/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=224765" target="_blank">Akiko Shina</a> from
+                <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=224765" target="_blank">Pixabay</a>
+                <br />
+                <a href="https://freesound.org/s/580811/" target="_blank">SilverIllusionist</a> from <a href="https://freesound.org/" target="_blank">Freesound.org</a> License: Attribution 4.0
+              </p>
+
+              <p>
+                <strong>Disclaimer</strong>
+                <br />
+                I take no responsibility for the content of external links. The operators of the linked pages are solely responsible for their content.
+              </p>
             </div>
           </div>
         </dialog>
@@ -220,7 +273,7 @@
                 <div class="flex-space-between">
                   <div class="key">D</div>
                   <span class="control-info-text">or</span>
-                  <div class="control-infp-btn">
+                  <div class="control-info-btn">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="height: 36px; width: 36px">
                       <path d="M0 0h512v512H0z" fill="currentColor" fill-opacity="0"></path>
                       <g class="" transform="translate(0,0)">

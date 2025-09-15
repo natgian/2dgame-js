@@ -32,7 +32,8 @@ dialog::backdrop {
   font-weight: 500;
 }
 
-.story-info-wrapper {
+.story-info-wrapper,
+.imprint-info-wrapper {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -40,6 +41,19 @@ dialog::backdrop {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #fdbf5b #251606;
+}
+
+.imprint-info-wrapper {
+  margin-block: 4rem;
+}
+
+.imprint-info-wrapper p {
+  margin-block: 0.5rem;
+}
+
+.imprint-info-wrapper strong {
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .controls-info-wrapper {
