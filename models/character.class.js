@@ -17,6 +17,9 @@ class Character extends MovableObject {
   maxCollectables = 3;
   craftedArrows = 9;
 
+  idleStartTime = null;
+  isBlinking = false;
+
   IMAGES_IDLE_BLINKING = Array.from({ length: 12 }, (_, i) => `img/character/idle_blinking/${String(i).padStart(2, "0")}_Idle_Blinking.png`);
 
   IMAGES_IDLE = Array.from({ length: 12 }, (_, i) => `img/character/idle/${String(i).padStart(2, "0")}_Idle.png`);
@@ -43,6 +46,7 @@ class Character extends MovableObject {
 
     const allImages = [
       ...this.IMAGES_IDLE,
+      ...this.IMAGES_IDLE_BLINKING,
       ...this.IMAGES_WALKING,
       ...this.IMAGES_WALK_AND_SHOOT,
       ...this.IMAGES_JUMP_START,
@@ -166,6 +170,15 @@ class Character extends MovableObject {
     this.world.checkThrowObjects();
   }
 
+  handleBlinking() {
+    if (this.currentImage >= this.IMAGES_IDLE_BLINKING.length - 1) {
+      this.isBlinking = false;
+      this.idleStartTime = Date.now();
+      this.currentImage = 0;
+    }
+    return;
+  }
+
   handleCollectable(type) {
     if (type === "feather") {
       if (this.collectedFeathers >= this.maxCollectables) return;
@@ -203,6 +216,7 @@ class Character extends MovableObject {
   }
 
   animateIsInTheAir() {
+    this.world.sound.stop("char_walking");
     if (this.speedY > 0) {
       this.playAnimation(this.IMAGES_JUMP_START, 50, false);
     } else if (this.speedY === 0) {
@@ -233,6 +247,30 @@ class Character extends MovableObject {
 
   animateIdle() {
     this.playAnimation(this.IMAGES_IDLE, 83, true);
+  }
+
+  animateBlinking() {
+    this.playAnimation(this.IMAGES_IDLE_BLINKING, 83, false);
+  }
+
+  animateIdle() {
+    if (this.isBlinking) {
+      this.animateBlinking();
+      this.handleBlinking();
+    }
+
+    if (!this.idleStartTime) {
+      this.idleStartTime = Date.now();
+    }
+
+    const elapsedTime = Date.now() - this.idleStartTime;
+
+    if (elapsedTime > 10000 && this.currentImage % 12 === 0) {
+      this.isBlinking = true;
+      this.currentImage = 0;
+    } else {
+      this.playAnimation(this.IMAGES_IDLE, 83, true);
+    }
   }
 
   lastArrowShot() {
