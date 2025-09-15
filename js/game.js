@@ -15,10 +15,13 @@ const keyMap = {
 };
 
 /**
- * Initializes the game world by selecting the canvas element
- * and creating a new World instance with that canvas.
+ * Initializes the game world.
  *
- * Called once at the start to set up the environment.
+ * Checks the device orientation.
+ * Initializes all event listeners.
+ * Creates a new instance of the "World" class using the selectes canvas and the global keyboard
+ * object to thandle input.
+ *
  */
 function init() {
   checkOrientation();
@@ -27,28 +30,48 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+/**
+ * Starts the game.
+ *
+ * - Hides the start screen
+ * - Shows the game controls
+ * - Initializes the level
+ * - Starts the game int the "world" instance with "level1"
+ * - Retrieves and applies the audio state from the local storage
+ *
+ */
 function startGame() {
-  document.getElementById("start-screen").classList.add("d-none");
-  document.querySelector(".controls").classList.remove("d-none");
+  hideStartScreen();
+  showGameControls();
   initLevel();
   world.startGame(level1);
-
-  const soundState = localStorage.getItem("soundState");
-  if (soundState === null) {
-    unmuteAudio();
-  } else if (soundState === "muted") {
-    muteAudio();
-  }
+  applySavedAudioState();
 }
 
+/**
+ * Restarts the game.
+ *
+ * - Hides the win and lose end screens
+ * - Frees the old "world" instance
+ * - Recreates a new "world" instance
+ * - Starts the game from the beginning
+ *
+ */
 function restartGame() {
-  document.getElementById("lose-end-screen").classList.add("d-none");
-  document.getElementById("win-end-screen").classList.add("d-none");
-
+  hideEndScreens();
+  world = null;
   world = new World(canvas, keyboard);
   startGame();
 }
 
+/**
+ * Stops the game.
+ *
+ * - Clears all intervals
+ * - Stops the background music and character walking sound
+ * - Checks if the game is won or lost and triggers the corresponding handler
+ *
+ */
 function stopGame() {
   clearAllIntervals();
   world.sound.stop("bg_music");
@@ -63,26 +86,53 @@ function stopGame() {
   }
 }
 
+/**
+ * Handles the game won scenario.
+ *
+ * After 500 ms:
+ * - Plays a "victory" sound
+ * - Shows the win end screen
+ * - Hides the game controls
+ *
+ */
 function handleGameWon() {
   setTimeout(() => {
     world.sound.play("victory");
-    document.getElementById("win-end-screen").classList.remove("d-none");
-    document.querySelector(".controls").classList.add("d-none");
+    showWinScreen();
+    hideGameControls();
   }, 500);
 }
 
+/**
+ * Handles the game over scenario.
+ *
+ * After 500 ms:
+ * - Plays a "game over" sound
+ * - Shows the lose end screen
+ * - Hides the game controls
+ *
+ */
 function handleGameOver() {
   setTimeout(() => {
     world.sound.play("game_over");
-    document.getElementById("lose-end-screen").classList.remove("d-none");
-    document.querySelector(".controls").classList.add("d-none");
+    showLoseScreen();
+    hideGameControls();
   }, 500);
 }
 
+/**
+ * Returns to the start screen.
+ *
+ * - Hides the end screens
+ * - Shows the start screen
+ * - Frees the old world instance
+ * - Initiates a new "world" instance
+ *
+ */
 function backToStartScreen() {
-  document.getElementById("lose-end-screen").classList.add("d-none");
-  document.getElementById("win-end-screen").classList.add("d-none");
-  document.getElementById("start-screen").classList.remove("d-none");
+  hideEndScreens();
+  showStartScreen();
+  world = null;
   world = new World(canvas, keyboard);
 }
 
