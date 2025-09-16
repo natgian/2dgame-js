@@ -11,11 +11,21 @@ class ArrowCounter extends DrawableObject {
     this.craftingAnimation = 0;
   }
 
+  /**
+   * Draws the arrow counter on the canvas, including the current arrow count
+   *
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context
+   */
   draw(ctx) {
     super.draw(ctx);
     this.fillText(ctx);
   }
 
+  /**
+   * Draws the number of crafted arrows, includes an animation
+   *
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context
+   */
   fillText(ctx) {
     ctx.save();
     ctx.font = "20px Lora";
@@ -31,14 +41,27 @@ class ArrowCounter extends DrawableObject {
     ctx.restore();
   }
 
+  /**
+   * Returns the text color for the arrow count
+   *
+   * @returns {string} - Returns "yellow" if it's animating, otherwise "white"
+   */
   getTextColor() {
     return this.craftingAnimation > 0 ? "yellow" : "white";
   }
 
+  /**
+   * Calculates the animation scale for the arrow count text.
+   *
+   * Reduces the craftingAnimation counter each frame if active and returns
+   * a scaling factor based on a sine wave to create a pulsating effect.
+   *
+   * @returns {number} - The scale factor to apply to the text
+   */
   getAnimationScale() {
     if (this.craftingAnimation > 0) {
       this.craftingAnimation--;
-      return 1 + Math.sin((this.craftingAnimation / 20) * Math.PI) * 1;
+      return 1 + Math.sin((this.craftingAnimation / 20) * Math.PI);
     }
     return 1;
   }

@@ -35,11 +35,6 @@ class World {
     this.runCleanupEnemiesInterval();
   }
 
-  removeKeyListeners() {
-    document.removeEventListener("keydown", this.handleKeyDown);
-    document.removeEventListener("keyup", this.handleKeyUp);
-  }
-
   loadSounds() {
     // Character sounds
     this.sound.load("char_walking", "audio/running_in_grass.mp3", true);
