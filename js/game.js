@@ -59,7 +59,6 @@ function startGame() {
  */
 function restartGame() {
   hideEndScreens();
-  world = null;
   world = new World(canvas, keyboard);
   startGame();
 }
@@ -74,8 +73,6 @@ function restartGame() {
  */
 function stopGame() {
   clearAllIntervals();
-  world.sound.stop("bg_music");
-  world.sound.stop("char_walking");
 
   if (world.isGameOver) {
     handleGameOver();
@@ -89,35 +86,29 @@ function stopGame() {
 /**
  * Handles the game won scenario.
  *
- * After 500 ms:
  * - Plays a "victory" sound
  * - Shows the win end screen
  * - Hides the game controls
  *
  */
 function handleGameWon() {
-  setTimeout(() => {
-    world.sound.play("victory");
-    showWinScreen();
-    hideGameControls();
-  }, 500);
+  world.sound.play("victory");
+  showWinScreen();
+  hideGameControls();
 }
 
 /**
  * Handles the game over scenario.
  *
- * After 500 ms:
  * - Plays a "game over" sound
  * - Shows the lose end screen
  * - Hides the game controls
  *
  */
 function handleGameOver() {
-  setTimeout(() => {
-    world.sound.play("game_over");
-    showLoseScreen();
-    hideGameControls();
-  }, 500);
+  world.sound.play("game_over");
+  showLoseScreen();
+  hideGameControls();
 }
 
 /**
@@ -132,10 +123,10 @@ function handleGameOver() {
 function backToStartScreen() {
   hideEndScreens();
   showStartScreen();
-  world = null;
   world = new World(canvas, keyboard);
 }
 
+//TODO:
 function initAllEventListeners() {
   initOrientationListener();
   initFullscreenListeners();

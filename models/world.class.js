@@ -10,7 +10,7 @@ class World {
   hintTextVisible = true;
 
   constructor(canvas, keyboard) {
-    this.ctx = canvas.getContext("2d"); // The getContext(“2d”) method returns a so-called rendering context object. This contains all the methods and properties needed to draw on the canvas: Lines, shapes, images, text, etc.
+    this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.character.world = this;
@@ -32,7 +32,12 @@ class World {
     this.sound.play("bg_music");
     this.runCollisionInterval();
     this.runArrowCollisionInterval();
-    this.runCleanupInterval();
+    this.runCleanupEnemiesInterval();
+  }
+
+  removeKeyListeners() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener("keyup", this.handleKeyUp);
   }
 
   loadSounds() {
@@ -127,7 +132,7 @@ class World {
     }, 50);
   }
 
-  runCleanupInterval() {
+  runCleanupEnemiesInterval() {
     setInterval(() => {
       this.removeDeadEnemies();
     }, 1000 / 60);
@@ -153,9 +158,11 @@ class World {
           this.level.statusBars[0].setValue(this.character.health);
         } else {
           this.isGameOver = true;
+
           setTimeout(() => {
+            this.sound.stopAllSounds();
             stopGame();
-          }, 500);
+          }, 1000);
         }
       }
     });
@@ -185,8 +192,9 @@ class World {
         if (this.level.endboss.isDead()) {
           this.isGameWon = true;
           setTimeout(() => {
+            this.sound.stopAllSounds();
             stopGame();
-          }, 500);
+          }, 1000);
         }
       }
     }
