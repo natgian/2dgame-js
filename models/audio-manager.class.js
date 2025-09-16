@@ -32,6 +32,12 @@ class AudioManager {
     sound.currentTime = 0;
   }
 
+  stopAllSounds() {
+    for (const name in this.sounds) {
+      this.stop(name);
+    }
+  }
+
   pause(name) {
     const sound = this.sounds[name];
     if (!sound) return;
