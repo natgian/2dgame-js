@@ -10,8 +10,15 @@ class Branch extends DrawableObject {
     this.collisionBoxHeight = this.height - 200;
   }
 
+  /**
+   * Sets the branch at a random position
+   *
+   * - x is randomized between 300 and (3200 - branch width)
+   * - y is fixed at 320
+   *
+   */
   setRandomPosition() {
-    this.x = 300 + Math.random() * (2500 - this.width);
+    this.x = 300 + Math.random() * (3200 - this.width);
     this.y = 320;
   }
 }

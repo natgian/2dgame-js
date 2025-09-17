@@ -20,14 +20,25 @@ class Feather extends MovableObject {
     this.collisionBoxHeight = this.height - 55;
   }
 
+  /**
+   * Animates the feather by cycling through the images.
+   *
+   */
   animate() {
     setInterval(() => {
       this.playAnimation(this.IMAGES);
     }, this.frameRate);
   }
 
+  /**
+   * Sets the feather at a random position.
+   *
+   * - x is randomized between 300 and (3200 - feather width)
+   * - y is randomized between 100 and 200
+   *
+   */
   setRandomPosition() {
-    this.x = 300 + Math.random() * (2500 - this.width);
+    this.x = 300 + Math.random() * (3200 - this.width);
     this.y = 100 + Math.random() * 100;
   }
 }

@@ -2,40 +2,59 @@ class Firefly extends MovableObject {
   width = 70;
   height = 80;
 
-  constructor() {
+  constructor(level) {
     super().loadImage("img/misc/firefly.png");
-    this.reset();
+    this.level = level;
+    this.resetPositionAndVelocity();
     this.animate();
     this.hasCollisionBox = false;
   }
 
-  reset() {
-    this.x = -Math.random() * 100 - 50; // results in a number between -50 and -150, so that they are spawned outside the canvas and fly in more naturally
-    this.y = Math.random() * 480; // number between 0 and 480
-
-    this.velocityX = 0.3 + Math.random() * 0.7; // minimum horizontal speed of 0.3, max 1.0
-    this.velocityY = (Math.random() - 0.5) * 1; // rando value betweeen -0.5 and 0.5 for random movements in both directions
+  /**
+   * Resets the firefly to a random position and velocity.
+   *
+   * - x is randomized across the level width
+   * - y is randomized across the height (480px)
+   * - velocityX is between 0.3 and 1.0
+   * - velocityY is between -0.5 and 0.5
+   *
+   */
+  resetPositionAndVelocity() {
+    this.x = Math.random() * this.level.levelEndX;
+    this.y = Math.random() * 480;
+    this.velocityX = 0.3 + Math.random() * 0.7;
+    this.velocityY = (Math.random() - 0.5) * 1;
   }
 
+  /**
+   * Animates the firefly.
+   *
+   * - x and y positions are updated every frame
+   *
+   */
   animate() {
     setInterval(() => {
-      // moves the object frame by frame
       this.x += this.velocityX;
       this.y += this.velocityY;
 
-      // slightly randomly so that the Firefly moves up/down in waves
       this.velocityY += (Math.random() - 0.5) * 0.1;
-      // limiting the velocity so that it doesn't wriggle to much up and down
       this.velocityY = Math.max(Math.min(this.velocityY, 0.7), -0.7);
 
-      // Respawns the fireflies on the left when they go over the visible image on the right
-      if (this.x > 2500 + 50) {
-        this.reset();
+      if (this.x > this.level.levelEndX + 50) {
+        this.x = -Math.random() * 200;
+        this.y = Math.random() * 480;
       }
     }, 1000 / 60);
   }
 
+  /**
+   * Moves the firefly to a new random spot in the game.
+   *
+   * This method also gives the firefly a new random speed
+   * (because it uses resetPositionAndVelocity inside).
+   *
+   */
   setRandomPosition() {
-    this.reset();
+    this.resetPositionAndVelocity();
   }
 }
