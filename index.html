@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/fonts.css" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="./css/overlays.css" />
-    <script src="./script.js" defer></script>
+    <script src="./js/overlay.js" defer></script>
     <script src="./js/utils.js" defer></script>
     <script src="./models/world.class.js" defer></script>
     <script src="./models/audio-manager.class.js" defer></script>
@@ -26,7 +26,9 @@
     <script src="./models/layer.class.js" defer></script>
     <script src="./models/level.class.js" defer></script>
     <script src="./levels/level1.js" defer></script>
-    <script src="./js/helpers.js"></script>
+    <script src="./js/helpers.js" defer></script>
+    <script src="./js/events.js" defer></script>
+    <script src="./js/fullscreen.js" defer></script>
     <script src="./js/game.js" defer></script>
     <title>Nara - Guardian of the Greendwood</title>
   </head>
@@ -94,14 +96,14 @@
 
           <!-- settings controls -->
           <div class="controls-container">
-            <button id="fullscreen-btn" onclick="enterFullscreen(fullscreen)">
+            <button id="fullscreen-btn" onclick="enterFullscreenMode(fullscreen)">
               <!-- fullscreen button -->
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M5 5h5v2H7v3H5zm9 0h5v5h-2V7h-3zm3 9h2v5h-5v-2h3zm-7 3v2H5v-5h2v3z" />
               </svg>
             </button>
             <!-- fullscreen exit button -->
-            <button class="d-none" id="fullscreen-exit-btn" onclick="exitFullscreen()">
+            <button class="d-none" id="fullscreen-exit-btn" onclick="exitFullscreenMode()">
               <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M14 14h5v2h-3v3h-2zm-9 0h5v5H8v-3H5zm3-9h2v5H5V8h3zm11 3v2h-5V5h2v3z" />
               </svg>
