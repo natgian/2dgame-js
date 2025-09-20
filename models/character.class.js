@@ -1,3 +1,8 @@
+/**
+ * Represents the main character in the game.
+ * Extends {@link MovableObject}.
+ *
+ */
 class Character extends MovableObject {
   world;
   y = 260;
@@ -64,6 +69,9 @@ class Character extends MovableObject {
     this.applyGravity();
   }
 
+  /**
+   *
+   */
   hit() {
     super.hit();
     if (!this.world.sound.isPlaying("char_hurt")) {
@@ -71,6 +79,9 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   */
   animate() {
     setInterval(() => {
       this.handlePlayerActions();
@@ -79,13 +90,88 @@ class Character extends MovableObject {
     }, 1000 / 60);
   }
 
+  /**
+   *
+   */
   updateCamera() {
     if (this.x < 3300) {
       this.world.cameraX = -this.x + 60;
     }
   }
 
+  /**
+   *
+   * @returns
+   */
   handlePlayerActions() {
+    if (this.isDead()) return;
+    this.handleMovement();
+    if (this.isJumping()) this.handleJump();
+    if (this.isShooting()) this.handleShooting();
+    if (this.isWalkingAndShooting()) this.handleWalkingAndShooting();
+    if (this.isCrafting()) this.craftArrows();
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isMovingRight() {
+    return this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX;
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isMovingLeft() {
+    return this.world.keyboard.LEFT && this.x > 0;
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isWalking() {
+    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isJumping() {
+    return this.world.keyboard.SPACE && !this.isInTheAir();
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isCrafting() {
+    return this.world.keyboard.F;
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isShooting() {
+    return this.world.keyboard.D && !this.isCurrentlyShooting;
+  }
+
+  /**
+   *
+   * @returns
+   */
+  isWalkingAndShooting() {
+    return (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.keyboard.D;
+  }
+
+  /**
+   *
+   */
+  handleMovement() {
     if (this.isMovingRight()) {
       this.handleMoveRight();
       this.handleWalkingSound();
@@ -95,81 +181,63 @@ class Character extends MovableObject {
     } else {
       this.world.sound.stop("char_walking");
     }
-    if (this.isJumping()) {
-      this.handleJump();
-    }
-    if (this.isShooting()) {
-      this.handleShooting();
-    }
-    if (this.isWalkingAndShooting()) {
-      this.handleWalkingAndShooting();
-    }
-    if (this.isCrafting()) {
-      this.craftArrows();
-    }
   }
 
-  isMovingRight() {
-    return this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX;
-  }
-
-  isMovingLeft() {
-    return this.world.keyboard.LEFT && this.x > 0;
-  }
-
-  isWalking() {
-    return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
-  }
-
-  isJumping() {
-    return this.world.keyboard.SPACE && !this.isInTheAir();
-  }
-
-  isCrafting() {
-    return this.world.keyboard.F;
-  }
-
-  isShooting() {
-    return this.world.keyboard.D && !this.isCurrentlyShooting;
-  }
-
-  isWalkingAndShooting() {
-    return (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.keyboard.D;
-  }
-
+  /**
+   *
+   */
   handleMoveLeft() {
     this.moveLeft();
     this.otherDirection = true;
   }
 
+  /**
+   *
+   */
   handleMoveRight() {
     this.moveRight();
     this.otherDirection = false;
   }
 
+  /**
+   *
+   */
   handleWalkingSound() {
     if (!this.world.sound.isPlaying("char_walking")) {
       this.world.sound.play("char_walking", false);
     }
   }
 
+  /**
+   *
+   */
   handleJump() {
     this.jump();
     this.world.sound.play("char_jumping");
   }
 
+  /**
+   *
+   */
   handleShooting() {
     this.isCurrentlyShooting = true;
     this.currentImage = 0;
     this.world.checkThrowObjects();
   }
 
+  /**
+   *
+   */
   handleWalkingAndShooting() {
     this.isCurrentlyWalkingAndShooting = true;
     this.isCurrentlyShooting = false;
     this.world.checkThrowObjects();
   }
 
+  /**
+   *
+   * @returns
+   */
   handleBlinking() {
     if (this.currentImage >= this.IMAGES_IDLE_BLINKING.length - 1) {
       this.isBlinking = false;
@@ -179,6 +247,11 @@ class Character extends MovableObject {
     return;
   }
 
+  /**
+   *
+   * @param {*} type
+   * @returns
+   */
   handleCollectable(type) {
     if (type === "feather") {
       if (this.collectedFeathers >= this.maxCollectables) return;
@@ -193,6 +266,9 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   */
   craftArrows() {
     if (this.collectedBranches === 3 && this.collectedFeathers === 3) {
       this.world.sound.play("char_crafting");
@@ -207,14 +283,27 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   */
   animateIsDead() {
+    if (!this.isInDeathAnimation) {
+      this.currentImage = 0;
+      this.isInDeathAnimation = true;
+    }
     this.playDeadAnimation(this.IMAGES_DYING);
   }
 
+  /**
+   *
+   */
   animateIsHurt() {
     this.playAnimation(this.IMAGES_HURT, 16, true);
   }
 
+  /**
+   *
+   */
   animateIsInTheAir() {
     this.world.sound.stop("char_walking");
     if (this.speedY > 0) {
@@ -226,10 +315,16 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   */
   animateWalking() {
     this.playAnimation(this.IMAGES_WALKING, 16, true);
   }
 
+  /**
+   *
+   */
   animateShooting() {
     this.playAnimation(this.IMAGES_SHOOTING, 100, false);
     if (this.currentImage === this.IMAGES_SHOOTING.length - 1) {
@@ -237,6 +332,9 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   */
   animateWalkAndShoot() {
     this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 66, true);
 
@@ -245,14 +343,23 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   */
   animateIdle() {
     this.playAnimation(this.IMAGES_IDLE, 83, true);
   }
 
+  /**
+   *
+   */
   animateBlinking() {
     this.playAnimation(this.IMAGES_IDLE_BLINKING, 83, false);
   }
 
+  /**
+   *
+   */
   animateIdle() {
     if (this.isBlinking) {
       this.animateBlinking();
@@ -273,18 +380,21 @@ class Character extends MovableObject {
     }
   }
 
+  /**
+   *
+   * @returns
+   */
   lastArrowShot() {
     let timepassed = new Date().getTime() - this.lastShoot;
     timepassed = timepassed / 1000;
     return timepassed > 1;
   }
 
+  /**
+   *
+   */
   updateAnimation() {
     if (this.isDead()) {
-      if (!this.isInDeathAnimation) {
-        this.currentImage = 0;
-        this.isInDeathAnimation = true;
-      }
       this.animateIsDead();
     } else if (this.isHurt()) {
       this.animateIsHurt();

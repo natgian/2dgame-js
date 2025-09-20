@@ -20,7 +20,11 @@ class World {
     this.loadSounds();
 
     this.backgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 });
-    this.midgroundLayers = generateLayerSequence({ count: 6, imagePaths: ["img/layers/repeating_layers/background2_trees.png", "img/layers/repeating_layers/background1_trees.png"] });
+
+    this.firstMidgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background2_trees.png", y: 0 });
+
+    this.secondMidgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background1_trees.png", y: 0 });
+
     this.foregroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/midground_grass.png", y: 200, height: 300 });
 
     this.draw();
@@ -71,7 +75,8 @@ class World {
     if (this.level) {
       this.addObjectsToMap(this.level.fireflies);
     }
-    this.addObjectsToMap(this.midgroundLayers);
+    this.addObjectsToMap(this.firstMidgroundLayers);
+    this.addObjectsToMap(this.secondMidgroundLayers);
     this.addObjectsToMap(this.foregroundLayers);
   }
 
@@ -157,7 +162,7 @@ class World {
           setTimeout(() => {
             this.sound.stopAllSounds();
             stopGame();
-          }, 1000);
+          }, 800);
         }
       }
     });
@@ -189,7 +194,7 @@ class World {
           setTimeout(() => {
             this.sound.stopAllSounds();
             stopGame();
-          }, 1000);
+          }, 800);
         }
       }
     }
@@ -261,8 +266,8 @@ class World {
   }
 
   /**
-   * Draws the object to the canvas, and flips it horizontally if it is facing left (otherDirection = true).
-   * This creates a mirrored effect for characters walking to the left.
+   * Draws the object to the canvas, and flips it horizontally if it is facing left (otherDirection = true). This creates a mirrored effect for characters walking to the left.
+   *
    */
   addToMap(movableObj) {
     if (movableObj.otherDirection) {

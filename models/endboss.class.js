@@ -53,12 +53,7 @@ class Endboss extends Enemy {
   }
 
   hit() {
-    this.health -= this.damage;
-    if (this.health < 0) {
-      this.health = 0;
-    } else {
-      this.lastHit = new Date().getTime();
-    }
+    super.hit();
     this.world.sound.play("endboss_hit");
     this.world.sound.play("endboss_hurt");
   }
