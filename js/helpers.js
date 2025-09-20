@@ -1,3 +1,19 @@
+/*--------- */
+/* CLEARING */
+/*--------- */
+
+/**
+ * Clears all active intervals.
+ *
+ */
+function clearAllIntervals() {
+  for (let i = 1; i < 9999; i++) window.clearInterval(i);
+}
+
+/*------------ */
+/* SHOW & HIDE */
+/*------------ */
+
 /**
  * Shows the game controls by removing the "d-none" class
  *
@@ -12,19 +28,6 @@ function showGameControls() {
  */
 function hideGameControls() {
   document.querySelector(".controls").classList.add("d-none");
-}
-
-/**
- * Retrieves and applies the audio state from the local storace
- *
- */
-function applySavedAudioState() {
-  const soundState = localStorage.getItem("soundState");
-  if (soundState === null) {
-    unmuteAudio();
-  } else if (soundState === "muted") {
-    muteAudio();
-  }
 }
 
 /**
@@ -67,6 +70,10 @@ function showWinScreen() {
 function showLoseScreen() {
   document.getElementById("lose-end-screen").classList.remove("d-none");
 }
+
+/*--------------------- */
+/* ORIENTATION & DEVICE */
+/*--------------------- */
 
 /**
  * Checks if the current device supports touch input.
@@ -114,6 +121,10 @@ function checkOrientation() {
   }
 }
 
+/*------------*/
+/* FULLSCREEN */
+/*----------- */
+
 /**
  * Displays the "exit fullscreen" button and hides the "enter fullscreen" button.
  *
@@ -132,12 +143,21 @@ function showEnterFullscreenButton() {
   document.getElementById("fullscreen-btn").classList.remove("d-none");
 }
 
+/*------ */
+/* AUDIO */
+/*------ */
+
 /**
- * Clears all active intervals.
+ * Retrieves and applies the audio state from the local storace
  *
  */
-function clearAllIntervals() {
-  for (let i = 1; i < 9999; i++) window.clearInterval(i);
+function applySavedAudioState() {
+  const soundState = localStorage.getItem("soundState");
+  if (soundState === null) {
+    unmuteAudio();
+  } else if (soundState === "muted") {
+    muteAudio();
+  }
 }
 
 /**
@@ -161,4 +181,94 @@ function unmuteAudio() {
   document.getElementById("sound-on-btn").classList.add("d-none");
   world.sound.unmuteAll();
   localStorage.setItem("soundState", "unmuted");
+}
+
+/*----------------- */
+/* LAYERS & OBJECTS */
+/*----------------- */
+
+/**
+ * Generates repeating layers placed next to each other.
+ *
+ * @param {Object} - Configuration object for the layer generation
+ * @param {number} count - The number of layers to generate
+ * @param {string} imagePath - The path to the image used for the layer
+ * @param {number} startX - The horizontal starting position of the first layer
+ * @param {number} spacingX - The horizontal spacing between layers
+ * @param {number} y - The vertical position of the layers
+ * @param {number} width - The width of each layer
+ * @param {number} height - The height of each layer
+ * @returns - An array of Layer objects positioned one after another
+ */
+function generateRepeatingLayer({ count, imagePath, startX = -100, spacingX = 720, y = 0, width = 720, height = 480 }) {
+  const layers = [];
+  for (let i = 0; i < count; i++) {
+    const x = startX + i * spacingX;
+    layers.push(new Layer(imagePath, x, y, width, height));
+  }
+  return layers;
+}
+
+/**
+ * Creates objects with a minimum distance between them.
+ *
+ * @param {Function} createObjectFunction - A function that creates a new object
+ * @param {number} count - The number of objects to generate
+ * @param {number} minDistance - The minimum distance between objects
+ * @param {number} maxAttempts - The maximum number of attempts to place all objects
+ * @returns - An array of generated objects
+ */
+function generateObjects(createObjectFunction, count, minDistance = 250, maxAttempts = 1000) {
+  const objects = [];
+  let attempts = 0;
+
+  while (canGenerateMoreObjects(objects, count, attempts, maxAttempts)) {
+    attempts++;
+    const newObject = generateAndPositionObject(createObjectFunction);
+
+    if (isFarEnough(objects, newObject, minDistance)) {
+      objects.push(newObject);
+      attempts = 0;
+    }
+  }
+  return objects;
+}
+
+/**
+ * Creates a new object and gives it a random position.
+ *
+ * @param {Function} createObjectFunction - A function that creates a new object
+ * @returns - The created and positioned object
+ */
+function generateAndPositionObject(createObjectFunction) {
+  const newObject = createObjectFunction();
+  newObject.setRandomPosition?.();
+  return newObject;
+}
+
+/**
+ * Checks if more objects can be generated.
+ *
+ * @param {Object[]} objects - The already generated objects
+ * @param {number} count - The number of objects to generate
+ * @param {number} attempts - The number of attempts already made
+ * @param {*} maxAttempts - The maximum number of attempts allowed
+ * @returns {boolean} - "True" if it can still try to generate objects, otherwise "false"
+ */
+function canGenerateMoreObjects(objects, count, attempts, maxAttempts) {
+  return objects.length < count && attempts < maxAttempts;
+}
+
+/**
+ * Checks if a new generated object is far enough from existing ones.
+ *
+ * @param {Object[]} objects - The already generated objects
+ * @param {Object} newObject - The new generated object
+ * @param {number} minDistance - The minimum distance between objects
+ * @returns {boolean} - "True" if the new object is far enough from other objects, otherwise "false"
+ */
+function isFarEnough(objects, newObject, minDistance) {
+  return objects.every((existingObject) => {
+    return Math.abs(newObject.x - existingObject.x) >= minDistance;
+  });
 }

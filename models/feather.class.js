@@ -1,3 +1,8 @@
+/**
+ * A collectible feather that can be placed in the world.
+ * Extends {@link MovableObject}.
+ *
+ */
 class Feather extends MovableObject {
   width = 30;
   height = 60;

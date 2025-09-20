@@ -1,3 +1,8 @@
+/**
+ * A drawable arrow counter object that shows the player's arrows.
+ * Extends {@link DrawableObject}.
+ *
+ */
 class ArrowCounter extends DrawableObject {
   constructor(character) {
     super();

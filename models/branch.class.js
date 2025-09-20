@@ -1,3 +1,7 @@
+/**
+ * A collectible branch that can be placed in the world.
+ * Extends {@link DrawableObject}.
+ */
 class Branch extends DrawableObject {
   width = 120;
   height = 120;

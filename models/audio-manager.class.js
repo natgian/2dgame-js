@@ -1,3 +1,7 @@
+/**
+ * Manages the audio by loading, playing, stopping and muting or unmuting sounds.
+ *
+ */
 class AudioManager {
   constructor() {
     this.sounds = {};
