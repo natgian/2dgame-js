@@ -1,13 +1,25 @@
+/**
+ * Represents a game level with enemies, endboss, collectibles and status bars.
+ *
+ */
 class Level {
   enemies;
   endboss;
   statusBars;
   feathers;
   branches;
-  fireflies;
 
   levelEndX = 3800;
 
+  /**
+   * Creates new Level with the given objects.
+   *
+   * @param {Enemy[]} enemies - The enemies placed in the level
+   * @param {Endboss} endboss - The endboss for this level
+   * @param {StatusBar[]} statusBars - The displayed status bar elements
+   * @param {Feather[]} feathers - The collectible feathers to craft arrows
+   * @param {Branch[]} branches - The collectible branches to craft arrows
+   */
   constructor(enemies, endboss, statusBars, feathers, branches) {
     this.enemies = enemies;
     this.endboss = endboss;

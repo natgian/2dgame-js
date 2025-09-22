@@ -1,3 +1,8 @@
+/**
+ * Represents the state of keyboard keys for the game.
+ * Keeps track of which keys are currently pressed.
+ *
+ */
 class Keyboard {
   LEFT = false;
   RIGHT = false;

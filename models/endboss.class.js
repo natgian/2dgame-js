@@ -1,3 +1,8 @@
+/**
+ * Represents the endboss in the game.
+ *
+ */
+
 class Endboss extends Enemy {
   width = 400;
   height = 400;
@@ -28,6 +33,11 @@ class Endboss extends Enemy {
 
   IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/enemies/endboss/dying/${String(i).padStart(3, "0")}.png`);
 
+  /**
+   * Creates a new Endboss instance.
+   *
+   * @param {Statusbar} statusbar - The status bar linked to the endboss health
+   */
   constructor(statusbar) {
     super();
     this.nextJumpTime = Date.now() + this.randomJumpInterval();
@@ -52,12 +62,21 @@ class Endboss extends Enemy {
     });
   }
 
+  /**
+   * Reduces the endboss health by calling the inherited method and plays a a hit and hurt sound.
+   *
+   */
   hit() {
     super.hit();
     this.world.sound.play("endboss_hit");
     this.world.sound.play("endboss_hurt");
   }
 
+  /**
+   * Handles the endboss behavior (movement, slashing, jumping).
+   *
+   * @returns - If the endboss is dead or there was no first conctact with the character yet
+   */
   handleEnemyActions() {
     if (this.isDead()) return;
     if (!this.hadFirstContact) return;
@@ -66,27 +85,52 @@ class Endboss extends Enemy {
     this.handleJumping();
   }
 
+  /**
+   * Updates the animation state of the endboss.
+   *
+   */
   updateAnimation() {
+    this.activateFirstContact();
+
+    if (this.isDead()) return this.handleDeath();
+
+    if (this.hadFirstContact) {
+      this.animateMovements();
+    } else {
+      this.animateIdle();
+    }
+  }
+
+  /**
+   * Activates the first encounter with the endboss.
+   * Makes the status bar visible, sets the first contact flag and plays a sound.
+   *
+   */
+  activateFirstContact() {
     if (this.world.character.x >= 3200 && !this.hadFirstContact) {
       this.statusbar.visible = true;
       this.hadFirstContact = true;
       this.world.sound.play("endboss_growl");
     }
-
-    if (this.isDead()) {
-      if (!this.isInDeathAnimation) {
-        this.currentImage = 0;
-        this.isInDeathAnimation = true;
-      }
-      this.animateIsDead();
-      return;
-    }
-
-    if (this.hadFirstContact) {
-      this.animateMovements();
-    } else this.animateIdle();
   }
 
+  /**
+   * Handles the death sequence for the endboss.
+   * Resets the animation index if needed and plays the death animation.
+   *
+   * @returns
+   */
+  handleDeath() {
+    if (!this.isInDeathAnimation) {
+      this.currentImage = 0;
+      this.isInDeathAnimation = true;
+    }
+    this.animateIsDead();
+  }
+
+  /**
+   * Updates the animation state based the endboss state (hurt, slashing, jumping, walking).
+   */
   animateMovements() {
     if (this.isHurt()) {
       this.isSlashing = false;
@@ -94,30 +138,49 @@ class Endboss extends Enemy {
     } else if (this.isSlashing) {
       this.animateSlashing();
     } else if (this.isJumping) {
-      this.animateIsInTheAir();
+      this.animateJumping();
     } else {
       this.animateWalking();
     }
   }
 
+  /**
+   * Plays the idle animation sequence.
+   *
+   */
   animateIdle() {
     this.playAnimation(this.IMAGES_IDLE);
   }
 
+  /**
+   * Plays the walking animation sequence.
+   *
+   */
   animateWalking() {
     this.playAnimation(this.IMAGES_WALKING, 33, true);
   }
 
+  /**
+   * Plays the slashing animation sequence.
+   *
+   */
   animateSlashing() {
-    this.moveLeft();
     this.playAnimation(this.IMAGES_SLASHING, 66);
   }
 
+  /**
+   * Plays the hurt animation sequence.
+   *
+   */
   animateIsHurt() {
     this.playAnimation(this.IMAGES_HURT, 16, true);
   }
 
-  animateIsInTheAir() {
+  /**
+   * Plays the jumping animation sequence.
+   *
+   */
+  animateJumping() {
     if (this.speedY > 0) {
       this.playAnimation(this.IMAGES_JUMP_START, 50, false);
     } else if (this.speedY === 0) {
@@ -127,6 +190,10 @@ class Endboss extends Enemy {
     }
   }
 
+  /**
+   * Initiates a slashing attack and adjusts the collision box temporarily.
+   *
+   */
   startSlashing() {
     this.isSlashing = true;
     this.collisionBoxOffsetX = 60;
@@ -139,6 +206,10 @@ class Endboss extends Enemy {
     }, 1000);
   }
 
+  /**
+   * Applies gravity to the endboss if he is jumping or or falling.
+   *
+   */
   applyGravity() {
     setInterval(() => {
       if (this.isJumping || this.speedY > 0) {
@@ -154,6 +225,10 @@ class Endboss extends Enemy {
     }, 1000 / 25);
   }
 
+  /**
+   * Initiates a jump if he is not already jumping and the jump timer has passed.
+   *
+   */
   handleJumping() {
     const now = Date.now();
 
@@ -164,28 +239,39 @@ class Endboss extends Enemy {
     }
   }
 
+  /**
+   * Checks if the endboss is currently in the are.
+   *
+   * @returns {boolean} - "True" if is in the air, otherwise "false"
+   */
   isInTheAir() {
     return this.y < 50;
   }
 
+  /**
+   * Returns a random jump interval in milliseconds.
+   *
+   * @returns {number} - Random interval between 5000-8000 ms
+   */
   randomJumpInterval() {
     return Math.random() * 3000 + 5000;
   }
 
+  /**
+   * Moves the endboss toward the character depending on distance.
+   * If the character changes direction the endboss follows.
+   *
+   */
   followCharacter() {
     if (!this.world.character) return;
 
     const distanceToCharacter = this.world.character.x - this.x;
 
     if (distanceToCharacter < 150) {
-      if (this.otherDirection) {
-        this.otherDirection = false;
-      }
+      this.otherDirection = false;
       this.moveLeft();
     } else if (distanceToCharacter > 150) {
-      if (!this.otherDirection) {
-        this.otherDirection = true;
-      }
+      this.otherDirection = true;
       this.moveRight();
     }
   }

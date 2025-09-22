@@ -1,7 +1,16 @@
+/**
+ * Represents a firefly object that appears in the game.
+ *
+ */
 class Firefly extends MovableObject {
   width = 70;
   height = 80;
 
+  /**
+   *  * Creates a new firefly instance and starts its animation.
+   *
+   * @param {Level} level - The level in which the firefly exists
+   */
   constructor(level) {
     super().loadImage("img/misc/firefly.png");
     this.level = level;

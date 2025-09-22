@@ -4,6 +4,11 @@
  *
  */
 class ArrowCounter extends DrawableObject {
+  /**
+   * Creates a new arrow counter.
+   *
+   * @param {Character} character - The character whose arrow count is displayed
+   */
   constructor(character) {
     super();
     this.loadImage("img/misc/arrow_status.png");

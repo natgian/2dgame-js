@@ -1,3 +1,8 @@
+/**
+ * Configuration object for different status bar types.
+ * Defines the maximum value, starting value and image paths for each type.
+ *
+ */
 const STATUSBAR_CONFIG = {
   health: {
     maxValue: 100,
@@ -35,12 +40,24 @@ const STATUSBAR_CONFIG = {
   },
 };
 
+/**
+ * Represents a status bar in the game (health, collectibles, or endboss).
+ * Extends {@link DrawableObject}.
+ *
+ */
 class Statusbar extends DrawableObject {
   hasCollisionBox = false;
   visible = true;
   width = 200;
   height = 50;
 
+  /**
+   * Creates a new status bar at the given position.
+   *
+   * @param {string} type - The status bar type (health, branch, feather, endboss)
+   * @param {number} x - The horizontal position
+   * @param {number} y - The vertical position
+   */
   constructor(type, x, y) {
     super();
     this.type = type;
@@ -58,16 +75,32 @@ class Statusbar extends DrawableObject {
     this.setValue(this.startValue);
   }
 
+  /**
+   * Draws the status bar on the canvas if it is visible.
+   *
+   * @param {CanvasRenderingContext2D} ctx - The canvas rendering context
+   * @returns - Returns if "visible" is false
+   */
   draw(ctx) {
     if (!this.visible) return;
     super.draw(ctx);
   }
 
+  /**
+   * Sets the current value of the status bar and updates the displayed image.
+   *
+   * @param {number} value - The new value to set
+   */
   setValue(value) {
     this.value = Math.min(value, this.maxValue);
     this.img = this.imageCache[this.IMAGES[this.getImageIndex(this.value)]];
   }
 
+  /**
+   * Determines which image index to use based on the current value.
+   *
+   * @returns {number} - The index of the image to display
+   */
   getImageIndex() {
     if (this.type === "health" || this.type === "endboss") {
       if (this.value === 100) return 5;

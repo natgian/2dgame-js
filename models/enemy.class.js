@@ -1,3 +1,8 @@
+/**
+ * Represents an enemy in the game.
+ * Extends {@link MovableObject}.
+ *
+ */
 class Enemy extends MovableObject {
   world;
   y = 270;
@@ -5,6 +10,11 @@ class Enemy extends MovableObject {
   damage = 20;
   isReadyToRemove = false;
 
+  /**
+   * Creates a new enemy instance.
+   *
+   * @param {string} type - The enemy type, used to determine image paths
+   */
   constructor(type = "enemy_1") {
     super();
     this.loadImage(`img/enemies/${type}/walking/0_Golem_Walking_000.png`);
@@ -31,11 +41,19 @@ class Enemy extends MovableObject {
     this.loadImages(allImages, () => this.animate());
   }
 
+  /**
+   * Reduces the enemy's health by calling the inherited method and plays a hit sound.
+   *
+   */
   hit() {
     super.hit();
     this.world.sound.play("enemy_hit");
   }
 
+  /**
+   * Starts the animation loop for the enemy.
+   *
+   */
   animate() {
     setInterval(() => {
       this.handleEnemyActions();
@@ -43,10 +61,19 @@ class Enemy extends MovableObject {
     }, 1000 / 60);
   }
 
+  /**
+   * Sets a random horizontal position for the enemy.
+   *
+   */
   setRandomPosition() {
     this.x = 800 + Math.random() * 2000;
   }
 
+  /**
+   * Starts the slashing attack and temporarily adjusts the collision boxes.
+   * Resets after 1 second.
+   *
+   */
   startSlashing() {
     this.isSlashing = true;
     this.collisionBoxOffsetX = 10;
@@ -59,16 +86,30 @@ class Enemy extends MovableObject {
     }, 1000);
   }
 
+  /**
+   * Generates a random time interval for the next slash attack.
+   *
+   * @returns {number} - A random interval in miliseconds (between 2000-5000 ms)
+   */
   randomSlashInterval() {
-    return Math.random() * 3000 + 2000; // 2–5 seconds
+    return Math.random() * 3000 + 2000;
   }
 
+  /**
+   * Handles the enemy actions like moving and slashing.
+   *
+   * @returns - Exits immediately if the enemy is dead
+   */
   handleEnemyActions() {
     if (this.isDead()) return;
     this.moveLeft();
     this.handleSlashing();
   }
 
+  /**
+   * Determines if the enemy should start slashing based on time and state.
+   *
+   */
   handleSlashing() {
     const now = Date.now();
     if (!this.isSlashing && now >= this.nextSlashTime) {
@@ -77,6 +118,10 @@ class Enemy extends MovableObject {
     }
   }
 
+  /**
+   * Updates the animation state based on enemy status (dead, slashing or walking).
+   *
+   */
   updateAnimation() {
     if (this.isDead()) {
       if (!this.isInDeathAnimation) {
@@ -94,19 +139,36 @@ class Enemy extends MovableObject {
     }
   }
 
+  /**
+   * Plays the death animation sequence.
+   *
+   */
   animateIsDead() {
     this.playDeadAnimation(this.IMAGES_DYING);
   }
 
+  /**
+   * Plays the walking animation sequence.
+   *
+   */
   animateWalking() {
     this.playAnimation(this.IMAGES_WALKING, 16, true);
   }
 
+  /**
+   * Plays the slashing animation sequence.
+   *
+   */
   animateSlashing() {
-    this.moveLeft();
     this.playAnimation(this.IMAGES_SLASHING, 33);
   }
 
+  /**
+   * Plays the death animation using the provided image sequence.
+   * Marks the enemy as ready to remove after the animation ends.
+   *
+   * @param {string[]} images. - The array of image paths for the death animation
+   */
   playDeadAnimation(images) {
     if (this.currentImage < images.length) {
       let path = images[this.currentImage];
