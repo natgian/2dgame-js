@@ -39,13 +39,15 @@ function startGame() {
 /**
  * Restarts the game.
  *
+ * - Stops the sounds
  * - Hides the win and lose end screens
- * - Frees the old "world" instance
  * - Recreates a new "world" instance
  * - Starts the game from the beginning
  *
  */
 function restartGame() {
+  world.sound.stop("victory");
+  world.sound.stop("game_over");
   hideEndScreens();
   world = new World(canvas, keyboard);
   startGame();
@@ -102,6 +104,7 @@ function handleGameOver() {
 /**
  * Returns to the start screen.
  *
+ * - Stops the sounds
  * - Hides the end screens
  * - Shows the start screen
  * - Frees the old world instance
@@ -109,6 +112,8 @@ function handleGameOver() {
  *
  */
 function backToStartScreen() {
+  world.sound.stop("victory");
+  world.sound.stop("game_over");
   hideEndScreens();
   showStartScreen();
   world = new World(canvas, keyboard);
