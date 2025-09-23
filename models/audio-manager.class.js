@@ -110,4 +110,28 @@ class AudioManager {
       this.sounds[key].muted = false;
     }
   }
+
+  /**
+   * Loads all game sounds (character, enemies, background).
+   *
+   */
+  loadAllSounds() {
+    // Character sounds
+    this.load("char_walking", "audio/running_in_grass.mp3", true);
+    this.load("char_collect_branch", "audio/collect_branch.mp3", false, 0.6);
+    this.load("char_collect_feather", "audio/collect_feather.mp3", false);
+    this.load("char_crafting", "audio/craft_item.mp3", false);
+    this.load("char_shooting", "audio/wind_swoosh.mp3", false);
+    this.load("char_jumping", "audio/whoosh_jump.mp3", false, 0.1);
+    this.load("char_hurt", "audio/hurt.mp3", false);
+    // Enemies sounds
+    this.load("enemy_hit", "audio/hit_enemy.mp3", false, 0.2);
+    this.load("endboss_growl", "audio/endboss_growl.mp3", false, 0.2);
+    this.load("endboss_hurt", "audio/endboss_hurt.mp3", false);
+    this.load("endboss_hit", "audio/endboss_hit.mp3", false);
+    // Background sounds
+    this.load("bg_music", "audio/fairy_background_music.mp3", true, 0.1);
+    this.load("game_over", "audio/game_over.mp3", false, 0.2);
+    this.load("victory", "audio/victory.mp3", false, 0.2);
+  }
 }

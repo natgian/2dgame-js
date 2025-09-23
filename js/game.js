@@ -32,7 +32,7 @@ function startGame() {
   hideStartScreen();
   showGameControls();
   initLevel();
-  world.startGame(level1);
+  world.startLevel(level1);
   applySavedAudioState();
 }
 

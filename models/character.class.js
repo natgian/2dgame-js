@@ -19,7 +19,7 @@ class Character extends MovableObject {
 
   collectedFeathers = 0;
   collectedBranches = 0;
-  maxCollectables = 3;
+  maxCollectibles = 3;
   craftedArrows = 9;
 
   idleStartTime = null;
@@ -252,14 +252,14 @@ class Character extends MovableObject {
    * @param {*} type
    * @returns
    */
-  handleCollectable(type) {
+  handleCollectible(type) {
     if (type === "feather") {
-      if (this.collectedFeathers >= this.maxCollectables) return;
+      if (this.collectedFeathers >= this.maxCollectibles) return;
       this.collectedFeathers++;
       this.world.sound.play("char_collect_feather");
       return true;
     } else if (type === "branch") {
-      if (this.collectedBranches >= this.maxCollectables) return;
+      if (this.collectedBranches >= this.maxCollectibles) return;
       this.collectedBranches++;
       this.world.sound.play("char_collect_branch");
       return true;

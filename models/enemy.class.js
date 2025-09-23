@@ -42,12 +42,14 @@ class Enemy extends MovableObject {
   }
 
   /**
-   * Reduces the enemy's health by calling the inherited method and plays a hit sound.
-   *
+   * Reduces the enemy's health by calling the inherited method and plays a hit sound if the
+   * enemy has the type "enemy_1" or "enemy_2".
    */
   hit() {
     super.hit();
-    this.world.sound.play("enemy_hit");
+    if (this.type === "enemy_1" || this.type === "enemy_2") {
+      this.world.sound.play("enemy_hit");
+    }
   }
 
   /**

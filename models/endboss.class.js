@@ -40,6 +40,7 @@ class Endboss extends Enemy {
    */
   constructor(statusbar) {
     super();
+    this.type = "endboss";
     this.nextJumpTime = Date.now() + this.randomJumpInterval();
     this.applyGravity();
     this.statusbar = statusbar;
@@ -63,7 +64,7 @@ class Endboss extends Enemy {
   }
 
   /**
-   * Reduces the endboss health by calling the inherited method and plays a a hit and hurt sound.
+   * Reduces the endboss health by calling the inherited method and plays a hit and hurt sound.
    *
    */
   hit() {
