@@ -79,6 +79,24 @@ function hideFullscreenBtn() {
   document.getElementById("fullscreen-btn").classList.add("d-none");
 }
 
+/**
+ * Displays the "exit fullscreen" button and hides the "enter fullscreen" button.
+ *
+ */
+function showExitFullscreenButton() {
+  document.getElementById("fullscreen-exit-btn").classList.remove("d-none");
+  document.getElementById("fullscreen-btn").classList.add("d-none");
+}
+
+/**
+ * Displays the "enter fullscreen" button and hides the "exit fullscreen" button.
+ *
+ */
+function showEnterFullscreenButton() {
+  document.getElementById("fullscreen-exit-btn").classList.add("d-none");
+  document.getElementById("fullscreen-btn").classList.remove("d-none");
+}
+
 /*--------------------- */
 /* ORIENTATION & DEVICE */
 /*--------------------- */
@@ -120,36 +138,64 @@ function getMobileButtons() {
 
 /**
  * Checks the device orientation and toggles a screen blocker.
+ * If the device is a tablet the game container will be resized.
  *
  */
 function checkOrientation() {
+  const screenWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+  const screenHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  const blocker = document.getElementById("mobile-portrait-blocker");
+
   if (window.matchMedia("(orientation: portrait)").matches) {
-    document.getElementById("mobile-portrait-blocker").classList.remove("d-none");
+    blocker.classList.remove("d-none");
   } else {
-    document.getElementById("mobile-portrait-blocker").classList.add("d-none");
+    blocker.classList.add("d-none");
+  }
+
+  if (isTablet(screenWidth, screenHeight)) {
+    resizeGameContainer(screenWidth, screenHeight);
   }
 }
 
-/*------------*/
-/* FULLSCREEN */
-/*----------- */
-
 /**
- * Displays the "exit fullscreen" button and hides the "enter fullscreen" button.
+ * Checks if the devie is a tablet based on user agent, touch support and screen size.
  *
+ * @param {number} screenWidth - The width of the viewport
+ * @param {number} screenHeight - The height of the viewport
+ * @returns {boolean} - "True" if the device is considered a tablet, otherwise "false"
  */
-function showExitFullscreenButton() {
-  document.getElementById("fullscreen-exit-btn").classList.remove("d-none");
-  document.getElementById("fullscreen-btn").classList.add("d-none");
+function isTablet(screenWidth, screenHeight) {
+  const ua = navigator.userAgent.toLowerCase();
+  const isUAtablet = /ipad|tablet|(android(?!.*mobile))|(kindle)|(silk)/i.test(ua);
+  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const minScreen = Math.min(screenWidth, screenHeight);
+  const maxScreen = Math.max(screenWidth, screenHeight);
+  const isScreenTablet = isTouch && minScreen >= 600 && minScreen <= 1024 && maxScreen <= 1366;
+
+  return isScreenTablet || (isTouch && isUAtablet);
 }
 
 /**
- * Displays the "enter fullscreen" button and hides the "exit fullscreen" button.
+ * Scales and centers the game container based on the viewport and game dimensions.
  *
+ * @param {number} screenWidth - The width of the viewport
+ * @param {number} screenHeight - The height of the viewport
  */
-function showEnterFullscreenButton() {
-  document.getElementById("fullscreen-exit-btn").classList.add("d-none");
-  document.getElementById("fullscreen-btn").classList.remove("d-none");
+function resizeGameContainer(screenWidth, screenHeight) {
+  const GAME_WIDTH = 720;
+  const GAME_HEIGHT = 480;
+  const container = document.querySelector(".game-container");
+  const scale = Math.min(screenWidth / GAME_WIDTH, screenHeight / GAME_HEIGHT);
+  const offsetX = (screenWidth - GAME_WIDTH * scale) / 2;
+  const offsetY = (screenHeight - GAME_HEIGHT * scale) / 2;
+
+  container.style.width = `${GAME_WIDTH}px`;
+  container.style.height = `${GAME_HEIGHT}px`;
+  container.style.position = "absolute";
+  container.style.left = `${offsetX}px`;
+  container.style.top = `${offsetY}px`;
+  container.style.transform = `scale(${scale})`;
+  container.style.transformOrigin = "top left";
 }
 
 /*------ */
