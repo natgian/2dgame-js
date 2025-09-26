@@ -38,7 +38,8 @@ class DrawableObject {
    * Loads multiple images and stores them in the cache.
    *
    * @param {string[]} arr - An array of image paths to load
-   * @param {Function} callback - The function to call wehn the images are loaded
+   * @param {Function} callback - The function to call wehn the images are loaded (is only called if
+   * it exists)
    */
   loadImages(arr, callback) {
     let loadedImages = 0;
@@ -50,7 +51,7 @@ class DrawableObject {
       img.onload = () => {
         loadedImages++;
         if (loadedImages === totalImages && callback) {
-          callback(); // only call if callback exists
+          callback();
         }
       };
       this.imageCache[path] = img;

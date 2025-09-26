@@ -50,8 +50,8 @@ class Firefly extends MovableObject {
       this.x += this.velocityX;
       this.y += this.velocityY;
 
-      this.velocityY += (Math.random() - 0.5) * 0.1; // between -0.05 and 0.05
-      this.velocityY = Math.max(Math.min(this.velocityY, 0.7), -0.7); // between -0.7 and 0.7
+      this.velocityY += (Math.random() - 0.5) * 0.1;
+      this.velocityY = Math.max(Math.min(this.velocityY, 0.7), -0.7);
 
       if (this.x > this.level.levelEndX + 50) {
         this.x = -Math.random() * 200;

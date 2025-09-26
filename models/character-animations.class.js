@@ -3,6 +3,17 @@
  *
  */
 class CharacterAnimations {
+  IMAGES_IDLE_BLINKING = Array.from({ length: 12 }, (_, i) => `img/character/idle_blinking/${String(i).padStart(2, "0")}_Idle_Blinking.png`);
+  IMAGES_IDLE = Array.from({ length: 12 }, (_, i) => `img/character/idle/${String(i).padStart(2, "0")}_Idle.png`);
+  IMAGES_WALKING = Array.from({ length: 24 }, (_, i) => `img/character/walking/${String(i).padStart(2, "0")}_Walking.png`);
+  IMAGES_JUMP_START = Array.from({ length: 6 }, (_, i) => `img/character/jump_start/${String(i).padStart(2, "0")}_Jump_Start.png`);
+  IMAGES_JUMP_LOOP = Array.from({ length: 6 }, (_, i) => `img/character/jump_loop/${String(i).padStart(2, "0")}_Jump_Loop.png`);
+  IMAGES_FALLING = Array.from({ length: 6 }, (_, i) => `img/character/falling_down/${String(i).padStart(2, "0")}_Falling_Down.png`);
+  IMAGES_HURT = Array.from({ length: 12 }, (_, i) => `img/character/hurt/${String(i).padStart(2, "0")}_Hurt.png`);
+  IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/character/dying/${String(i).padStart(2, "0")}_Dying.png`);
+  IMAGES_SHOOTING = Array.from({ length: 10 }, (_, i) => `img/character/shooting/${String(i).padStart(2, "0")}_Shooting.png`);
+  IMAGES_WALK_AND_SHOOT = Array.from({ length: 15 }, (_, i) => `img/character/run_shooting/${String(i).padStart(2, "0")}_Run_Shooting.png`);
+
   /**
    * Creates a new CharacterAnimations instance.
    *
@@ -10,17 +21,6 @@ class CharacterAnimations {
    */
   constructor(character) {
     this.character = character;
-
-    this.IMAGES_IDLE_BLINKING = Array.from({ length: 12 }, (_, i) => `img/character/idle_blinking/${String(i).padStart(2, "0")}_Idle_Blinking.png`);
-    this.IMAGES_IDLE = Array.from({ length: 12 }, (_, i) => `img/character/idle/${String(i).padStart(2, "0")}_Idle.png`);
-    this.IMAGES_WALKING = Array.from({ length: 24 }, (_, i) => `img/character/walking/${String(i).padStart(2, "0")}_Walking.png`);
-    this.IMAGES_JUMP_START = Array.from({ length: 6 }, (_, i) => `img/character/jump_start/${String(i).padStart(2, "0")}_Jump_Start.png`);
-    this.IMAGES_JUMP_LOOP = Array.from({ length: 6 }, (_, i) => `img/character/jump_loop/${String(i).padStart(2, "0")}_Jump_Loop.png`);
-    this.IMAGES_FALLING = Array.from({ length: 6 }, (_, i) => `img/character/falling_down/${String(i).padStart(2, "0")}_Falling_Down.png`);
-    this.IMAGES_HURT = Array.from({ length: 12 }, (_, i) => `img/character/hurt/${String(i).padStart(2, "0")}_Hurt.png`);
-    this.IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/character/dying/${String(i).padStart(2, "0")}_Dying.png`);
-    this.IMAGES_SHOOTING = Array.from({ length: 10 }, (_, i) => `img/character/shooting/${String(i).padStart(2, "0")}_Shooting.png`);
-    this.IMAGES_WALK_AND_SHOOT = Array.from({ length: 15 }, (_, i) => `img/character/run_shooting/${String(i).padStart(2, "0")}_Run_Shooting.png`);
   }
 
   /**

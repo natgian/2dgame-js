@@ -29,16 +29,19 @@ class World {
     this.isGameWon = false;
     this.sound = new AudioManager();
     this.sound.loadAllSounds();
-
-    this.backgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 });
-
-    this.firstMidgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background2_trees.png", y: 0 });
-
-    this.secondMidgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background1_trees.png", y: 0 });
-
-    this.foregroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/midground_grass.png", y: 200, height: 300 });
-
+    this.generateGameLayers();
     this.draw();
+  }
+
+  /**
+   * Generates the game layers.
+   *
+   */
+  generateGameLayers() {
+    this.backgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background_backdrop.png", y: 0 });
+    this.firstMidgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background2_trees.png", y: 0 });
+    this.secondMidgroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/background1_trees.png", y: 0 });
+    this.foregroundLayers = generateRepeatingLayer({ count: 6, imagePath: "img/layers/repeating_layers/midground_grass.png", y: 200, height: 300 });
   }
 
   /**
@@ -262,7 +265,7 @@ class World {
    * @param {Object} arrow - The arrow object
    */
   handleArrowShot(arrow) {
-    arrow.throw();
+    arrow.shoot();
     this.arrows.push(arrow);
     this.character.isCurrentlyShooting = false;
   }

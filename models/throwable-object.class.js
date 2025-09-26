@@ -70,17 +70,17 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Throws the object and plays a sound.
-   * The throw direction depends on the character's orientation.
+   * Shoots the object and plays a sound.
+   * The shooting direction depends on the character's orientation.
    *
    */
-  throw() {
+  shoot() {
     this.applyGravity();
     this.world.sound.play("char_shooting");
     this.otherDirection = this.world.character.otherDirection;
     const maxDistance = 800;
     const step = this.calculateStep();
-    this.handleThrowMotion(step, maxDistance);
+    this.handleShootMotion(step, maxDistance);
   }
 
   /**
@@ -93,14 +93,14 @@ class ThrowableObject extends MovableObject {
   }
 
   /**
-   * Handles the throw motion of the object by updating its position at a fixed interval until the
+   * Handles the shoot motion of the object by updating its position at a fixed interval until the
    * maximum distance is reached.
-   * Stops the throw by clearing the interval and removing the object from the world.
+   * Stops the shoot by clearing the interval and removing the object from the world.
    *
    * @param {number} step - The horizontal movement
    * @param {number} maxDistance - The maximum distance the object can go before being removed
    */
-  handleThrowMotion(step, maxDistance) {
+  handleShootMotion(step, maxDistance) {
     this.throwInterval = setInterval(() => {
       this.x += step;
       if (Math.abs(this.x - world.character.x) > maxDistance) {
