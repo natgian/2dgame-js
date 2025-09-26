@@ -1,5 +1,5 @@
 /**
- * Represents the main character in the game.
+ * Represents the main character controlled by the player in the game.
  * Extends {@link MovableObject}.
  *
  */
@@ -25,51 +25,18 @@ class Character extends MovableObject {
   idleStartTime = null;
   isBlinking = false;
 
-  IMAGES_IDLE_BLINKING = Array.from({ length: 12 }, (_, i) => `img/character/idle_blinking/${String(i).padStart(2, "0")}_Idle_Blinking.png`);
-
-  IMAGES_IDLE = Array.from({ length: 12 }, (_, i) => `img/character/idle/${String(i).padStart(2, "0")}_Idle.png`);
-
-  IMAGES_WALKING = Array.from({ length: 24 }, (_, i) => `img/character/walking/${String(i).padStart(2, "0")}_Walking.png`);
-
-  IMAGES_JUMP_START = Array.from({ length: 6 }, (_, i) => `img/character/jump_start/${String(i).padStart(2, "0")}_Jump_Start.png`);
-
-  IMAGES_JUMP_LOOP = Array.from({ length: 6 }, (_, i) => `img/character/jump_loop/${String(i).padStart(2, "0")}_Jump_Loop.png`);
-
-  IMAGES_FALLING = Array.from({ length: 6 }, (_, i) => `img/character/falling_down/${String(i).padStart(2, "0")}_Falling_Down.png`);
-
-  IMAGES_HURT = Array.from({ length: 12 }, (_, i) => `img/character/hurt/${String(i).padStart(2, "0")}_Hurt.png`);
-
-  IMAGES_DYING = Array.from({ length: 15 }, (_, i) => `img/character/dying/${String(i).padStart(2, "0")}_Dying.png`);
-
-  IMAGES_SHOOTING = Array.from({ length: 10 }, (_, i) => `img/character/shooting/${String(i).padStart(2, "0")}_Shooting.png`);
-
-  IMAGES_WALK_AND_SHOOT = Array.from({ length: 15 }, (_, i) => `img/character/run_shooting/${String(i).padStart(2, "0")}_Run_Shooting.png`);
-
   constructor() {
     super();
+    this.animations = new CharacterAnimations(this);
     this.loadImage("img/character/idle/00_Idle.png");
-
-    const allImages = [
-      ...this.IMAGES_IDLE,
-      ...this.IMAGES_IDLE_BLINKING,
-      ...this.IMAGES_WALKING,
-      ...this.IMAGES_WALK_AND_SHOOT,
-      ...this.IMAGES_JUMP_START,
-      ...this.IMAGES_JUMP_LOOP,
-      ...this.IMAGES_FALLING,
-      ...this.IMAGES_HURT,
-      ...this.IMAGES_DYING,
-      ...this.IMAGES_SHOOTING,
-    ];
-
-    this.loadImages(allImages, () => {
+    this.loadImages(this.animations.getAllImages(), () => {
       this.animate();
     });
-
     this.applyGravity();
   }
 
   /**
+   * Reduces the character health by calling the inherited method and plays a hurt sound.
    *
    */
   hit() {
@@ -80,6 +47,8 @@ class Character extends MovableObject {
   }
 
   /**
+   * Starts the main update loop for the character.
+   * Handles player input, camera movement, and animation state updates.
    *
    */
   animate() {
@@ -91,6 +60,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Updates the camera position to follow the character, unless the level end has been reached.
    *
    */
   updateCamera() {
@@ -100,8 +70,9 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles all player actions like movements, jumping, shooting, crafting and death check.
    *
-   * @returns
+   * @returns - Exits immediately if the character is dead
    */
   handlePlayerActions() {
     if (this.isDead()) return;
@@ -113,62 +84,72 @@ class Character extends MovableObject {
   }
 
   /**
+   * Checks if the player is moving right.
    *
-   * @returns
+   * @returns {boolean} - "True" if the RIGHT key is pressed and the level end has not been reached
    */
   isMovingRight() {
     return this.world.keyboard.RIGHT && this.x < this.world.level.levelEndX;
   }
 
   /**
+   * Checks if the player is moving left.
    *
-   * @returns
+   * @returns {boolean} - "True" if the LEFT key is pressed and the beginning of the level has not
+   * been reached
    */
   isMovingLeft() {
     return this.world.keyboard.LEFT && this.x > 0;
   }
 
   /**
+   * Checks if the character is walking.
    *
-   * @returns
+   * @returns {boolean} - "True" if the RIGHT or LEFT key is pressed
    */
   isWalking() {
     return this.world.keyboard.RIGHT || this.world.keyboard.LEFT;
   }
 
   /**
+   * Checks if the character is jumping.
    *
-   * @returns
+   * @returns {boolean} - "True" if the SPACE key is pressed and the character is currently not
+   * in the air
    */
   isJumping() {
     return this.world.keyboard.SPACE && !this.isInTheAir();
   }
 
   /**
+   * Checks if the character is crafting.
    *
-   * @returns
+   * @returns {boolean} - "True" if the F key is pressed
    */
   isCrafting() {
     return this.world.keyboard.F;
   }
 
   /**
+   * Checks if the character is shooting.
    *
-   * @returns
+   * @returns {boolean} - "True" if the D key is pressed and the character is not already shooting
    */
   isShooting() {
     return this.world.keyboard.D && !this.isCurrentlyShooting;
   }
 
   /**
+   * Checks if the character is walking and shooting.
    *
-   * @returns
+   * @returns {boolean} - "True" if the RIGHT or LEFT key and the D key are pressed
    */
   isWalkingAndShooting() {
     return (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.keyboard.D;
   }
 
   /**
+   * Handles the character movements (left and right).
    *
    */
   handleMovement() {
@@ -184,6 +165,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the characters left movement.
    *
    */
   handleMoveLeft() {
@@ -192,6 +174,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the characters right movement.
    *
    */
   handleMoveRight() {
@@ -200,6 +183,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the characters walking sound.
    *
    */
   handleWalkingSound() {
@@ -209,6 +193,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the character jumping.
    *
    */
   handleJump() {
@@ -217,6 +202,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the character shooting.
    *
    */
   handleShooting() {
@@ -226,6 +212,7 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the character walking and shooting.
    *
    */
   handleWalkingAndShooting() {
@@ -235,11 +222,11 @@ class Character extends MovableObject {
   }
 
   /**
+   * Ends the blinking animation and resets the idle timer.
    *
-   * @returns
    */
-  handleBlinking() {
-    if (this.currentImage >= this.IMAGES_IDLE_BLINKING.length - 1) {
+  resetBlinking() {
+    if (this.currentImage >= this.animations.IMAGES_IDLE_BLINKING.length - 1) {
       this.isBlinking = false;
       this.idleStartTime = Date.now();
       this.currentImage = 0;
@@ -248,9 +235,10 @@ class Character extends MovableObject {
   }
 
   /**
+   * Increases the counter of the collected item (feather or branch) and plays a corresponding sound.
    *
-   * @param {*} type
-   * @returns
+   * @param {string} type - The type of collectible ("feather" or "branch")
+   * @returns {boolean} - "True" if a collectible has been collected, otherwise "false"
    */
   handleCollectible(type) {
     if (type === "feather") {
@@ -267,6 +255,8 @@ class Character extends MovableObject {
   }
 
   /**
+   * Handles the arrow crafting (only active if the player has collected 3 of each collectibles).
+   * Updates the counters and status bars.
    *
    */
   craftArrows() {
@@ -284,105 +274,10 @@ class Character extends MovableObject {
   }
 
   /**
+   * Checks if enough time has passed since the last arrow was shot.
    *
-   */
-  animateIsDead() {
-    if (!this.isInDeathAnimation) {
-      this.currentImage = 0;
-      this.isInDeathAnimation = true;
-    }
-    this.playDeadAnimation(this.IMAGES_DYING);
-  }
-
-  /**
-   *
-   */
-  animateIsHurt() {
-    this.playAnimation(this.IMAGES_HURT, 16, true);
-  }
-
-  /**
-   *
-   */
-  animateIsInTheAir() {
-    this.world.sound.stop("char_walking");
-    if (this.speedY > 0) {
-      this.playAnimation(this.IMAGES_JUMP_START, 50, false);
-    } else if (this.speedY === 0) {
-      this.playAnimation(this.IMAGES_JUMP_LOOP, 100, true);
-    } else {
-      this.playAnimation(this.IMAGES_FALLING, 50, false);
-    }
-  }
-
-  /**
-   *
-   */
-  animateWalking() {
-    this.playAnimation(this.IMAGES_WALKING, 16, true);
-  }
-
-  /**
-   *
-   */
-  animateShooting() {
-    this.playAnimation(this.IMAGES_SHOOTING, 100, false);
-    if (this.currentImage === this.IMAGES_SHOOTING.length - 1) {
-      this.isCurrentlyShooting = false;
-    }
-  }
-
-  /**
-   *
-   */
-  animateWalkAndShoot() {
-    this.playAnimation(this.IMAGES_WALK_AND_SHOOT, 66, true);
-
-    if (this.currentImage === this.IMAGES_WALK_AND_SHOOT.length - 1) {
-      this.isCurrentlyWalkingAndShooting = false;
-    }
-  }
-
-  /**
-   *
-   */
-  animateIdle() {
-    this.playAnimation(this.IMAGES_IDLE, 83, true);
-  }
-
-  /**
-   *
-   */
-  animateBlinking() {
-    this.playAnimation(this.IMAGES_IDLE_BLINKING, 83, false);
-  }
-
-  /**
-   *
-   */
-  animateIdle() {
-    if (this.isBlinking) {
-      this.animateBlinking();
-      this.handleBlinking();
-    }
-
-    if (!this.idleStartTime) {
-      this.idleStartTime = Date.now();
-    }
-
-    const elapsedTime = Date.now() - this.idleStartTime;
-
-    if (elapsedTime > 10000 && this.currentImage % 12 === 0) {
-      this.isBlinking = true;
-      this.currentImage = 0;
-    } else {
-      this.playAnimation(this.IMAGES_IDLE, 83, true);
-    }
-  }
-
-  /**
-   *
-   * @returns
+   * @returns {boolean} - "True" if more than 1 second has passed since the last shot,
+   * otherwise "false"
    */
   lastArrowShot() {
     let timepassed = new Date().getTime() - this.lastShoot;
@@ -391,23 +286,24 @@ class Character extends MovableObject {
   }
 
   /**
+   * Updates the animation state based on character status (dead, hurt, shooting...).
    *
    */
   updateAnimation() {
     if (this.isDead()) {
-      this.animateIsDead();
+      this.animations.animateIsDead();
     } else if (this.isHurt()) {
-      this.animateIsHurt();
+      this.animations.animateIsHurt();
     } else if (this.isCurrentlyShooting) {
-      this.animateShooting();
+      this.animations.animateShooting();
     } else if (this.isCurrentlyWalkingAndShooting) {
-      this.animateWalkAndShoot();
+      this.animations.animateWalkAndShoot();
     } else if (this.isInTheAir()) {
-      this.animateIsInTheAir();
+      this.animations.animateIsInTheAir();
     } else if (this.isWalking()) {
-      this.animateWalking();
+      this.animations.animateWalking();
     } else {
-      this.animateIdle();
+      this.animations.animateIdle();
     }
   }
 }

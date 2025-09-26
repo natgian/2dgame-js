@@ -1,3 +1,7 @@
+/**
+ * Maps the keyboard event codes to the game action keys.
+ *
+ */
 const keyMap = {
   ArrowRight: "RIGHT",
   ArrowLeft: "LEFT",
