@@ -295,10 +295,6 @@ canvas {
   .end-screen {
     width: 100%;
   }
-
-  #fullscreen-btn {
-    display: none;
-  }
 }
 
 @media only screen and (max-width: 720px) {

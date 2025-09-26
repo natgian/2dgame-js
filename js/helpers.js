@@ -15,7 +15,7 @@ function clearAllIntervals() {
 /*------------ */
 
 /**
- * Shows the game controls by removing the "d-none" class
+ * Shows the game controls by removing the "d-none" class.
  *
  */
 function showGameControls() {
@@ -23,7 +23,7 @@ function showGameControls() {
 }
 
 /**
- * Hides the game controls
+ * Hides the game controls.
  *
  */
 function hideGameControls() {
@@ -31,7 +31,7 @@ function hideGameControls() {
 }
 
 /**
- * Shows the start screen by removing "d-none" class
+ * Shows the start screen by removing "d-none" class.
  *
  */
 function showStartScreen() {
@@ -39,7 +39,7 @@ function showStartScreen() {
 }
 
 /**
- * Hides the start screen by adding "d-none" class
+ * Hides the start screen by adding "d-none" class.
  *
  */
 function hideStartScreen() {
@@ -47,7 +47,7 @@ function hideStartScreen() {
 }
 
 /**
- * Hides the win and lose end screens by adding the "d-none" class
+ * Hides the win and lose end screens by adding the "d-none" class.
  *
  */
 function hideEndScreens() {
@@ -56,7 +56,7 @@ function hideEndScreens() {
 }
 
 /**
- * Shows the win screen by removing the "d-none" class
+ * Shows the win screen by removing the "d-none" class.
  *
  */
 function showWinScreen() {
@@ -64,11 +64,19 @@ function showWinScreen() {
 }
 
 /**
- * Shows the game over screen by removing the "d-none" class
+ * Shows the game over screen by removing the "d-none" class.
  *
  */
 function showLoseScreen() {
   document.getElementById("lose-end-screen").classList.remove("d-none");
+}
+
+/**
+ * Hides the fullscreen button.
+ *
+ */
+function hideFullscreenBtn() {
+  document.getElementById("fullscreen-btn").classList.add("d-none");
 }
 
 /*--------------------- */
@@ -93,6 +101,7 @@ function toggleMobileControls() {
     element.classList.add("active");
   });
   document.querySelector(".controls").classList.add("active");
+  hideFullscreenBtn();
 }
 
 /**
