@@ -9,9 +9,9 @@ class Character extends MovableObject {
   speed = 5;
 
   collisionBoxOffsetX = 40;
-  collisionBoxOffsetY = 0;
+  collisionBoxOffsetY = 20;
   collisionBoxWidth = -60;
-  collisionBoxHeight = 0;
+  collisionBoxHeight = -30;
 
   lastShoot = 0;
   isCurrentlyWalkingAndShooting = false;
