@@ -16,12 +16,19 @@ class CollisionManager {
   /**
    * Checks the character with enemies collision.
    *
+   * - If the character collides from above with an "enemy_1" it triggers a jump and
+   *   damages the enemy
+   * - If the character collides from any other side, the character takes damage
+   *
    */
   checkCharacterEnemyCollision() {
     const allEnemies = [...this.world.level.enemies, this.world.level.endboss];
 
     allEnemies.forEach((enemy) => {
-      if (this.world.character.isColliding(enemy)) {
+      if (this.world.character.isCollidingFromAbove(enemy) && enemy.type === "enemy_1") {
+        this.world.character.jump();
+        enemy.hit();
+      } else if (this.world.character.isColliding(enemy)) {
         this.handleCharacterEnemyCollision();
       }
     });

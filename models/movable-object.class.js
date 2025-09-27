@@ -28,12 +28,21 @@ class MovableObject extends DrawableObject {
    * Applies gravity so the object falls down if in the air.
    * Updates the vertical position 25 times per second.
    *
+   * Special handling for Character instance:
+   * - ensures the character does not fall below a fixed ground level of 260
+   * - resets speedY to 0
+   *
    */
   applyGravity() {
     setInterval(() => {
       if (this.isInTheAir() || this.speedY > 0) {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
+
+        if (this instanceof Character && this.y > 260) {
+          this.y = 260;
+          this.speedY = 0;
+        }
       }
     }, 1000 / 25);
   }
@@ -57,7 +66,23 @@ class MovableObject extends DrawableObject {
     const thisObj = this.getCollisionBox();
     const otherObj = movableObj.getCollisionBox();
 
-    return thisObj.x + thisObj.width > otherObj.x && thisObj.y + thisObj.height > otherObj.y && thisObj.x < otherObj.x + otherObj.width && thisObj.y < otherObj.y + otherObj.height;
+    const isRightOfOther = thisObj.x + thisObj.width > otherObj.x;
+    const isBelowOther = thisObj.y + thisObj.height > otherObj.y;
+    const isLeftOfOther = thisObj.x < otherObj.x + otherObj.width;
+    const isAboveOther = thisObj.y < otherObj.y + otherObj.height;
+
+    return isRightOfOther && isBelowOther && isLeftOfOther && isAboveOther;
+  }
+
+  /**
+   * Checks if the object is colliding from above with another movable object.
+   *
+   * @param {MovableObject} movableObj - The object to check if it's colliding with this object
+   */
+  isCollidingFromAbove(movableObj) {
+    const isFalling = this.isInTheAir();
+    const isColliding = this.isColliding(movableObj);
+    return isFalling && isColliding;
   }
 
   /**
@@ -157,7 +182,7 @@ class MovableObject extends DrawableObject {
    * Makes the object jump by setting setting a vertical speed.
    *
    */
-  jump() {
-    this.speedY = 30;
+  jump(verticalSpeed = 30) {
+    this.speedY = verticalSpeed;
   }
 }
