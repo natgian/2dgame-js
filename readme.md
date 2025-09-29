@@ -15,14 +15,14 @@ This game was created to practice OOP (object oriented programming). The goal wa
 - **Collision detection:** The character can collide with enemies and also collect items
 - **Crafting:** When the character has collected enough items it can craft new arrows
 - **Input controls:** The player can use the keyboard to play, for tablets and mobile devices the inputs are connected to buttons
-- **Sound effects and background music:** The game has a background music and every interaction has sound effects, the sound can be muted
+- **Sound effects and background music:** The game has background music and every interaction has sound effects, the sound can be muted
 - **Restart functionality:** Once the game is over the player can restart it or go back to the menu
 - **Responsiveness:** Works across desktop, tablet, and mobile devices
 
 ## Technologies Used
 
-- HTML5 for canvas rendering, start and ending screens
-- JavaScript for game logic
+- HTML5 for canvas rendering, start and ending screens and menu overlays
+- JavaScript for game logic and UI interactions
 - CSS3 for styling
 
 ## Installation
