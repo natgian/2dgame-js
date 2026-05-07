@@ -2,7 +2,9 @@
 
 ![Screenshot Nara Game](img/misc/nara-game.png)
 
-**NARA - Guardian of the Greenwood** is a 2d jump and run browser game built with vanilla JavaScript. Try it 👉 [**here**](https://nara-game.natgian.com)
+**NARA - Guardian of the Greenwood** is a 2d jump and run browser game built with vanilla JavaScript. 
+
+👉 Live Demo: https://nara-game.natgian.com
 
 ## Purpose
 
