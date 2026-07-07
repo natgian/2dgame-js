@@ -38,5 +38,5 @@ To get a local copy of the project up and running, follow these steps:
 
 For questions or feedback, please contact:
 
-- Email: <info@natgian.com>
+- Email: <contact@natgian.dev>
 - GitHub: [natgian](https://github.com/natgian)
